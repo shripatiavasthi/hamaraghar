@@ -3,7 +3,6 @@ export default {
         if (!params) {
             return "";
         }
-
         var esc = encodeURIComponent;
         return "?" + Object.keys(params)
             .map(k => esc(k) + "=" + esc(params[k]))

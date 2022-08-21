@@ -2,16 +2,14 @@ import * as React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './src/Components/HomeScreen/HomeScreen';
-import Signup from './src/Components/Signup/Signup';
-import AddEmailorPhone from './src/Components/AddEmailorPhone/AddEmailorphone';
-import VerifyEmailandPhone from './src/Components/VerifyEmailandPhone/VerifyEmailandPhone';
-import Signupsucess from './src/Components/SignupSucess/Signupsucess';
-import Youare from './src/Components/Youare/Youare';
-import { store } from './src/Slices/Store'
 import { Provider } from 'react-redux'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import store from './src/app/store';
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
+import Signup from './src/containers/LoginScreen'
 
+let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -125,15 +123,13 @@ function MyTabs() {
 function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
-          <Stack.Screen name="Profile" component={AddEmailorPhone} options={{ headerShown: false }} />
-          <Stack.Screen name="Verifyemail" component={VerifyEmailandPhone} options={{ headerShown: false }} />
-          <Stack.Screen name="SignupSucess" component={Signupsucess} options={{ headerShown: false }} />
-          <Stack.Screen name="Youare" component={Youare} options={{ headerShown: false }} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }

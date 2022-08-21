@@ -33,7 +33,7 @@ export const doPost = async (location, query, body, token) => {
     config.headers["Authorization"] = `Token ${token}`;
   }
   const response = await fetch(url, config);
-  // console.log(response,url,".............")
+
   return await response.json();
 };
 
