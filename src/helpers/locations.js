@@ -1,3 +1,4 @@
 module.exports = {
-  LOGIN: '/notification/send_otp/', 
+  // LOGIN: '/notification/send_otp/', 
+  LOGIN : '/user/signup'
 };

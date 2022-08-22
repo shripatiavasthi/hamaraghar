@@ -1,3 +1,3 @@
 module.exports = {
-    baseApi: "https://apidev.redcliffelabs.com/api/v1"
+    baseApi: "http://54.214.196.237:3000"
 }

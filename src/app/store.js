@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { combineReducers } from "redux";
 import { persistReducer } from 'redux-persist';
 import thunk from 'redux-thunk';
-import LoginSlice from '../slices/LoginSlice';
+import LoginSlice from '../Slices/LoginSlice';
 
 const reducers = combineReducers({
     LoginSlice
