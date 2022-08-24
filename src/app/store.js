@@ -4,9 +4,16 @@ import { combineReducers } from "redux";
 import { persistReducer } from 'redux-persist';
 import thunk from 'redux-thunk';
 import LoginSlice from '../Slices/LoginSlice';
+import createUser from '../Slices/CreateUserSlice';
+import send_otp_phone from '../Slices/SendPhoneOtpSlice'
+import send_otp_email from '../Slices/SendEmailOtpSlice'
+
 
 const reducers = combineReducers({
-    LoginSlice
+    LoginSlice,
+    createUser,
+    send_otp_phone,
+    send_otp_email
 });
 
 const persistConfig = {

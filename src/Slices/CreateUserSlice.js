@@ -7,17 +7,15 @@ const initialState = {
   pending: false,
   loading: false,
   error: false,
-  otpResp : {}
+  CreateRes : {}
 };
 
-export const postLogin = createAsyncThunk(
+export const createUser = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(location.LOGIN, data?.query, data?.body);
+    return await doPost(location.CREATE_USER, data?.query, data?.body);
   }
 );
-
-
 
 const addressSlice = createSlice({
   name: "StoreAddress",
@@ -33,14 +31,14 @@ const addressSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(postLogin.pending, (state) => {
+      .addCase(createUser.pending, (state) => {
         state.pending = true;
       })
-      .addCase(postLogin.fulfilled, (state, action) => {
+      .addCase(createUser.fulfilled, (state, action) => {
         state.pending = false;
-        state.otpResp = action.payload;
+        state.CreateRes = action.payload;
       })
-      .addCase(postLogin.rejected, (state) => {
+      .addCase(createUser.rejected, (state) => {
         state.pending = false;
         state.error = true;
       });

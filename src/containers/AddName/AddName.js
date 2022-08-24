@@ -8,10 +8,10 @@ const { height, width } = Dimensions.get('screen')
 
 const image = { uri: "https://reactjs.org/logo-og.png" };
 
-const SignUp = (props , navigation) => {
+const AddName = (props , navigation) => {
 
-  const [username,setusername] = useState()
-  const [password,setpassword] = useState()
+  const [Firstname,setFirstname] = useState()
+  const [Lastname,setLastname] = useState()
 
   console.log(props.login , "signup screen")
 
@@ -21,48 +21,37 @@ const SignUp = (props , navigation) => {
             <View style={styles.signup}>
                 <View style={styles.mainview}>
                     <View style={styles.subview}>
-                        <Text style={styles.heading}>Sign up</Text>
+                        <Text style={styles.heading}>Add name</Text>
+                        <Text>You can add a name or skip. In case you skip your username will be your name.</Text>
                     </View>
                     <View style={styles.subview}>
                         <View>
-                            <TextInput placeholder='username' style={styles.input}
+                            <TextInput placeholder='First Name' style={styles.input}
                                  onChangeText={(value) => {
-                                  setusername(value)
+                                    setFirstname(value)
                                 }}
                             >
                             </TextInput>
-                            <TextInput placeholder='password' style={styles.input}
+                            <TextInput placeholder='Last Name' style={styles.input}
                                  onChangeText={(value) => {
-                                  setpassword(value)
+                                    setLastname(value)
                                 }}
                             >
                             </TextInput>
-                        </View>
-                        <View style={styles.forget}>
-                            <TouchableOpacity>
-                                <Text>Forget password</Text>
-                            </TouchableOpacity>
                         </View>
                         <TouchableOpacity style={styles.submit} 
                             onPress={() => {
                               const data = {
                                 query : {},
                                 body : {
-                                  "alias":username,
-                                  "password": password
+                                  "alias":"gfgfghfhj",
+                                  "password": "hghghjgh"
                                 }
                               }
                               props?.doLogin(data)
                             }}
                         >
                             <Text>Sign Up</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.haveaccount} 
-                        onPress={() => {
-                            navigation.navigate(Screens.AddEmailorPhon)
-                        }}
-                        >
-                            <Text>Have an account login</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -105,7 +94,7 @@ const styles = StyleSheet.create({
       paddingTop: 10
   },
   submit: {
-      backgroundColor: 'red',
+      backgroundColor: 'FF473A',
       height: height / 15,
       justifyContent: 'center',
       alignItems: 'center',
@@ -132,4 +121,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(SignUp)
+export default connect(mapStateToProps,mapDispatchToProps)(AddName)

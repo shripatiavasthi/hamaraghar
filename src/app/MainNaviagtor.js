@@ -205,6 +205,10 @@ import VerifyEmailorPhone from '../containers/VerifyEmailorPhone/VerifyEmailorPh
 import CreateUser from '../containers/CreateUser/CreateUser'
 import SignUp from '../containers/SignUp/SignUp'
 import Home from '../containers/Home/Home'
+import { Screens } from '../helpers/Screens'
+import Gender from '../containers/Gender/Gender'
+import Birthday from '../containers/Birthday/Birthday'
+import AddName from '../containers/AddName/AddName'
 
 let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
@@ -215,11 +219,14 @@ export const MainNaviagtor = (props) => {
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.SignUp} component={SignUp} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.AddEmailorPhon} component={AddEmailorPhon} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.AddName} component={AddName} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.Birthday} component={Birthday} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="CreateUser" component={CreateUser} options={{ headerShown: false }} />
-          <Stack.Screen name="AddEmailorPhon" component={AddEmailorPhon} options={{ headerShown: false }} />
           <Stack.Screen name="VerifyOtp" component={VerifyEmailorPhone} options={{ headerShown: false }} />
-          <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>

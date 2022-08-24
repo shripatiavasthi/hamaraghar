@@ -10,10 +10,10 @@ const initialState = {
   otpResp : {}
 };
 
-export const postLogin = createAsyncThunk(
+export const send_otp_phone = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(location.LOGIN, data?.query, data?.body);
+    return await doPost(location.SEND_OTP_PHONE, data?.query, data?.body);
   }
 );
 
@@ -33,14 +33,14 @@ const addressSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(postLogin.pending, (state) => {
+      .addCase(send_otp_phone.pending, (state) => {
         state.pending = true;
       })
-      .addCase(postLogin.fulfilled, (state, action) => {
+      .addCase(send_otp_phone.fulfilled, (state, action) => {
         state.pending = false;
         state.otpResp = action.payload;
       })
-      .addCase(postLogin.rejected, (state) => {
+      .addCase(send_otp_phone.rejected, (state) => {
         state.pending = false;
         state.error = true;
       });

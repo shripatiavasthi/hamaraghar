@@ -15,4 +15,9 @@ export function resetScreen(screenName,index=0) {
 
 export const Screens = {
  LOGIN: 'LOGIN',
+ SignUp : 'SignUp',
+ AddEmailorPhon : 'AddEmailorPhon',
+ Gender : 'Gender',
+ Birthday : 'Birthday',
+ AddName : 'AddName'
 };
