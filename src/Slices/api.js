@@ -32,8 +32,9 @@ export const doPost = async (location, query, body, token) => {
   if (token) {
     config.headers["Authorization"] = `Token ${token}`;
   }
+  console.log("Post Api",url,config)
   const response = await fetch(url, config);
-
+  
   return await response.json();
 };
 

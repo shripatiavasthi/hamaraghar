@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, SafeAreaView, Dimensions, TouchableOpacity, ImageBackground, Alert , ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, SafeAreaView, Dimensions, TouchableOpacity, ImageBackground, Alert, ScrollView } from 'react-native';
 import { connect, useDispatch } from "react-redux";
+import { unwrapResult } from '@reduxjs/toolkit'
 import { postLogin } from '../../Slices/LoginSlice'
 import { navigate, Screens } from '../../helpers/Screens';
 import Geolocation from '@react-native-community/geolocation';
 import styles from '../../css/Maincss'
-import axios from 'axios';
+import { validateName } from '../../helpers/CommonValidator'
 
 Geolocation.getCurrentPosition(info => console.log(info, "location data "));
 
@@ -13,34 +14,27 @@ const { height, width } = Dimensions.get('screen')
 
 const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
-const SignUp = ({ props, navigation }) => {
+const SignUp = (props) => {
+    const { navigation } = props
+    const [username, setusername] = useState('Shubham1234')
+    const [nameError, setNameError] = useState(null)
+    const [password, setpassword] = useState('homework12')
 
-    const [username, setusername] = useState()
-    const [password, setpassword] = useState()
 
-    // useEffect(() => {
-    //     if (props?.login?.otpResp?.data?.message == "success") {
-    //         navigation.navigate(Screens.Home)
-    //     } else if (props?.login?.otpResp?.data?.message == "Failed") {
-    //         Alert.alert("something")
-    //     }
-    // }, [props?.login?.otpResp?.data?.result])
-    console.log(props?.login?.otpResp?.data, "signup screen")
-
-    const sign = ( ) => {
+    const sign = () => {
         axios({
             method: 'post',
             url: `http://54.214.196.237:3000/user/signup`,
-            data:{
+            data: {
                 "alias": username,
                 "password": password
             }
-          }).then((response) => {
-            console.log(response.data , "direct method");
+        }).then((response) => {
+            console.log(response.data, "direct method");
             navigation.navigate(Screens.AddName)
-          }).catch((e)=>{
-            console.log(e.response.data.result , "direct method" )
-          })
+        }).catch((e) => {
+            console.log(e.response.data.result, "direct method")
+        })
     }
 
     return (
@@ -55,21 +49,22 @@ const SignUp = ({ props, navigation }) => {
                         </View>
                         <View style={styles.Contentbox}>
                             <View style={styles.Input}>
-                                <ScrollView style={{flex: 1}}>
-                                {/* <View style={styles.inputfeild}> */}
-                                    <TextInput placeholder='username' style={styles.input}
+                                <ScrollView style={{ flex: 1 }}>
+                                    {/* <View style={styles.inputfeild}> */}
+                                    <TextInput value={username} placeholder='username' style={styles.input}
                                         onChangeText={(value) => {
+                                            setNameError(validateName(value))
                                             setusername(value)
                                         }}
                                     >
                                     </TextInput>
-                                    <TextInput placeholder='password' style={styles.input}
+                                    <TextInput value={password} placeholder='password' style={styles.input}
                                         onChangeText={(value) => {
                                             setpassword(value)
                                         }}
                                     >
                                     </TextInput>
-                                {/* </View> */}
+                                    {/* </View> */}
                                 </ScrollView>
                                 <View style={styles.subInput}>
                                     <TouchableOpacity>
@@ -79,25 +74,30 @@ const SignUp = ({ props, navigation }) => {
                             </View>
                             <View style={styles.SubmitButton}>
                                 <TouchableOpacity
-                                    disabled = {username && password ? false : true}
+                                    disabled={username && password ? false : true}
                                     style={username && password ? styles.button : styles.buttondisable}
-                                    onPress={() => {
-                                        // const data = {
-                                        //     query: {},
-                                        //     body: {
-                                        //         "alias": username,
-                                        //         "password": password
-                                        //     }
-                                        // }
-                                        // props?.doLogin(data)
-                                        sign()
+                                    onPress={async () => {
+                                        if (nameError) {
+                                            alert(`${nameError}`)
+                                        } else {
+                                            const data = {
+                                                query: {},
+                                                body: {
+                                                    "alias": username,
+                                                    "password": password
+                                                }
+                                            }
+                                            const resp = await props?.doLogin(data)
+                                            const rawData = await unwrapResult(resp)
+                                            console.log(rawData, "here is data")
+                                        }
                                     }}
                                 >
                                     <Text style={styles.buttonText}>Sign up</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.haveaccount}
                                     onPress={() => {
-                                        navigation.navigate(Screens.Gender)
+                                        navigation.push(Screens.Gender)
                                     }}
                                 >
                                     <Text style={styles.content}>Have an account login</Text>
