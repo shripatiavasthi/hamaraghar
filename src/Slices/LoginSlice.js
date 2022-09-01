@@ -39,6 +39,7 @@ const addressSlice = createSlice({
       .addCase(postLogin.fulfilled, (state, action) => {
         state.pending = false;
         state.otpResp = action.payload;
+        console.log(action.payload , "api call response")
       })
       .addCase(postLogin.rejected, (state) => {
         state.pending = false;

@@ -1,10 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { View } from 'react-native'
+import { View , Text } from 'react-native'
 
 export const Home = (props) => {
   return (
-    <View></View>
+    <View>
+      <Text>Home Screen</Text>
+    </View>
   )
 }
 

@@ -19,5 +19,14 @@ export const Screens = {
  AddEmailorPhon : 'AddEmailorPhon',
  Gender : 'Gender',
  Birthday : 'Birthday',
- AddName : 'AddName'
+ AddName : 'AddName',
+ Avatar : 'Avatar',
+ Home: 'Home',
+ Sucess : 'Sucess',
+ VerifyOtp: 'VerifyOtp',
+ Belongone: 'Belongone',
+ BelongThree : 'BelongThree',
+ BelongDetails: 'BelongDetails',
+ CreateBelong : 'CreateBelong',
+ InvitePeople: 'InvitePeople'
 };

@@ -1,35 +1,35 @@
-import React , {useState} from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, SafeAreaView, StyleSheet, Dimensions, TextInput, TouchableOpacity , ImageBackground } from 'react-native'
-import styles from '../../css/Maincss'
+import { View, Text, SafeAreaView, StyleSheet, Dimensions, TextInput, TouchableOpacity, Alert , ImageBackground } from 'react-native'
+import { send_otp_phone } from '../../Slices/SendPhoneOtpSlice'
+import { send_otp_email } from '../../Slices/SendEmailOtpSlice'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { navigate, Screens } from '../../helpers/Screens';
+import styles from '../../css/Maincss'
 
 const { height, width } = Dimensions.get('screen')
 
-export const VerifyEmailorPhone = ({navigation , props } ) => {
+export const Sucess = ({ props, navigation }) => {
 
     const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
-    const [emailotp , setemailotp] = useState()
-    const [smsotp , setsmsotp] = useState()
-
-  return (
-    <SafeAreaView >
+    return (
+        <SafeAreaView >
             <ImageBackground source={image.image} style={styles.maindiv}>
                 <View style={styles.FirstView}>
                     <View style={styles.PageView}>
                         <View style={styles.Headingdiv}>
                             <View style={styles.headingcontainer}>
-                                <Text style={styles.headingtext}>Verify your e-mail or phone</Text>
+                                <Text style={styles.headingtext}>Sucess</Text>
                             </View>
                             <View style={styles.headingcontainer}>
-                                <Text style={styles.subheadingtext}> We have sent you an OTP please check your email / phone and verify</Text>
+                                <Text style={styles.subheadingtext}> You are verified</Text>
                             </View>
                         </View>
                         <View style={styles.Contentbox}>
                             <View style={styles.Input}>
                                 <View style={styles.inputfeild}>
-                                    <TextInput placeholder='enter email OTP' style={styles.input}
+                                    {/* <TextInput placeholder='enter email OTP' style={styles.input}
                                         onChangeText={(value) => {
                                             setemailotp(value)
                                         }}
@@ -40,7 +40,7 @@ export const VerifyEmailorPhone = ({navigation , props } ) => {
                                             setsmsotp(value)
                                         }}
                                     >
-                                    </TextInput>
+                                    </TextInput> */}
                                 </View>
                                 <View style={styles.subInput}>
 
@@ -48,33 +48,44 @@ export const VerifyEmailorPhone = ({navigation , props } ) => {
                             </View>
                             <View style={styles.SubmitButton}>
                                 <TouchableOpacity
-                                    disabled={emailotp && smsotp ? false : true}
-                                    style={emailotp && smsotp ? styles.button : styles.buttondisable}
+                                    style={ styles.button}
                                     onPress={() => {
-                                        
+                                        navigation.navigate(Screens.Avatar)
                                     }}
                                 >
-                                    <Text style={styles.buttonText}>Verify</Text>
+                                    <Text style={styles.buttonText}>Done</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.skipbutton}
+                                {/* <TouchableOpacity style={styles.skipbutton}
                                     onPress={() => {
                                         navigation.navigate(Screens.Sucess)
                                     }}
                                 >
-                                    <Text style={styles.content}>Skip</Text>
-                                </TouchableOpacity>
+                                    <Text>Skip</Text>
+                                </TouchableOpacity> */}
                             </View>
                         </View>
                     </View>
                 </View>
             </ImageBackground>
         </SafeAreaView>
-  )
+    )
 }
 
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+    phoenotp: state.send_otp_phone,
+    emailotp: state.send_otp_email
+})
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        sendOtpPhone: (data) => {
+            dispatch(send_otp_phone(data));
+        },
+        sendOtpEmail: (data) => {
+            dispatch(send_otp_email(data));
+        },
+    }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(VerifyEmailorPhone)
+export default connect(mapStateToProps, mapDispatchToProps)(Sucess)

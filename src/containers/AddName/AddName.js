@@ -1,124 +1,109 @@
-import React,{ useEffect, useState} from 'react';
-import { StyleSheet, Text, View, Button, TextInput , SafeAreaView , Dimensions , TouchableOpacity , ImageBackground } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Button, TextInput, SafeAreaView, Dimensions, TouchableOpacity, ImageBackground } from 'react-native';
 import { connect, useDispatch } from "react-redux";
 import { postLogin } from '../../Slices/LoginSlice'
 import { navigate, Screens } from '../../helpers/Screens';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../../css/Maincss'
 
 const { height, width } = Dimensions.get('screen')
 
-const image = { uri: "https://reactjs.org/logo-og.png" };
+const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
-const AddName = (props , navigation) => {
+const AddName = ({ props, navigation }) => {
 
-  const [Firstname,setFirstname] = useState()
-  const [Lastname,setLastname] = useState()
+    const [Firstname, setFirstname] = useState()
+    const [Lastname, setLastname] = useState()
 
-  console.log(props.login , "signup screen")
+    const FirstNameData = async (value) => {
+        try {
+            await AsyncStorage.setItem('firstname', Firstname)
+            navigation.navigate(Screens.AddEmailorPhon)
+        } catch (e) {
+            console.log(e, "error in gender storage")
+        }
+    }
 
-  return (
-    <SafeAreaView >
-        <ImageBackground ource={image} resizeMode="cover" style={styles.image}>
-            <View style={styles.signup}>
-                <View style={styles.mainview}>
-                    <View style={styles.subview}>
-                        <Text style={styles.heading}>Add name</Text>
-                        <Text>You can add a name or skip. In case you skip your username will be your name.</Text>
-                    </View>
-                    <View style={styles.subview}>
-                        <View>
-                            <TextInput placeholder='First Name' style={styles.input}
-                                 onChangeText={(value) => {
-                                    setFirstname(value)
-                                }}
-                            >
-                            </TextInput>
-                            <TextInput placeholder='Last Name' style={styles.input}
-                                 onChangeText={(value) => {
-                                    setLastname(value)
-                                }}
-                            >
-                            </TextInput>
+    const LastNameData = async (value) => {
+        try {
+            await AsyncStorage.setItem('lastname', Lastname)
+
+        } catch (e) {
+            console.log(e, "error in gender storage")
+        }
+    }
+
+
+    return (
+        <SafeAreaView >
+            <ImageBackground source={image.image} style={styles.maindiv}>
+                <View style={styles.FirstView}>
+                    <View style={styles.PageView}>
+                        <View style={styles.Headingdiv}>
+                            <View style={styles.headingcontainer}>
+                                <Text style={styles.headingtext}>Add name</Text>
+                            </View>
+                            <View style={styles.headingcontainer}>
+                                <Text style={styles.subheadingtext}>You can add a name or skip. In case you skip your username will be your name.</Text>
+                            </View>
                         </View>
-                        <TouchableOpacity style={styles.submit} 
-                            onPress={() => {
-                              const data = {
-                                query : {},
-                                body : {
-                                  "alias":"gfgfghfhj",
-                                  "password": "hghghjgh"
-                                }
-                              }
-                              props?.doLogin(data)
-                            }}
-                        >
-                            <Text>Sign Up</Text>
-                        </TouchableOpacity>
+                        <View style={styles.Contentbox}>
+                            <View style={styles.Input}>
+                                <View style={styles.inputfeild}>
+                                    <TextInput placeholder='First Name' style={styles.input}
+                                        onChangeText={(value) => {
+                                            setFirstname(value)
+                                        }}
+                                    >
+                                    </TextInput>
+                                    <TextInput placeholder='Last Name' style={styles.input}
+                                        onChangeText={(value) => {
+                                            setLastname(value)
+                                        }}
+                                    >
+                                    </TextInput>
+                                </View>
+                                <View style={styles.subInput}>
+
+                                </View>
+                            </View>
+                            <View style={styles.SubmitButton}>
+                                <TouchableOpacity
+                                    disabled={Firstname && Lastname ? false : true}
+                                    style={Firstname && Lastname ? styles.button : styles.buttondisable}
+                                    onPress={() => {
+                                        FirstNameData()
+                                        LastNameData()
+                                    }}
+                                >
+                                    <Text style={styles.buttonText}>Verify</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.skipbutton}
+                                    onPress={() => {
+                                        navigation.navigate(Screens.AddEmailorPhon)
+                                    }}
+                                >
+                                    <Text style={styles.content}>Skip</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
                 </View>
-            </View>
-        </ImageBackground>
+            </ImageBackground>
         </SafeAreaView>
-  )
+    )
 }
 
-
-const styles = StyleSheet.create({
-  signup: {
-      height: height / 1,
-      padding: 10,
-      // backgroundColor: 'green'
-  },
-  mainview: {
-      // backgroundColor: 'pink',
-      height: height / 1,
-      padding: 10
-  },
-  subview: {
-      height: height / 2.6,
-      margin: 10,
-      // backgroundColor: 'red',
-      padding: 10
-  },
-  heading: {
-      fontSize: 24
-  },
-  input: {
-      padding: 10,
-      backgroundColor: 'white',
-      borderWidth: 1,
-      borderColor: 'gray',
-  },
-  forget: {
-      display: 'flex',
-      flexDirection: 'row-reverse',
-      paddingTop: 10
-  },
-  submit: {
-      backgroundColor: 'FF473A',
-      height: height / 15,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 50
-  },
-  haveaccount: {
-      paddingTop: 10
-  },
-  mage: {
-    flex: 1,
-    justifyContent: "center"
-  },
-})
-
 const mapStateToProps = (state) => ({
-    login : state.LoginSlice
+    login: state.LoginSlice
 })
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-      doLogin: (data) => {
-          dispatch(postLogin(data));
-      }
-  }
+    return {
+        doLogin: (data) => {
+            dispatch(postLogin(data));
+        }
+    }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(AddName)
+export default connect(mapStateToProps, mapDispatchToProps)(AddName)

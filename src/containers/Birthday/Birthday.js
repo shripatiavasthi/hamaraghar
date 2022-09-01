@@ -1,111 +1,111 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, SafeAreaView, StyleSheet, Dimensions, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground, Button } from 'react-native'
 import { createUser } from '../../Slices/CreateUserSlice'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { navigate, Screens } from '../../helpers/Screens';
+import styles from '../../css/Maincss'
+import DatePicker from 'react-native-date-picker'
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+
 
 const { height, width } = Dimensions.get('screen')
 
-export const Birthday = (props) => {
+export const Birthday = ({ props, navigation }) => {
 
+    const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
-    console.log(props.user, "create user response")
+    const [check, setcheck] = useState(false)
+
+    const [date, setDate] = useState(new Date())
+    const [open, setOpen] = useState(false)
+
+    console.log(date.toString(), "selected date")
+
+    const BirthdayData = async (value) => {
+        navigation.navigate(Screens.SignUp)
+        try {
+            await AsyncStorage.setItem('Dob', dob)
+        } catch (e) {
+            console.log(e, "dob error")
+        }
+    }
 
     return (
         <SafeAreaView >
-            <View style={styles.signup}>
-                <View style={styles.mainview}>
-                    <View style={styles.subview}>
-                        <Text style={styles.heading}>Add your e-mail or phone</Text>
-                        <Text style={styles.subheading}>vcvfhjvxbv vhdfvhbdfxmnfvhv gfgdsvchdf gvchgdvcghd gvcghdvcghd vcgvfdcv vhcvdhc hgvhgdvch vchdvchgdfvch hvchgdfvhgdfv vhvdfhvd vhgvdfhgvdfhgv b hbvhdfbvhjdfbvjdf v jf vhfdvh nmbv  vdvhdf vb dh v d v</Text>
-                        <View>
-                            <TextInput placeholder='Enter Birthday' style={styles.input}>
-                            </TextInput>
+            <ImageBackground source={image.image} style={styles.maindiv}>
+                <View style={styles.FirstView}>
+                    <View style={styles.PageView}>
+                        <View style={styles.Headingdiv}>
+                            <View style={styles.headingcontainer}>
+                                <Text style={styles.headingtext}>Add Birthday</Text>
+                            </View>
+                            <View style={styles.headingcontainer}>
+                                <Text style={styles.subheadingtext}>You must be 18 years of age to use this app. Adding your age helps us in providing you with better recommendations that enhances your experience while using this app. You can choose not to add the birthday and just certify that you are 18 or older.</Text>
+                            </View>
+                            <View style={styles.Birthday}>
+                                <TouchableOpacity onPress={() => setOpen(true)} style={styles.datebutton}>
+                                    <Text style={{ margin: 10, fontSize: 16, fontWeight: 'bold' }}> September 29 , 1997</Text>
+                                </TouchableOpacity>
+                                <DatePicker
+                                    modal
+                                    open={open}
+                                    date={date}
+                                    mode="date"
+                                    onConfirm={(date) => {
+                                        setOpen(false)
+                                        setDate(date)
+                                    }}
+                                    onCancel={() => {
+                                        setOpen(false)
+                                    }}
+                                />
+                            </View>
+                        </View>
+                        <View style={styles.Contentbox}>
+                            <View style={styles.Input}>
+                                <View style={styles.inputfeild}>
+
+                                </View>
+                                <View style={styles.agebox}>
+                                    <TouchableOpacity 
+                                    onPress={()=>{
+                                        setcheck(true)
+                                        if (check === true) {
+                                            setcheck(false)
+                                        }
+                                    }}
+                                    >
+                                        <View style={styles.checkbox} >
+                                            {check ? 
+                                            <IconAntDesign name="check" size={30} color="#900" />
+                                            : null }
+                                        </View>
+                                    </TouchableOpacity>
+                                    <Text style={styles.content}>I am 18 or older</Text>
+                                </View>
+                            </View>
+                            <View style={styles.SubmitButton}>
+                                <TouchableOpacity
+                                    style={date && check ? styles.button : styles.buttondisable}
+                                    disabled={ check ? false : true}
+                                    onPress={() => {
+                                        BirthdayData()
+                                    }}
+                                >
+                                    <Text style={styles.buttonText}>Submit</Text>
+                                </TouchableOpacity>
+                                <View style={styles.skipbutton}>
+                                    <Text >Once added the gender cannot be changed.</Text>
+                                </View>
+                            </View>
                         </View>
                     </View>
-                    <View  style={styles.submitView}>
-                        <TouchableOpacity style={styles.submit}
-                            onPress={() => {
-                                const data = {
-                                    query: {},
-                                    body: {
-                                        "user_alias": "Subhi2197",
-                                        "first_name": "Subhi",
-                                        "last_name": "Tandon",
-                                        "gender": "male",
-                                        "date_of_birth": 767676,
-                                        "email": "subhi6565@gmail.com",
-                                        "phone": 8989989887,
-                                        "bio": "jhvjhvdjhv",
-                                        "country": 5
-                                    }
-                                }
-                                props?.createuser(data)
-                            }}
-                        >
-                            <Text>Sign Up</Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
-            </View>
+            </ImageBackground>
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    signup: {
-        height: height / 1,
-        padding: 10,
-        // backgroundColor: 'green'
-    },
-    mainview: {
-        // backgroundColor: 'pink',
-        height: height / 1,
-        padding: 10
-    },
-    subview: {
-        height: height / 2,
-        margin: 10,
-        // backgroundColor: 'red',
-        padding: 10,
-        justifyContent:'space-evenly'
-    },
-    heading: {
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-    subheading: {
-        paddingTop: 10,
-        fontSize: 15
-    },
-    input: {
-        padding: 10,
-        backgroundColor: 'white',
-        borderWidth: 1,
-        borderColor: 'gray',
-    },
-    forget: {
-        display: 'flex',
-        flexDirection: 'row-reverse',
-        paddingTop: 10
-    },
-    submit: {
-        backgroundColor: 'yellow',
-        height: height / 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 50
-    },
-    haveaccount: {
-        paddingTop: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    submitView:{
-        height: height/4,
-        justifyContent: 'flex-end',
-        // backgroundColor:'green'
-    }
-})
 
 const mapStateToProps = (state) => ({
     user: state.createUser

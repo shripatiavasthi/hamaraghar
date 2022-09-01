@@ -3,50 +3,61 @@ import { StyleSheet, Text, View, Button, TextInput, SafeAreaView, Dimensions, To
 import { connect, useDispatch } from "react-redux";
 import { postLogin } from '../../Slices/LoginSlice'
 import { navigate, Screens } from '../../helpers/Screens';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../../css/Maincss'
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
 
 const { height, width } = Dimensions.get('screen')
 
-const image = { uri: "https://reactjs.org/logo-og.png" };
+const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
-const Gender = (props, navigation) => {
+const Gender = ({ props, navigation }) => {
 
     const [gender, setgender] = useState()
     const [genderindex, setgenderindex] = useState()
 
     const allgender = ['Female', 'Male', 'Non-binary', 'Tansgender', 'Prefer not to say']
 
-    console.log(props.login, "signup screen")
+    const GenderData = async (value) => {
+        try {
+            await AsyncStorage.setItem('Gender', value)
+
+        } catch (e) {
+            console.log(e, "error in gender storage")
+        }
+    }
 
     return (
         <SafeAreaView >
-            <ImageBackground ource={image} resizeMode="cover" style={styles.image}>
-                <View style={styles.signup}>
-                    <View style={styles.mainview}>
-                        <View style={styles.subview}>
-                            <Text style={styles.heading}>You are</Text>
-                            <View style={styles.secondview}>
+            <ImageBackground source={image.image} style={styles.maindiv}>
+                <View style={styles.FirstView}>
+                    <View style={styles.PageView}>
+                        <View style={styles.Headingdiv}>
+                            <View style={styles.headingcontainer}>
+                                <Text style={styles.headingtext}>You are</Text>
+                            </View>
+                            <View style={styles.GenderView}>
                                 {allgender.map((item, index) => {
                                     return (
                                         <TouchableOpacity
-                                            style={styles.button}
+                                            style={styles.options}
                                             key={index}
                                             onPress={() => {
                                                 setgender(item)
                                                 setgenderindex(index)
+                                                if (gender === item) {
+                                                    setgender()
+                                                    setgenderindex()
+                                                }
                                             }}>
-                                            <View style={styles.options}>
-                                                <View style={styles.boxview} >
+                                            <View style={styles.option}>
+                                                <View style={styles.checkbox} >
                                                     {genderindex === index ?
-                                                        <Image
-                                                            style={styles.tinyLogo}
-                                                            source={{
-                                                                uri: 'https://reactnative.dev/img/tiny_logo.png',
-                                                            }}
-                                                        /> : null}
+                                                        <IconAntDesign name="check" size={30} color="#900" />
+                                                        : null}
                                                 </View >
                                                 <View style={styles.optionname}>
-                                                <Text>{item}</Text>
+                                                    <Text style={styles.GenderText}>{item}</Text>
                                                 </View>
                                             </View>
                                         </TouchableOpacity>
@@ -54,21 +65,37 @@ const Gender = (props, navigation) => {
                                 })}
                             </View>
                         </View>
-                        <View style={styles.submitView}>
-                            <TouchableOpacity style={styles.submit}
-                                onPress={() => {
-                                    const data = {
-                                        query: {},
-                                        body: {
-                                            "alias": "gfgfghfhj",
-                                            "password": "hghghjgh"
-                                        }
-                                    }
-                                    props?.doLogin(data)
-                                }}
-                            >
-                                <Text>Submit</Text>
-                            </TouchableOpacity>
+                        <View style={styles.Contentbox}>
+                            <View style={styles.Input}>
+                                <View style={styles.inputfeild}>
+                                    
+                                </View>
+                                <View style={styles.subInput}>
+
+                                </View>
+                            </View>
+                            <View style={styles.SubmitButton}>
+                                <TouchableOpacity
+                                    style={gender ? styles.button : styles.buttondisable}
+                                    disabled={gender ? false : true}
+                                    onPress={() => {
+                                        GenderData(gender)
+                                        navigation.navigate(Screens.Birthday)
+                                    }}
+                                >
+                                    <Text style={styles.buttonText}>Submit</Text>
+                                </TouchableOpacity>
+                                <View style={styles.skipbutton}>
+                                    <Text style={styles.content}>Once added the gender cannot be changed.</Text>
+                                </View>
+                                {/* <TouchableOpacity style={styles.skipbutton}
+                                    onPress={() => {
+                                        navigation.navigate(Screens.Sucess)
+                                    }}
+                                >
+                                    <Text>Skip</Text>
+                                </TouchableOpacity> */}
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -78,71 +105,7 @@ const Gender = (props, navigation) => {
 }
 
 
-const styles = StyleSheet.create({
-    signup: {
-        height: height / 1,
-        padding: 10,
-        // backgroundColor: 'green'
-    },
-    mainview: {
-        // backgroundColor: 'pink',
-        height: height / 1,
-        padding: 10
-    },
-    subview: {
-        height: height / 1.5,
-        margin: 10,
-        // backgroundColor: 'red',
-        padding: 10
-    },
-    secondview: {
-        marginTop:50,
-        height: height / 2,
-        width: width / 1.3,
-        // backgroundColor: 'green',
-    },
-    heading: {
-        fontSize: 24
-    },
-    submit: {
-        backgroundColor: 'red' , 
-        height: height / 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 50
-    },
-    mage: {
-        flex: 1,
-        justifyContent: "center"
-    },
-    boxview: {
-        height: height / 22,
-        width: width / 11,
-        borderColor: 'black',
-        borderWidth: 1
-    },
-    tinyLogo: {
-        width: 35,
-        height: 37,
-    },
-    options: {
-        width: width / 2,
-        // backgroundColor: 'pink',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    button: {
-        flexDirection: 'row',
-        // backgroundColor: "#DDDDDD",
-        padding: 10,
-    },
-    optionname:{
-        // backgroundColor: 'blue' , 
-        width: '90%' ,
-        marginLeft:10,
-        justifyContent: 'center'
-    }
-})
+
 
 const mapStateToProps = (state) => ({
     login: state.LoginSlice
