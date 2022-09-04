@@ -20,7 +20,8 @@ export const Birthday = ({ props, navigation }) => {
     const [date, setDate] = useState(new Date())
     const [open, setOpen] = useState(false)
 
-    console.log(date.toString(), "selected date")
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+    console.log(date.toLocaleDateString("en-US",options), "selected date")
 
     const BirthdayData = async (value) => {
         navigation.navigate(Screens.SignUp)

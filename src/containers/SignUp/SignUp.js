@@ -119,7 +119,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         doLogin: (data) => {
-            dispatch(postLogin(data));
+           return dispatch(postLogin(data));
         }
     }
 }
