@@ -22,23 +22,7 @@ export const Birthday = ({ props, navigation }) => {
     const [ChousenDate, setChousenDate] = useState(false)
     const [lessthen, setlessthen] = useState(false)
 
-    const d = new Date();
-
-    useEffect(() => { Comparison() }, [date])
-
-    const Comparison = () => {
-        const diff = d.getTime() - date.getTime()
-        const days = diff / 31556952
-        if (days > 18000) {
-            setlessthen(true)
-        }else if (days > 13000){
-
-        }
-        console.log(days, "difference of two date")
-    }
-
-    var options = { year: 'numeric', month: 'long', day: 'numeric' };
-    console.log(date.toLocaleDateString("en-US", options), "selected date")
+    console.log(date.toString(), "selected date")
 
     const BirthdayData = async (value) => {
         navigation.navigate(Screens.SignUp)
