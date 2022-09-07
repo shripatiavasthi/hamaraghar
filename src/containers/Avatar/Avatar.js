@@ -216,7 +216,7 @@ const Avatar = ( {props, navigation }) => {
                                     
                                 </View>
                                 <View style={styles.subInput}>
-
+                                    
                                 </View>
                             </View>
                             <View style={styles.SubmitButton}>

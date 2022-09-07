@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, SafeAreaView, StyleSheet, Dimensions, TextInput, TouchableOpacity, ImageBackground, Button } from 'react-native'
 import { createUser } from '../../Slices/CreateUserSlice'
@@ -19,8 +19,26 @@ export const Birthday = ({ props, navigation }) => {
 
     const [date, setDate] = useState(new Date())
     const [open, setOpen] = useState(false)
+    const [ChousenDate, setChousenDate] = useState(false)
+    const [lessthen, setlessthen] = useState(false)
 
-    console.log(date.toString(), "selected date")
+    const d = new Date();
+
+    useEffect(() => { Comparison() }, [date])
+
+    const Comparison = () => {
+        const diff = d.getTime() - date.getTime()
+        const days = diff / 31556952
+        if (days > 18000) {
+            setlessthen(true)
+        }else if (days > 13000){
+
+        }
+        console.log(days, "difference of two date")
+    }
+
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+    console.log(date.toLocaleDateString("en-US", options), "selected date")
 
     const BirthdayData = async (value) => {
         navigation.navigate(Screens.SignUp)
@@ -45,7 +63,7 @@ export const Birthday = ({ props, navigation }) => {
                             </View>
                             <View style={styles.Birthday}>
                                 <TouchableOpacity onPress={() => setOpen(true)} style={styles.datebutton}>
-                                    <Text style={{ margin: 10, fontSize: 16, fontWeight: 'bold' }}> September 29 , 1997</Text>
+                                    <Text style={{ margin: 10, fontSize: 16, fontWeight: 'bold' }}> {date ? date.toLocaleDateString("en-US", options) : "September 29 , 1997"}  </Text>
                                 </TouchableOpacity>
                                 <DatePicker
                                     modal
@@ -68,18 +86,20 @@ export const Birthday = ({ props, navigation }) => {
 
                                 </View>
                                 <View style={styles.agebox}>
-                                    <TouchableOpacity 
-                                    onPress={()=>{
-                                        setcheck(true)
-                                        if (check === true) {
-                                            setcheck(false)
-                                        }
-                                    }}
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setcheck(true)
+                                            if (lessthen === true) {
+                                                setlessthen(false)
+                                            } else {
+                                                alert("You are Less then 13 years ")
+                                            }
+                                        }}
                                     >
                                         <View style={styles.checkbox} >
-                                            {check ? 
-                                            <IconAntDesign name="check" size={30} color="#900" />
-                                            : null }
+                                            {lessthen ?
+                                                <IconAntDesign name="check" size={30} color="#900" />
+                                                : null}
                                         </View>
                                     </TouchableOpacity>
                                     <Text style={styles.content}>I am 18 or older</Text>
@@ -87,8 +107,8 @@ export const Birthday = ({ props, navigation }) => {
                             </View>
                             <View style={styles.SubmitButton}>
                                 <TouchableOpacity
-                                    style={date && check ? styles.button : styles.buttondisable}
-                                    disabled={ check ? false : true}
+                                    style={date && lessthen ? styles.button : styles.buttondisable}
+                                    disabled={lessthen ? false : true}
                                     onPress={() => {
                                         BirthdayData()
                                     }}
