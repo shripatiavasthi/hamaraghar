@@ -1,5 +1,6 @@
 module.exports = {
   // LOGIN: '/notification/send_otp/', 
+  USERLOGIN : '/user/login',
   LOGIN : '/user/signup',
   CREATE_USER : '/user/create',
   SEND_OTP_PHONE : '/user/send_otp/phone',

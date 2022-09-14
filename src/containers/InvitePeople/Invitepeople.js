@@ -1,8 +1,9 @@
-import React, { useState ,  } from 'react'
+import React, { useState, } from 'react'
 import { connect } from 'react-redux'
 import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity, Image } from 'react-native'
 import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 export const InvitePeople = (props) => {
 
@@ -33,7 +34,13 @@ export const InvitePeople = (props) => {
                             }}>
                             <View style={belongstyles.option}>
                                 <View style={belongstyles.optionname}>
-                                    <Text style={belongstyles.GenderText}>{item}</Text>
+                                    <View style={belongstyles.user}>
+                                        <EvilIcons name="user" size={45} color="black" />
+                                    </View>
+                                    <View>
+                                        <Text style={belongstyles.GenderText}>{item}</Text>
+                                        <Text>Shared groups heavens</Text>
+                                    </View>
                                 </View>
                                 <View style={styles.checkbox} >
                                     {optionindex === index ?
@@ -70,7 +77,13 @@ export const InvitePeople = (props) => {
                             }}>
                             <View style={belongstyles.option}>
                                 <View style={belongstyles.optionname}>
-                                    <Text style={belongstyles.GenderText}>{item}</Text>
+                                    <View style={belongstyles.user}>
+                                        <EvilIcons name="user" size={45} color="black" />
+                                    </View>
+                                    <View>
+                                        <Text style={belongstyles.GenderText}>{item}</Text>
+                                        <Text>Shared groups heavens</Text>
+                                    </View>
                                 </View>
                                 <View style={styles.checkbox} >
                                     {optionindex === index ?
@@ -107,7 +120,13 @@ export const InvitePeople = (props) => {
                             }}>
                             <View style={belongstyles.option}>
                                 <View style={belongstyles.optionname}>
-                                    <Text style={belongstyles.GenderText}>{item}</Text>
+                                    <View style={belongstyles.user}>
+                                        <EvilIcons name="user" size={45} color="black" />
+                                    </View>
+                                    <View>
+                                        <Text style={belongstyles.GenderText}>{item}</Text>
+                                        <Text>Shared groups heavens</Text>
+                                    </View>
                                 </View>
                                 <View style={styles.checkbox} >
                                     {optionindex === index ?
@@ -137,10 +156,10 @@ export const InvitePeople = (props) => {
                                 <Text style={belongstyles.headingtext}>Invite people</Text>
                             </View>
                             <View style={belongstyles.headingcontainer}>
-                                <Text >Grow your community , invite people to join </Text>
+                                <Text style={belongstyles.detTxt}>Grow your community , invite people to join </Text>
                             </View>
                         </View>
-                        <View style={belongstyles.form}>
+                        <View style={belongstyles.InviteView}>
                             <View style={belongstyles.OPTIONS}>
                                 <TouchableOpacity
                                     style={caseone ? belongstyles.ChouseSection : belongstyles.UnSelectChouseSection}
@@ -149,7 +168,7 @@ export const InvitePeople = (props) => {
                                         setcasetwo(false)
                                         setcasethree(false)
                                     }}>
-                                    <Text>Followers</Text>
+                                    <Text style={caseone ? belongstyles.selectoptiontext : belongstyles.unselectoptiontext}>Followers</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={casetwo ? belongstyles.ChouseSection : belongstyles.UnSelectChouseSection}
@@ -158,7 +177,7 @@ export const InvitePeople = (props) => {
                                         setcasetwo(true)
                                         setcasethree(false)
                                     }}>
-                                    <Text>Following</Text>
+                                    <Text style={casetwo ? belongstyles.selectoptiontext : belongstyles.unselectoptiontext}>Following</Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={casethree ? belongstyles.ChouseSection : belongstyles.UnSelectChouseSection}
@@ -167,7 +186,7 @@ export const InvitePeople = (props) => {
                                         setcasetwo(false)
                                         setcasethree(true)
                                     }}>
-                                    <Text>Contact</Text>
+                                    <Text style={casethree ? belongstyles.selectoptiontext : belongstyles.unselectoptiontext}>Contact</Text>
                                 </TouchableOpacity>
                             </View>
                             <ScrollView>
@@ -180,7 +199,7 @@ export const InvitePeople = (props) => {
                         </View>
                         <View style={belongstyles.browseAll}>
                             <TouchableOpacity style={belongstyles.SubmitButton}>
-                                <Text style={belongstyles.SubmitButtonText}>Create your own community </Text>
+                                <Text style={belongstyles.SubmitButtonText}>Invite </Text>
                             </TouchableOpacity>
                             <TouchableOpacity >
                                 <Text >Later </Text>

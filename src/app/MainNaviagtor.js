@@ -216,31 +216,139 @@ import BelongThree from '../containers/BELONG/BelongThree'
 import BelongDetails from '../containers/BELONG/BelongDetail'
 import CreateBelong from '../containers/CreateBelong/CreateBelong'
 import InvitePeople from '../containers/InvitePeople/Invitepeople'
+import SubCategories from '../containers/BELONG/SubCategories'
+import InviteSucess from '../containers/InviteSucess/InviteSucess'
+
 
 let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const BottomTabs = createBottomTabNavigator();
+
+
+const Tabs = props => {
+  return (
+    <BottomTabs.Navigator
+      screenOptions={{
+        showIcon: true,
+        tabBarShowLabel: true,
+        // tabBarActiveTintColor: PrimarySettings.primaryColor,
+        // tabBarInactiveTintColor: PrimarySettings.grayColors._700,
+        style: {
+          borderRadius: 5,
+          height: 50,
+        },
+      }}
+    >
+      <BottomTabs.Screen
+        name={Screens.Home}
+        component={Home}
+        options={({ navigation }) => {
+          return {
+            // tabBarIcon: ({ focused }) => (
+            // <View>
+            //   {focused ? (
+            //     <View>
+            //       <BlueHome />
+            //     </View>
+            //   ) : (
+            //     <View>
+            //       <GrayHome />
+            //     </View>
+            //   )}
+            // </View>
+            // ),
+            // tabBarLabel: 'Home',
+            headerShown: false,
+          };
+        }}
+      />
+
+      {/* <BottomTabs.Screen
+        name={Screens.Home}
+        component={Home}
+        listeners={{
+          tabPress: e => {
+            navigate(Screens.ALLPACKAGE, {
+              search: '',
+              from: 'notmainpage',
+              best: false,
+            });
+          },
+        }}
+        options={({ navigation }) => {
+          return {
+            // tabBarIcon: ({ focused }) => (
+              // <View>
+              //   {focused ? (
+              //     <View>
+              //       <BlueHeart />
+              //     </View>
+              //   ) : (
+              //     <View>
+              //       <GrayHeart />
+              //     </View>
+              //   )}
+              // </View>
+            // ),
+            tabBarLabel: 'All Packages',
+            headerShown: false,
+          };
+        }}
+      /> */}
+
+      {/* <BottomTabs.Screen
+        name={Screens.Home}
+        component={Home}
+        options={({ navigation }) => {
+          return {
+            // tabBarIcon: ({ focused }) => (
+            //   <View>
+            //     {focused ? (
+            //       <View>
+            //         <BlueUser />
+            //       </View>
+            //     ) : (
+            //       <View>
+            //         <GreyUser />
+            //       </View>
+            //     )}
+            //   </View>
+            // ),
+            tabBarLabel: 'My Profile',
+            headerShown: false,
+          };
+        }}
+      /> */}
+    </BottomTabs.Navigator>
+  );
+};
+
 
 export const MainNaviagtor = (props) => {
   return (
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SignUp} component={SignUp} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.Tabs} component={Tabs} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.InviteSucess} component={InviteSucess} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.InvitePeople} component={InvitePeople} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.CreateBelong} component={CreateBelong} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.Home} component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.Belongone} component={Belongone} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.SubCategories} component={SubCategories} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.AddName} component={AddName} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.VerifyOtp} component={VerifyEmailorPhone} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.AddEmailorPhon} component={AddEmailorPhon} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.Belongone} component={Belongone} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.InvitePeople} component={InvitePeople} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.CreateBelong} component={CreateBelong} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.BelongDetails} component={BelongDetails} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.BelongThree} component={BelongThree} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Birthday} component={Birthday} options={{ headerShown: false }} />
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.Login} component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="CreateUser" component={CreateUser} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.Home} component={Home} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Sucess} component={Sucess} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>

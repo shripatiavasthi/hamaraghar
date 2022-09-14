@@ -240,15 +240,15 @@ const SignUp = (props) => {
                                 onChangeText={ async txt => {
                                     setName(txt), 
                                     _nameValidate(txt);
-                                    // const data = {
-                                    //     query: {},
-                                    //     body: {
-                                    //         "alias": txt,
-                                    //     }
-                                    // }
-                                    // const resp = await props?.aliesexist(data)
-                                    // const rawData = await unwrapResult(resp)
-                                    // console.log(rawData, "alies response")
+                                    const data = {
+                                        query: {},
+                                        body: {
+                                            "alias": txt,
+                                        }
+                                    }
+                                    const resp = await props?.aliesexist(data)
+                                    const rawData = await unwrapResult(resp)
+                                    console.log(rawData, "alies response")
                                 }}
                             />
                             {errorName != null ? (
@@ -316,7 +316,9 @@ const SignUp = (props) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.forCon}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>{
+                            navigation.push(Screens.Login)
+                        }}>
                             <Text style={styles.anTxt}>Have an account, log in!</Text>
                         </TouchableOpacity>
                     </View>
@@ -332,7 +334,7 @@ const styles = StyleSheet.create({
         // backgroundColor: 'cyan',
     },
     MainDiv: {
-        height: height * 0.92,
+        height: height ,
         width: width / 1,
         // backgroundColor: 'lightblue',
     },

@@ -28,5 +28,9 @@ export const Screens = {
  BelongThree : 'BelongThree',
  BelongDetails: 'BelongDetails',
  CreateBelong : 'CreateBelong',
- InvitePeople: 'InvitePeople'
+ InvitePeople: 'InvitePeople',
+ SubCategories : 'SubCategories',
+ InviteSucess : 'InviteSucess',
+ Tabs : 'Tabs', 
+ Login : 'Login',
 };

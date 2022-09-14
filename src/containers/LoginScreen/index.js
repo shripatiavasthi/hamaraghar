@@ -1,131 +1,295 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, SafeAreaView, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { Dimensions, StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity, ImageBackground } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler';
 import { connect, useDispatch } from "react-redux";
+import { unwrapResult } from '@reduxjs/toolkit'
 import { postLogin } from '../../Slices/LoginSlice'
+import { postUserLogin } from '../../Slices/UserLoginSlice'
+import { alies_exist } from '../../Slices/AliesCheckSlice'
+import { navigate, Screens } from '../../helpers/Screens';
+import Geolocation from '@react-native-community/geolocation';
+import { validateName, _nameValidate, _passwordvalidate } from '../../helpers/CommonValidator'
+import axios from 'axios'
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
 
 const { height, width } = Dimensions.get('screen')
 
+const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
 const LoginScreen = (props) => {
-    const [username, setusername] = useState()
-    const [password, setpassword] = useState()
 
-    console.log(props.login, "signup screen")
+    const { navigation } = props
+
+    const [Password, setPassword] = useState('');
+    const [errorPassword, setErrorPassword] = useState(null);
+    const [Name, setName] = useState('');
+    const [errorName, setErrorName] = useState(null);
+    const [email, setemail] = useState('');
+    const [errorEmail, setErrorEmail] = useState(null);
+
+
+
+
+
+    // const _nameValidate = name => {
+    //     var nameRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    //     if (name === '') {
+    //         setErrorName('*Please enter name.');
+    //     } else if (!nameRegex.test(name)) {
+    //         setErrorName('*Please enter valid name.');
+    //     } else {
+    //         setErrorName(null);
+    //     }
+    // };
+
+    const [lat, setlat] = useState('')
+    const [lon, setlon] = useState('')
+
+    Geolocation.getCurrentPosition(info => {
+        setlat(info?.coords?.latitude)
+        setlon(info?.coords?.longitude)
+        console.log(info?.coords?.latitude, "location data ")
+    }
+    );
+
+    useEffect(() => { getlocation() }, [lat && lon])
+
+    const getlocation = () => {
+        axios({
+            method: 'post',
+            url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyBFB_A5HYqjbBxCd5eLF7oUD7_movLicUk`,
+        }).then((response) => {
+            console.log(response, "direct method");
+        }).catch((e) => {
+            console.log(e.response, "direct method")
+        })
+    }
 
     return (
-        <SafeAreaView >
-            <View style={styles.signup}>
-                <View style={styles.mainview}>
-                    <View style={styles.subview}>
-                        <Text style={styles.heading}>Login </Text>
-                        <View>
-                            <TextInput placeholder='phone number' style={styles.input}
-                                onChangeText={(value) => {
-                                    setpassword(value)
-                                }}
-                            >
-                            </TextInput>
-                        </View>
-                        <TouchableOpacity style={styles.submit}
-                            onPress={() => {
-                                const data = {
-                                    query: {},
-                                    body: {
-                                        "alias": "gfgfghfhj",
-                                        "password": "hghghjgh"
+        <View style={styles.mainContinter}>
+            <ScrollView>
+                <ImageBackground source={image.image} style={styles.MainDiv}>
+                    <View style={styles.titleCon}>
+                        <Text style={styles.titTxt}>Log In</Text>
+                    </View>
+                    <KeyboardAvoidingView behavior='position'>
+                        <View style={styles.usercon}>
+                        <TextInput
+                                style={styles.useText}
+                                placeholder='email '
+                                placeholderTextColor={'#000000'}
+                                onChangeText={async txt => {
+                                    setName(txt),
+                                        setErrorName(_nameValidate(txt))
+                                    const data = {
+                                        query: {},
+                                        body: {
+                                            "alias": txt,
+                                        }
                                     }
-                                }
-                                props?.doLogin(data)
-                            }}
-                        >
-                            <Text>Login with otp</Text>
+                                    const resp = await props?.aliesexist(data)
+                                    const rawData = await unwrapResult(resp)
+                                    console.log(rawData, "alies response")
+                                }}
+                            />
+                            {errorName != null ? (
+                                <View
+                                    style={styles.redCon}>
+                                    <Text
+                                        style={styles.redTxt}>
+                                        {errorName}
+                                    </Text>
+                                </View>
+                            ) : null}
+                            <TextInput
+                                style={styles.useText}
+                                placeholder='user name'
+                                placeholderTextColor={'#000000'}
+                                onChangeText={async txt => {
+                                    setName(txt),
+                                        setErrorName(_nameValidate(txt))
+                                    const data = {
+                                        query: {},
+                                        body: {
+                                            "alias": txt,
+                                        }
+                                    }
+                                    const resp = await props?.aliesexist(data)
+                                    const rawData = await unwrapResult(resp)
+                                    console.log(rawData, "alies response")
+                                }}
+                            />
+                            {errorName != null ? (
+                                <View
+                                    style={styles.redCon}>
+                                    <Text
+                                        style={styles.redTxt}>
+                                        {errorName}
+                                    </Text>
+                                </View>
+                            ) : null}
+                            <View style={styles.passcon}>
+                                <TextInput
+                                    style={styles.useText}
+                                    placeholder='password'
+                                    placeholderTextColor={'#000000'}
+                                    onChangeText={txt => {
+                                        setPassword(txt),
+                                            setErrorPassword(_passwordvalidate(txt))
+                                    }}
+                                />
+                                {errorPassword != null ? (
+                                    <View
+                                        style={styles.redCon}>
+                                        <Text
+                                            style={styles.redTxt}>
+                                            {errorPassword}
+                                        </Text>
+                                    </View>
+                                ) : null}
+                            </View>
+                        </View>
+                    </KeyboardAvoidingView>
+                    <View style={styles.forgotCon}>
+                        <TouchableOpacity onPress={() => { alert('Hello') }}>
+                            <Text style={styles.frgTxt}>Forgot your password?</Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.subview}>
-                        <View>
-                            <TextInput placeholder='username' style={styles.input}
-                                onChangeText={(value) => {
-                                    setusername(value)
-                                }}
-                            >
-                            </TextInput>
-                            <TextInput placeholder='password' style={styles.input}
-                                onChangeText={(value) => {
-                                    setpassword(value)
-                                }}
-                            >
-                            </TextInput>
-                        </View>
-                        <View style={styles.forget}>
-                            <TouchableOpacity>
-                                <Text>Forget password</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity style={styles.submit}
-                            onPress={() => {
-                                const data = {
-                                    query: {},
-                                    body: {
-                                        "alias": "gfgfghfhj",
-                                        "password": "hghghjgh"
+                    <View style={styles.titleCons}>
+                        <TouchableOpacity
+                            style={styles.btnCon}
+                            disabled={errorName && errorPassword ? true : false}
+                            onPress={async () => {
+                                if (errorName && errorPassword) {
+                                    alert('Please Enter correct User id and password')
+                                } else {
+                                    const data = {
+                                        query: {},
+                                        body: {
+                                            "alias": Name,
+                                            "phone_number": Password,
+                                            "email": email,
+                                        }
+                                    }
+                                    const resp = await props?.doLogin(data)
+                                    const rawData = await unwrapResult(resp)
+                                    console.log(rawData?.data, "here is data")
+                                    if (rawData?.data?.message === 'Success') {
+                                        navigation.push(Screens.AddName)
+                                    } else if (rawData?.data?.message === 'Failed') {
+                                        alert(`${rawData?.data?.Error}`)
                                     }
                                 }
-                                props?.doLogin(data)
                             }}
                         >
-                            <Text>Sign Up</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.haveaccount}>
-                            <Text>Have an account login</Text>
+                            <Text style={styles.btnTxt}>Sign up</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
-            </View>
-        </SafeAreaView>
+                    <View style={styles.forCon}>
+                        <TouchableOpacity >
+                            {/* <Text style={styles.anTxt}>Have an account, log in!</Text> */}
+                        </TouchableOpacity>
+                    </View>
+                </ImageBackground>
+            </ScrollView>
+        </View>
     )
 }
 
-
 const styles = StyleSheet.create({
-    signup: {
-        height: height / 1,
-        padding: 10,
-        // backgroundColor: 'green'
+    mainContinter: {
+        flex: 1,
+        // backgroundColor: 'cyan',
     },
-    mainview: {
-        // backgroundColor: 'pink',
-        height: height / 1,
-        padding: 10
+    MainDiv: {
+        height: height,
+        width: width / 1,
+        // backgroundColor: 'lightblue',
     },
-    subview: {
-        height: height / 2.6,
-        margin: 10,
-        // backgroundColor: 'red',
-        padding: 10
+    titleCon: {
+        height: height / 7,
+        width: width / 1.4,
+        // backgroundColor: 'cyan',
+        justifyContent: 'flex-end',
+        // alignItems: 'center',    
+        alignSelf: 'center'
+
     },
-    heading: {
-        fontSize: 24
+    titTxt: {
+        fontSize: height / 20,
+        // fontFamily: Montserrat,
+        fontWeight: '400',
+        color: '#FFFFFF'
     },
-    input: {
-        padding: 10,
-        backgroundColor: 'white',
-        borderWidth: 1,
-        borderColor: 'gray',
+    usercon: {
+        height: height / 1.8,
+        width: width / 1.4,
+        // backgroundColor: 'cyan',
+        justifyContent: 'flex-end',
+        // alignItems: 'center',    
+        alignSelf: 'center',
     },
-    forget: {
-        display: 'flex',
-        flexDirection: 'row-reverse',
-        paddingTop: 10
+    useText: {
+        height: height / 16,
+        width: width / 1.4,
+        backgroundColor: '#FFFFFF',
+        paddingHorizontal: 20,
+        fontSize: height / 55,
+        borderWidth: 0.5
     },
-    submit: {
-        backgroundColor: 'FF473A',
-        height: height / 15,
+    forgotCon: {
+        height: height / 30,
+        width: width / 1.4,
+        // backgroundColor: 'cyan',
+        alignSelf: 'center',
         justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 50
+        alignItems: 'flex-end'
     },
-    haveaccount: {
-        paddingTop: 10
+    frgTxt: {
+        fontSize: 13,
+        fontWeight: '400',
+        color: '#FFFFFF'
+    },
+    btnCon: {
+        height: height / 16,
+        width: width / 1.4,
+        backgroundColor: '#FF4500',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    btnTxt: {
+        color: '#FFFFFF',
+        fontSize: 20
+    },
+    titleCons: {
+        height: height / 10,
+        width: width / 1.4,
+        // backgroundColor: 'cyan',
+        justifyContent: 'flex-end',
+        // alignItems: 'center',    
+        alignSelf: 'center'
+    },
+    forCon: {
+        height: height / 27,
+        width: width / 1.4,
+        // backgroundColor: 'cyan',
+        alignSelf: 'center',
+        justifyContent: 'flex-end',
+        alignItems: 'baseline'
+    },
+    anTxt: {
+        color: '#707070',
+        fontSize: 14
+    },
+    redCon: {
+        height: height * 0.02,
+        width: width / 1.4,
+        // backgroundColor: 'green',
+        alignSelf: 'center'
+    },
+    redTxt: {
+        color: 'red',
+        fontSize: 13,
     }
 })
 
@@ -136,7 +300,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         doLogin: (data) => {
-            dispatch(postLogin(data));
+            return dispatch(postUserLogin(data));
+        },
+        aliesexist: (data) => {
+            return dispatch(alies_exist(data));
         }
     }
 }

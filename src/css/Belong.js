@@ -5,7 +5,7 @@ const { height, width } = Dimensions.get('screen')
 export default StyleSheet.create({
     containerone: {
         height: height / 1,
-        backgroundColor: 'rgba(151, 151, 151)',
+        backgroundColor: 'A09A9A',
         padding: 10,
     },
     containertwo: {
@@ -14,7 +14,7 @@ export default StyleSheet.create({
         padding: 10,
     },
     Headingdiv: {
-        height: height / 8,
+        height: height / 7,
         // backgroundColor: 'pink',
     },
     headingcontainer: {
@@ -23,9 +23,13 @@ export default StyleSheet.create({
         // borderWidth: 1,
     },
     headingtext: {
-        fontSize: 30,
+        // fontSize: 30,
+        // fontWeight: '400',
+        // color: 'black',
+        fontSize: height / 20,
+        // fontFamily: Montserrat,
         fontWeight: '400',
-        color: 'black',
+        color: 'black'
     },
     Searchsection: {
         marginTop: 5,
@@ -38,6 +42,7 @@ export default StyleSheet.create({
         backgroundColor: 'white'
     },
     SearchInput: {
+        paddingLeft: 20,
         backgroundColor: 'C4C4C4',
     },
     categories: {
@@ -47,7 +52,7 @@ export default StyleSheet.create({
         // borderWidth: 1,
     },
     Category: {
-        marginTop: 10,
+        // marginTop: 5,
         height: height / 2.3,
         borderColor: 'black',
         // borderWidth: 1,
@@ -62,7 +67,8 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     categorytext: {
-        color: 'white',
+        color: 'lightgreen',
+        fontWeight: '900',
         margin: 5,
     },
     browseAll: {
@@ -78,130 +84,219 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         color: 'black'
     },
-    card:{
+    card: {
         height: height / 5,
         marginTop: 5,
         marginBottom: 5,
         // backgroundColor: 'white',
     },
-    SubmitButton:{
+    SubmitButton: {
         backgroundColor: 'red',
         height: height / 17,
-        width: height/2.5,
+        width: height / 2.3,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    SubmitButtonText:{
+    SubmitButtonText: {
         color: 'white',
         fontWeight: 'bold',
-        fontFamily: 'Montserrat'
+        // fontFamily: 'Montserrat'
     },
-    DetailContainer:{
-        height: height /1.4,
+    DetailContainer: {
+        height: height / 1.4,
         borderColor: 'black',
         // borderWidth: 1,
     },
-    CradHeading:{
+    CradHeading: {
         marginTop: 10,
-        height: height/13,
+        height: height / 13,
         borderColor: 'black',
         // borderWidth: 1,
         justifyContent: 'space-around'
     },
-    descreption:{
+    descreption: {
         marginTop: 10,
-        height: height/8,
+        height: height / 8,
         borderColor: 'black',
         // borderWidth: 1,
     },
-    subpoints:{
+    subpoints: {
         marginTop: 10,
-        height: height/15,
+        height: height / 15,
         borderColor: 'black',
         // borderWidth: 1,
         flexDirection: 'row',
         alignItems: 'center',
     },
-    qna:{
+    qna: {
         marginTop: 10,
         marginBottom: 10,
-        height: height/8,
-        width: height/2,
+        height: height / 8,
+        width: height / 2,
         borderColor: 'black',
         // borderWidth: 1,
         backgroundColor: 'white',
     },
-    form:{
-        height: height/1.7,
+    form: {
+        height: height / 1.8,
         borderColor: 'black',
         // borderWidth: 1,
     },
-    sectionone:{
-        marginTop: 10,
-        height: height/11,
+    InviteView: {
+        height: height / 1.7,
         borderColor: 'black',
         // borderWidth: 1,
     },
-    sectiontwo:{
+    sectionone: {
         marginTop: 10,
-        height: height/5,
+        height: height / 11,
         borderColor: 'black',
         // borderWidth: 1,
     },
-    sectionthree:{
+    sectiontwo: {
         marginTop: 10,
-        height: height/14,
+        height: height / 5,
+        borderColor: 'black',
+        // borderWidth: 1,
+    },
+    sectionthree: {
+        marginTop: 10,
+        height: height / 14,
         borderColor: 'black',
         // borderWidth: 1,
         flexDirection: 'row',
         alignItems: 'center',
     },
-    input:{
+    input: {
         marginTop: 10,
         backgroundColor: 'white',
     },
-    describeinput:{
+    describeinput: {
         marginTop: 10,
-        height: height/6,
+        height: height / 6,
         backgroundColor: 'white',
     },
-    OPTIONS:{
-        height: height/20,
+    OPTIONS: {
+        height: height / 20,
         borderBottomColor: 'black',
         borderBottomWidth: 1,
-        flexDirection: 'row',
-        justifyContent:'space-between',
-        alignItems: 'center',
-    },
-    ChouseSection:{
-        borderBottomColor: 'black',
-        borderBottomWidth: 1,
-        height :40,
-        width :100,
-        justifyContent:'center',
-        alignItems: 'center',
-    },
-    UnSelectChouseSection:{
-        height :40,
-        width :100,
-        justifyContent:'center',
-        alignItems: 'center',
-    },
-    followers:{
-        marginTop: 10,
-        paddingBottom: 10,
-    },
-    options:{
-        marginTop: 5,
-        margingBottom: 5,
-        borderBottomColor: 'black',
-        borderBottomWidth: 1,
-    },
-    option:{
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: height/ 17,
+    },
+    ChouseSection: {
+        borderBottomColor: 'black',
+        borderBottomWidth: 1,
+        height: 40,
+        width: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    UnSelectChouseSection: {
+        height: 40,
+        width: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    followers: {
+        marginTop: 10,
+        paddingBottom: 10,
+    },
+    options: {
+        marginTop: 5,
+        margingBottom: 5,
+        borderBottomColor: 'C4C4C4',
+        borderBottomWidth: 1,
+    },
+    option: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: height / 12,
+    },
+    detTxt: {
+        color: 'black',
+        fontSize: 15,
+    },
+    Browsealldiv: {
+        marginTop: 10,
+        // backgroundColor: 'yellow',
+    },
+    forminput: {
+        backgroundColor: 'white',
+    },
+    descibeforminput: {
+        backgroundColor: 'white',
+        minHeight: height / 6,
+    },
+    Subheading: {
+        fontSize: 22,
+        color: 'black',
+        fontWeight: '600',
+    },
+    nameview: {
+        height: height / 8,
+        justifyContent: 'space-around',
+        borderColor: 'black',
+        // borderWidth: 1,
+    },
+    DescribeView: {
+        marginTop: 10,
+        height: height / 4.7,
+        justifyContent: 'space-around',
+        borderColor: 'black',
+        // borderWidth: 1,
+    },
+    Suggestiontag: {
+        marginTop: 5,
+        borderColor: 'black',
+        // borderWidth: 1,
+        flexDirection: 'row',
+        height: height / 18,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginRight: 10,
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: '400',
+        fontSize: 18
+    },
+    optionname: {
+        flexDirection: 'row',
+        borderColor: 'black',
+        // borderWidth: 1,
+        alignItems: 'center',
+        width: width / 1.6,
+        height: height / 18
+    },
+    user:{
+        margin : 5
+    },
+    selectoptiontext : {
+        color: 'black',
+        fontSize: 20,
+        fontWeight :'600'
+    },
+    unselectoptiontext : {
+        fontSize: 20,
+        fontWeight :'600'
+    },
+    GenderText:{
+        color: 'black',
+        fontSize: 15,
+        fontWeight :'600'
+    },
+    ImageContainer:{
+        height: height /2,
+        width : width / 1.1,
+        // backgroundColor: 'yellow',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    ImageView:{
+        backgroundColor: 'green',
+        borderRadius: 50,
     }
 })
 

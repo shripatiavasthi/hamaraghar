@@ -24,29 +24,17 @@ const DATA = [
         id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
         title: 'Second Item',
     },
-    {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-    },
-    {
-        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        title: 'Second Item',
-    },
-    {
-        id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        title: 'Third Item',
-    },
+    
 ];
 
 
 
-export const Belongone = ( props ) => {
+export const SubCategories = ( props  ) => {
 
-    const { navigation } = props
 
     const Item = ({ title }) => (
         <TouchableOpacity onPress={()=>{
-            navigation.push(Screens.SubCategories)
+            navigation.navigate(Screens.BelongThree)
         }}>
         <ImageBackground source={image.image} style={belongstyles.categoryimage} >
             <Text style={belongstyles.categorytext}>{title}</Text>
@@ -89,11 +77,6 @@ export const Belongone = ( props ) => {
                                 </View>
                             </ScrollView>
                         </View>
-                        <View style={belongstyles.Browsealldiv} >
-                            <Text style={belongstyles.subheadingtext}>Browse All</Text>
-                            <Text>Architecture</Text>
-                            <Text>Arts</Text>
-                        </View>
                     </View>
                 </View>
             </View>
@@ -105,4 +88,4 @@ const mapStateToProps = (state) => ({})
 
 const mapDispatchToProps = {}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Belongone)
+export default connect(mapStateToProps, mapDispatchToProps)(SubCategories)

@@ -14,8 +14,9 @@ const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
 const dummyimage = {  image: require("../../staticdata/images/Avatar1.jpeg")}
 
-const Avatar = ( {props, navigation }) => {
+const Avatar = (props) => {
 
+    const { navigation } = props
 
     const [avatar, setavatar] = useState()
     const [avatarindex, setavatarindex] = useState()
@@ -140,9 +141,6 @@ const Avatar = ( {props, navigation }) => {
     }
 
 
-
-
-
     const createuser = ( ) => {
         axios({
             method: 'post',
@@ -159,7 +157,7 @@ const Avatar = ( {props, navigation }) => {
                 "country": 5,
             }
           }).then((response) => {
-            navigation.navigate(Screens.Belongone)
+            navigation.push(Screens.Belongone)
             console.log(response.data , "create user response");
           }).catch((e)=>{
             console.log(e , "create user response error" )

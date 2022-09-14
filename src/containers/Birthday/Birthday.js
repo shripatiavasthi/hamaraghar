@@ -14,13 +14,14 @@ const { height, width } = Dimensions.get('screen')
 export const Birthday = ({ props, navigation }) => {
 
     const image = { image: require("../../staticdata/images/BackgroundImage.png") }
-
     const [check, setcheck] = useState(false)
-
     const [date, setDate] = useState(new Date())
     const [open, setOpen] = useState(false)
     const [ChousenDate, setChousenDate] = useState(false)
     const [lessthen, setlessthen] = useState(false)
+
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+    console.log(date.toLocaleDateString("en-US",options), "selected date")
 
     console.log(date.toString(), "selected date")
 
