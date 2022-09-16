@@ -216,7 +216,7 @@ const SignUp = (props) => {
     const getlocation = () => {
         axios({
             method: 'post',
-            url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyBFB_A5HYqjbBxCd5eLF7oUD7_movLicUk`,
+            url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&result_type=country&key=AIzaSyBFB_A5HYqjbBxCd5eLF7oUD7_movLicUk`,
         }).then((response) => {
             console.log(response, "direct method");
         }).catch((e) => {
