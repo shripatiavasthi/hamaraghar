@@ -218,7 +218,9 @@ import CreateBelong from '../containers/CreateBelong/CreateBelong'
 import InvitePeople from '../containers/InvitePeople/Invitepeople'
 import SubCategories from '../containers/BELONG/SubCategories'
 import InviteSucess from '../containers/InviteSucess/InviteSucess'
-
+import Conversation from '../containers/Conversation/Conversation'
+import ConversationGroups from '../containers/Groupbelong/Groupbelong'
+import SingleGroup from '../containers/SingleGroup/SingleGroup'
 
 let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
@@ -331,6 +333,18 @@ export const MainNaviagtor = (props) => {
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen name={Screens.Login} component={Login} options={{ headerShown: false }} />
+
+
+        <Stack.Screen name={Screens.SingleGroup} component={SingleGroup} options={{ headerShown: false }} />
+
+
+          <Stack.Screen name={Screens.ConversationGroups} component={ConversationGroups} options={{ headerShown: false }} />
+
+
+          <Stack.Screen name={Screens.Conversation} component={Conversation} options={{ headerShown: false }} />
+
+
           <Stack.Screen name={Screens.SignUp} component={SignUp} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Tabs} component={Tabs} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.InviteSucess} component={InviteSucess} options={{ headerShown: false }} />
@@ -347,7 +361,6 @@ export const MainNaviagtor = (props) => {
           <Stack.Screen name={Screens.BelongThree} component={BelongThree} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Birthday} component={Birthday} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.Login} component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="CreateUser" component={CreateUser} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Sucess} component={Sucess} options={{ headerShown: false }} />
         </Stack.Navigator>

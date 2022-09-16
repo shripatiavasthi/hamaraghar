@@ -33,4 +33,7 @@ export const Screens = {
  InviteSucess : 'InviteSucess',
  Tabs : 'Tabs', 
  Login : 'Login',
+ Conversation : 'Conversation',
+ ConversationGroups : 'ConversationGroups',
+ SingleGroup : 'SingleGroup',
 };

@@ -152,7 +152,7 @@ const LoginScreen = (props) => {
                     </KeyboardAvoidingView>
                     <View style={styles.forgotCon}>
                         <TouchableOpacity onPress={() => { alert('Hello') }}>
-                            <Text style={styles.frgTxt}>Forgot your password?</Text>
+                            {/* <Text style={styles.frgTxt}>Forgot your password?</Text> */}
                         </TouchableOpacity>
                     </View>
                     <View style={styles.titleCons}>
@@ -182,7 +182,7 @@ const LoginScreen = (props) => {
                                 }
                             }}
                         >
-                            <Text style={styles.btnTxt}>Sign up</Text>
+                            <Text style={styles.btnTxt}>Log In</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.forCon}>
