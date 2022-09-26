@@ -115,6 +115,7 @@ import { Dimensions, StyleSheet, Text, TextInput, View, KeyboardAvoidingView, To
 import { ScrollView } from 'react-native-gesture-handler';
 import { navigate, Screens } from '../../helpers/Screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { _Firstname , _Lastname } from '../../helpers/CommonValidator'
 
 const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
@@ -132,29 +133,7 @@ const AddName = (props) => {
     const [errorEmail, setErrorEmail] = useState(null);
     const [Password, setPassword] = useState('');
 
-    const _emailValidate = email => {
-        var emailRegex =
-        /^[a-z ,.'-]+$/i
-        if (email === '') {
-            setErrorEmail('*Please enter email.');
-        } else if (!emailRegex.test(email)) {
-            setErrorEmail('*Please enter valid email.');
-        } else {
-            setErrorEmail(null);
-        }
-    }
-    const _numbervalidate = number => {
-        var numberRegex =
-        /^[a-z ,.'-]+$/i
-        if (number === '') {
-            setErrorNumber('*Please enter number.');
-        } else if (!numberRegex.test(number)) {
-            setErrorNumber('*Please enter valid number.');
-        } else {
-            setErrorNumber(null);
-        }
-    };
-
+    
     const FirstNameData = async (value) => {
         try {
             await AsyncStorage.setItem('firstname', Email)
@@ -192,7 +171,8 @@ const AddName = (props) => {
                                 placeholder='First Name'
                                 placeholderTextColor={'#000000'}
                                 onChangeText={txt => {
-                                    setEmail(txt), _emailValidate(txt);
+                                    setEmail(txt), 
+                                    setErrorEmail(_Firstname(txt))
                                 }}
                             />
                             {errorEmail != null ? (
@@ -211,7 +191,8 @@ const AddName = (props) => {
                                     placeholderTextColor={'#000000'}
                                     maxLength={10}
                                     onChangeText={txt => {
-                                        setNumber(txt), _numbervalidate(txt);
+                                        setNumber(txt), 
+                                        setErrorNumber(_Lastname(txt))
                                     }}
                                 />
                                 {errorNumber != null ? (
@@ -259,7 +240,7 @@ const styles = StyleSheet.create({
         // backgroundColor: 'cyan',
     },
     MainDiv: {
-        height: height * 0.92,
+        height: height * 1,
         width: width / 1,
         // backgroundColor: 'lightblue',
     },

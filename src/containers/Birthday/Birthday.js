@@ -23,8 +23,6 @@ export const Birthday = ({ props, navigation }) => {
     var options = { year: 'numeric', month: 'long', day: 'numeric' };
     console.log(date.toLocaleDateString("en-US",options), "selected date")
 
-    console.log(date.toString(), "selected date")
-
     const BirthdayData = async (value) => {
         navigation.navigate(Screens.SignUp)
         try {
@@ -33,6 +31,8 @@ export const Birthday = ({ props, navigation }) => {
             console.log(e, "dob error")
         }
     }
+
+
 
     return (
         <SafeAreaView >
@@ -93,7 +93,7 @@ export const Birthday = ({ props, navigation }) => {
                             <View style={styles.SubmitButton}>
                                 <TouchableOpacity
                                     style={date && lessthen ? styles.button : styles.buttondisable}
-                                    disabled={lessthen ? false : true}
+                                    // disabled={lessthen ? false : true}
                                     onPress={() => {
                                         BirthdayData()
                                     }}

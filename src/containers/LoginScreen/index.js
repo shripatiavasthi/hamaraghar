@@ -28,20 +28,6 @@ const LoginScreen = (props) => {
     const [errorEmail, setErrorEmail] = useState(null);
 
 
-
-
-
-    // const _nameValidate = name => {
-    //     var nameRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    //     if (name === '') {
-    //         setErrorName('*Please enter name.');
-    //     } else if (!nameRegex.test(name)) {
-    //         setErrorName('*Please enter valid name.');
-    //     } else {
-    //         setErrorName(null);
-    //     }
-    // };
-
     const [lat, setlat] = useState('')
     const [lon, setlon] = useState('')
 
@@ -74,7 +60,7 @@ const LoginScreen = (props) => {
                     </View>
                     <KeyboardAvoidingView behavior='position'>
                         <View style={styles.usercon}>
-                        <TextInput
+                        {/* <TextInput
                                 style={styles.useText}
                                 placeholder='email '
                                 placeholderTextColor={'#000000'}
@@ -100,7 +86,7 @@ const LoginScreen = (props) => {
                                         {errorName}
                                     </Text>
                                 </View>
-                            ) : null}
+                            ) : null} */}
                             <TextInput
                                 style={styles.useText}
                                 placeholder='user name'
@@ -168,12 +154,11 @@ const LoginScreen = (props) => {
                                         body: {
                                             "alias": Name,
                                             "phone_number": Password,
-                                            "email": email,
                                         }
                                     }
                                     const resp = await props?.doLogin(data)
                                     const rawData = await unwrapResult(resp)
-                                    console.log(rawData?.data, "here is data")
+                                    console.log(rawData?.data, "login data")
                                     if (rawData?.data?.message === 'Success') {
                                         navigation.push(Screens.AddName)
                                     } else if (rawData?.data?.message === 'Failed') {

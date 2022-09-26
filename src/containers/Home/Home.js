@@ -58,11 +58,11 @@ export const Home = (props) => {
       <View style={styles.PostContent}>
         <View style={styles.content}>
           <View style={styles.Userdetails}>
-            <View style={{ flexDirection: "row" }}>
-              <EvilIcons name="user" size={45} color="black" />
+            <View style={{ flexDirection: "row" , alignItems: 'center' }}>
+              <EvilIcons name="user" size={25} color="black" />
               <View>
-                <Text>User NAme</Text>
-                <Text>/lajycat</Text>
+                <Text style={{color:"black" , fontSize:12 , fontWeight:'600'}}>lopamudra</Text>
+                <Text style={{color:"black" , fontSize:10 , fontWeight:'400'}}>/junglecats</Text>
               </View>
             </View>
             <View>
@@ -84,19 +84,19 @@ export const Home = (props) => {
               </TouchableOpacity>
             </View>
             <View>
-              <Text>100+ Comments</Text>
+              <Text style={{color:"black" , fontSize:12 , fontWeight:'600'}}>100+ Comments</Text>
             </View>
           </View>
           <View style={styles.Description}>
-            <Text>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
+            <Text style={{color:"black" , fontSize:13 , fontWeight:'600'}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
           </View>
           <View style={styles.noofdays}>
-            <Text>1 day ago</Text>
+            <Text style={{ fontSize:10 }}>1 day ago</Text>
           </View>
           <View style={styles.CommentSection}>
             <View style={styles.ComenterDetails}>
-              <EvilIcons name="user" size={45} color="black" />
-              <Text>Kali_bili</Text>
+              <EvilIcons name="user" size={25} color="black" />
+              <Text style={{color:"black" , fontSize:12}}>Kali_bili</Text>
             </View>
             <ScrollView>
             <View style={styles.CommentInput}>
@@ -211,11 +211,11 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
   },
   Description: {
-    height: height / 9,
+    height: height / 10,
     backgroundColor: 'white',
   },
   noofdays: {
-    height: height / 30,
+    height: height / 34,
     // backgroundColor: 'gray',
     justifyContent: 'center',
   },
@@ -230,13 +230,13 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    width: width / 2.5
+    width: width / 4
   },
   CommentInput: {
     height: height / 22,
     borderColor: 'black',
     // borderWidth: 1,
-    width: width / 1.9,
+    width: width / 1.5,
     flexDirection: 'row',
     alignItems: 'center',
   }

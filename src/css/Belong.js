@@ -85,7 +85,7 @@ export default StyleSheet.create({
         color: 'black'
     },
     card: {
-        height: height / 5,
+        height: height / 7,
         marginTop: 5,
         marginBottom: 5,
         // backgroundColor: 'white',

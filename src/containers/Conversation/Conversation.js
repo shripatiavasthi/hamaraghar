@@ -26,7 +26,7 @@ const Item = ({ title }) => (
   <View style={styles.item}>
     <View style={styles.commentbox}>
       <View>
-        <EvilIcons name="user" size={35} color="black" />
+        <EvilIcons name="user" size={25} color="black" />
       </View>
       <View style={styles.commenttextbox}>
         <Text style={styles.title}>{title}</Text>
@@ -95,13 +95,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headertext: {
-    fontSize: 22,
+    fontSize: 18,
     color: 'black',
     fontWeight: '600'
   },
   subheadertext: {
     color: 'black',
-    fontWeight: '400'
+    fontSize: 10,
+    // fontWeight: '400'
   },
   conversationbox: {
     flex: 1,
@@ -109,10 +110,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   item: {
-    height: height / 5,
+    height: height / 7,
     // backgroundColor: 'pink',
     marginBottom: 10,
-    padding: 10,
+    padding: 5,
   },
   commentbox: {
     borderColor: 'black',
@@ -124,13 +125,18 @@ const styles = StyleSheet.create({
   },
   commenttextbox: {
     width: width / 1.2,
+    height: height / 10,
     // backgroundColor : 'blue',
   },
   title: {
     fontSize: 12,
+    color:'black',
   },
   replysection:{
-    height : height / 22,
+    height : height / 35,
+    width : width / 1.2,
+    marginLeft: width * 0.1,
+    
     // backgroundColor : 'lightblue',
     flexDirection: 'row',
     justifyContent: 'space-between',

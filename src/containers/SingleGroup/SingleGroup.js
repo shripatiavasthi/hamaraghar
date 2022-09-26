@@ -26,7 +26,7 @@ const Item = ({ title }) => (
     <View style={styles.item}>
         <View style={styles.replysection}>
             <View style={styles.options}>
-                <EvilIcons name="user" size={50} color="black" />
+                <EvilIcons name="user" size={35} color="black" />
                 <TouchableOpacity><Text style={styles.optiontxt}>lopamudra</Text></TouchableOpacity>
             </View>
         </View>
@@ -82,13 +82,15 @@ const styles = StyleSheet.create({
     profileimage: {
         justifyContent: 'center',
         alignItems: 'center',
+        // backgroundColor:'red'
     },
     headertext: {
-        fontSize: 22,
+        fontSize: 18,
         color: 'black',
         fontWeight: '600'
     },
     subheadertext: {
+        fontSize: 10,
         color: 'black',
         fontWeight: '400'
     },
@@ -98,10 +100,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     item: {
-        height: height / 10,
+        height: height / 12,
         // backgroundColor: 'pink',
-        marginBottom: 5,
-        padding: 15,
+        // marginBottom: 5,
+        // padding: 15,
     },
     replysection: {
         height: height / 14,
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
     },
     optiontxt: {
         fontSize: 14,
-        fontWeight : '900',
+        fontWeight : '600',
         color  :'black'
     },
     noofpeopleacive:{
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
     },
     peopleactive:{
         fontSize: 14,
-        fontWeight : '900',
+        // fontWeight : '900',
         color  :'black'
     }
 })

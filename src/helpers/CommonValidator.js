@@ -43,3 +43,41 @@ export const _emailValidate = email => {
       return null 
     }
   }
+
+export const _Firstname = email => {
+    var emailRegex =
+    /^[a-z ,.'-]+$/i
+    if (email === '') {
+        return '*Please enter email.' 
+    } else if (!emailRegex.test(email)) {
+        return '*Please enter valid email.'
+    } else {
+        return null 
+    }
+}
+
+export const _Lastname = number => {
+    var numberRegex =
+    /^[a-z ,.'-]+$/i
+    if (number === '') {
+        return '*Please enter number.'
+    } else if (!numberRegex.test(number)) {
+        return '*Please enter valid number.'
+    } else {
+        return null
+    }
+};
+
+export const _numbervalidate = number => {
+    var numberRegex =
+      /^[0]?[6789]\d{9}$/;
+    if (number === '') {
+      return '*Please enter number.'
+    } else if (/([A-Z]+)/g.test(number) && number.length < 8) {
+      return  '*Please enter a special character and length must be 8 digit.'
+    } else if (!numberRegex.test(number)) {
+      return '*Please enter valid number.'
+    } else {
+      return null
+    }
+  };

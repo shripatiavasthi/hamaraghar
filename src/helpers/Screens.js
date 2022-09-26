@@ -36,4 +36,6 @@ export const Screens = {
  Conversation : 'Conversation',
  ConversationGroups : 'ConversationGroups',
  SingleGroup : 'SingleGroup',
+ Post : 'Post',
+ Real : 'Real',
 };

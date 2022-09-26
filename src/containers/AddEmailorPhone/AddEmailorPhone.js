@@ -162,6 +162,7 @@ import { send_otp_email } from '../../Slices/SendEmailOtpSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit'
+import { _emailValidate , _numbervalidate  } from '../../helpers/CommonValidator'
 
 const { height, width } = Dimensions.get('screen')
 
@@ -174,32 +175,33 @@ const AddEmailorPhone = (props) => {
   const [Email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState(null);
 
-  const _emailValidate = email => {
-    var emailRegex =
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if (email === '') {
-      setErrorEmail('*Please enter email.');
-    } else if (!emailRegex.test(email)) {
-      setErrorEmail('*Please enter valid email.');
-    } else {
-      setErrorEmail(null);
-    }
-  }
-  const _numbervalidate = number => {
-    var numberRegex =
-      /^[0]?[6789]\d{9}$/;
-    if (number === '') {
-      setErrorNumber('*Please enter number.');
-    } else if (/([A-Z]+)/g.test(number) && number.length < 8) {
-      setErrorNumber(
-        '*Please enter a special character and length must be 8 digit.',
-      );
-    } else if (!numberRegex.test(number)) {
-      setErrorNumber('*Please enter valid number.');
-    } else {
-      setErrorNumber(null);
-    }
-  };
+  // const _emailValidate = email => {
+  //   var emailRegex =
+  //     /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  //   if (email === '') {
+  //     setErrorEmail('*Please enter email.');
+  //   } else if (!emailRegex.test(email)) {
+  //     setErrorEmail('*Please enter valid email.');
+  //   } else {
+  //     setErrorEmail(null);
+  //   }
+  // }
+
+  // const _numbervalidate = number => {
+  //   var numberRegex =
+  //     /^[0]?[6789]\d{9}$/;
+  //   if (number === '') {
+  //     setErrorNumber('*Please enter number.');
+  //   } else if (/([A-Z]+)/g.test(number) && number.length < 8) {
+  //     setErrorNumber(
+  //       '*Please enter a special character and length must be 8 digit.',
+  //     );
+  //   } else if (!numberRegex.test(number)) {
+  //     setErrorNumber('*Please enter valid number.');
+  //   } else {
+  //     setErrorNumber(null);
+  //   }
+  // };
 
   const { navigation } = props
   
@@ -277,7 +279,8 @@ const AddEmailorPhone = (props) => {
                 placeholder='enter email'
                 placeholderTextColor={'#000000'}
                 onChangeText={txt => {
-                  setEmail(txt), _emailValidate(txt);
+                  setEmail(txt), 
+                  setErrorEmail(_emailValidate(txt))
                 }}
               />
               {errorEmail != null ? (
@@ -296,7 +299,8 @@ const AddEmailorPhone = (props) => {
                   placeholderTextColor={'#000000'}
                   maxLength={10}
                   onChangeText={txt => {
-                    setNumber(txt), _numbervalidate(txt);
+                    setNumber(txt), 
+                    setErrorNumber(_numbervalidate(txt))
                   }}
                 />
                 {errorNumber != null ? (
@@ -344,7 +348,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'cyan',
   },
   MainDiv: {
-    height: height * 0.92,
+    height: height * 1,
     width: width / 1,
     // backgroundColor: 'lightblue',
   },

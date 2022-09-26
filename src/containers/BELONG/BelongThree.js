@@ -10,7 +10,7 @@ const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 const DATA = [
     {
         title: 'Popular ear you',
-        details: [" Pregnant women in indiranagr ", " Pregnant women in indiranagr ", " Pregnant women in indiranagr ", " Pregnant women in indiranagr "]
+        details: [" Pregnant women in indiranagr ", " Pregnant women in HSR Layout ", " Pregnant women in indiranagr ", " Pregnant women in indiranagr "]
     },
     {
         title: 'Second Item',
@@ -49,7 +49,7 @@ export const BelongThree = ({ props, navigation }) => {
             {title.details && title.details.map((item, index) => {
                 return (
                     <View key={index}>
-                        <Text>{item}</Text>
+                        <Text style={{color:'black'}}>{item}</Text>
                     </View>
                 )
             })}
@@ -70,8 +70,8 @@ export const BelongThree = ({ props, navigation }) => {
                                 <Text style={belongstyles.headingtext}>Belong</Text>
                             </View>
                             <View style={belongstyles.headingcontainer}>
-                                <Text >Select from existing communities or</Text>
-                                <Text >create your own</Text>
+                                <Text style={{color:'black'}}>Select from existing communities or</Text>
+                                <Text style={{color:'black'}}>create your own</Text>
                             </View>
                         </View>
                         <View style={belongstyles.Searchsection}>
