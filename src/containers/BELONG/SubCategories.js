@@ -37,7 +37,6 @@ export const SubCategories = (props) => {
     const dispatch = useDispatch()
 
     const getSubCat = async () => {
-
         const data = {
             token : props?.token,
             query : {
@@ -54,9 +53,9 @@ export const SubCategories = (props) => {
         getSubCat()
     }, [])
     
-    const Item = ({ title }) => (
+    const Item = ({ title, item }) => (
         <TouchableOpacity onPress={()=>{
-            props?.navigation?.navigate(Screens.BelongThree)
+            props?.navigation?.navigate(Screens.BelongThree,{item})
         }}>
         <ImageBackground source={image.image} style={belongstyles.categoryimage} >
             <Text style={belongstyles.categorytext}>{title}</Text>

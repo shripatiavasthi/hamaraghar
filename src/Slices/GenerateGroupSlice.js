@@ -13,7 +13,7 @@ const initialState = {
 export const generate_group = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(location.GENERATE_GROUP, data?.query, data?.body);
+    return await doPost(thunkAPI,location.GENERATE_GROUP, data?.query, data?.body,data?.token);
   }
 );
 

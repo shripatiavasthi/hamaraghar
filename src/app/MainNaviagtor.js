@@ -335,6 +335,7 @@ export const MainNaviagtor = (props) => {
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen name={Screens.Login} component={Login} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.BelongDetails} component={BelongDetails} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.CreateBelong} component={CreateBelong} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SignUp} component={SignUp} options={{ headerShown: false }} />
@@ -350,7 +351,7 @@ export const MainNaviagtor = (props) => {
           <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.AddEmailorPhon} component={AddEmailorPhon} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.Login} component={Login} options={{ headerShown: false }} />
+
           <Stack.Screen name={Screens.InviteSucess} component={InviteSucess} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.InvitePeople} component={InvitePeople} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SubCategories} component={SubCategories} options={{ headerShown: false }} />
