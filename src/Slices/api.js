@@ -3,7 +3,6 @@ import ObjectHelper from "../helpers/objectHelpers";
 import NetInfo from "@react-native-community/netinfo";
 import { resetScreen, Screens } from "../helpers/Screens";
 
-
 const getLocation = (location) => {
   return links?.baseApi + location;
 };
