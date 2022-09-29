@@ -1568,6 +1568,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/geolocation/-/geolocation-2.1.0.tgz"
   "version" "2.1.0"
 
+"@react-native-community/netinfo@^9.3.2":
+  "integrity" "sha512-fR7wSIhmIUX+Skzgkr2vj5xopWa0lvvEWoXP1m7//jZjEgOZnu9DgdUimLHDrMo6AtZyUNrJscsFEepihTLlPQ=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-9.3.2.tgz"
+  "version" "9.3.2"
+
 "@react-native/assets@1.0.0":
   "integrity" "sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ=="
   "resolved" "https://registry.npmjs.org/@react-native/assets/-/assets-1.0.0.tgz"

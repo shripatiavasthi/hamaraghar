@@ -13,7 +13,7 @@ const initialState = {
 export const alies_exist = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(location.ALIES_EXIST, data?.query, data?.body);
+    return await doPost(thunkAPI,location.ALIES_EXIST, data?.query, data?.body);
   }
 );
 

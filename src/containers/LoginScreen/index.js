@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { connect, useDispatch } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit'
 import { postLogin } from '../../Slices/LoginSlice'
-import { postUserLogin } from '../../Slices/UserLoginSlice'
+import { postUserLogin } from './loginSlice';
 import { alies_exist } from '../../Slices/AliesCheckSlice'
 import { navigate, Screens } from '../../helpers/Screens';
 import Geolocation from '@react-native-community/geolocation';
@@ -60,7 +60,7 @@ const LoginScreen = (props) => {
                     </View>
                     <KeyboardAvoidingView behavior='position'>
                         <View style={styles.usercon}>
-                        {/* <TextInput
+                            {/* <TextInput
                                 style={styles.useText}
                                 placeholder='email '
                                 placeholderTextColor={'#000000'}
@@ -102,7 +102,6 @@ const LoginScreen = (props) => {
                                     }
                                     const resp = await props?.aliesexist(data)
                                     const rawData = await unwrapResult(resp)
-                                    console.log(rawData, "alies response")
                                 }}
                             />
                             {errorName != null ? (
@@ -146,24 +145,19 @@ const LoginScreen = (props) => {
                             style={styles.btnCon}
                             disabled={errorName && errorPassword ? true : false}
                             onPress={async () => {
-                                if (errorName && errorPassword) {
-                                    alert('Please Enter correct User id and password')
+                                const data = {
+                                    query: {},
+                                    body: {
+                                        "alias": Name,
+                                        "password": Password,
+                                    }
+                                }
+                                const resp = await props.doLogin(data)
+                                const rawData = await unwrapResult(resp)
+                                if (rawData?.message == 'Success') {
+                                    navigation.push(Screens.Home)
                                 } else {
-                                    const data = {
-                                        query: {},
-                                        body: {
-                                            "alias": Name,
-                                            "phone_number": Password,
-                                        }
-                                    }
-                                    const resp = await props?.doLogin(data)
-                                    const rawData = await unwrapResult(resp)
-                                    console.log(rawData?.data, "login data")
-                                    if (rawData?.data?.message === 'Success') {
-                                        navigation.push(Screens.AddName)
-                                    } else if (rawData?.data?.message === 'Failed') {
-                                        alert(`${rawData?.data?.Error}`)
-                                    }
+                                    alert(rawData?.result)
                                 }
                             }}
                         >

@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import React, { useState,useEffect } from 'react'
+import { connect,useDispatch } from 'react-redux'
 import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity , Alert } from 'react-native'
 import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
 import { navigate, Screens } from '../../helpers/Screens';
+import { getCategories } from '../../Slices/Belongslice'
 
 const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
@@ -41,7 +42,15 @@ const DATA = [
 
 
 export const Belongone = ( props ) => {
-
+    const dispatch = useDispatch()
+    const getCat = async () => {
+        const resp = await dispatch(getCategories())
+        console.log(resp,"MMMM")
+    }
+    useEffect(() => {
+        getCat() 
+    }, [])
+    
     const { navigation } = props
 
     const Item = ({ title }) => (

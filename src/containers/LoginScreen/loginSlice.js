@@ -1,13 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { doPost, doGet, doDel ,doPut } from "./api";
-import location from "../helpers/locations";
+import { doPost, doGet, doDel ,doPut } from "../../Slices/api";
+import location from "../../helpers/locations";
 
 
 const initialState = {
   pending: false,
   loading: false,
   error: false,
-  otpResp : {}
+  otpResp : {},
+  token : ''
 };
 
 export const postUserLogin = createAsyncThunk(
@@ -18,7 +19,7 @@ export const postUserLogin = createAsyncThunk(
 );
 
 
-const addressSlice = createSlice({
+const loginSlice = createSlice({
   name: "StoreAddress",
   initialState,
   reducers: {
@@ -37,8 +38,8 @@ const addressSlice = createSlice({
       })
       .addCase(postUserLogin.fulfilled, (state, action) => {
         state.pending = false;
-        state.otpResp = action.payload;
-        console.log(action.payload , "api call response")
+        state.token = action.payload.result;
+        state.otpResp = action.payload
       })
       .addCase(postUserLogin.rejected, (state) => {
         state.pending = false;
@@ -52,5 +53,5 @@ const addressSlice = createSlice({
 export const {
   rehydrate,
   setAddressStateSlider,
-} = addressSlice.actions;
-export default addressSlice.reducer;
+} = loginSlice.actions;
+export default loginSlice.reducer;

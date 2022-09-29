@@ -1,27 +1,33 @@
 import links from "../helpers/links";
 import ObjectHelper from "../helpers/objectHelpers";
+import NetInfo from "@react-native-community/netinfo";
+import { resetScreen, Screens } from "../helpers/Screens";
+
 
 const getLocation = (location) => {
   return links?.baseApi + location;
 };
 
-function status(response) {
-  if (response.status === 204) {
-    return Promise.resolve(null);
-  }
+async function status(response) {
+
   if (response.status >= 200 && response.status < 300) {
-    return Promise.resolve(response.data);
-  } else {
-    return Promise.reject({
-      statusText: response.statusText,
-      status: response.status,
-      responseJson: response.data,
-    });
+    // alert('Working fine ')
+  }
+  if (response.status >= 401 && response.status <= 403) {
+    alert(`Token expired please login again\nError code : ${response?.status}`)
+    // resetScreen(Screens?.LOGINOTP_SCREEN)
+  }
+  if (response.status == 400 || (response.status >= 404 && response.status < 500)) {
+    alert(`Something went wrong, please try again later\nError code : ${response?.status} `)
+  }
+  if (response.status >= 500) {
+    alert(`Server error, we are working on it please wait for sometime\nError code : ${response?.status} `)
   }
 }
 
-export const doPost = async (location, query, body, token) => {
+export const doPost = async (thunk, location, query, body, token) => {
   let url = getLocation(location) + ObjectHelper.getQueryString(query);
+
   const config = {
     method: "POST",
     headers: {
@@ -32,13 +38,21 @@ export const doPost = async (location, query, body, token) => {
   if (token) {
     config.headers["Authorization"] = `Token ${token}`;
   }
-  console.log("Post Api",url,config)
+  const NetInfoData = await NetInfo.fetch()
+  // thunk.dispatch(SpinnerActions.showSpinner())
+
+  if (!NetInfoData?.isInternetReachable || !NetInfoData?.isConnected) {
+    alert("Please Check your internet connection")
+    // thunk.dispatch(SpinnerActions.hideSpinner())
+  }
   const response = await fetch(url, config);
-  
+  // thunk.dispatch(SpinnerActions.hideSpinner())
+  status(response)
+  // console.log(response, url, ".............")
   return await response.json();
 };
 
-export const doPut = async (location, query, body, token) => {
+export const doPut = async (thunk, location, query, body, token) => {
   let url = getLocation(location) + ObjectHelper.getQueryString(query);
   const config = {
     method: "PUT",
@@ -50,13 +64,24 @@ export const doPut = async (location, query, body, token) => {
   if (token) {
     config.headers["Authorization"] = `Token ${token}`;
   }
+
+  const NetInfoData = await NetInfo.fetch()
+  // thunk.dispatch(SpinnerActions.showSpinner())
+
+  if (!NetInfoData?.isInternetReachable || !NetInfoData?.isConnected) {
+    alert("Please Check your internet connection")
+    // thunk.dispatch(SpinnerActions.hideSpinner())
+  }
+
   const response = await fetch(url, config);
-  console.log(response,url,".............")
+  thunk.dispatch(SpinnerActions.hideSpinner())
+  console.log(url, response, "..................")
+  status(response)
   return await response.json();
 };
 
 
-export const doDel = async (location, query, body, token) => {
+export const doDel = async (thunk, location, query, body, token) => {
   let url = getLocation(location) + ObjectHelper.getQueryString(query);
   const config = {
     method: "DELETE",
@@ -68,13 +93,16 @@ export const doDel = async (location, query, body, token) => {
   if (token) {
     config.headers["Authorization"] = `Token ${token}`;
   }
+  // thunk.dispatch(SpinnerActions.showSpinner())
   const response = await fetch(url, config);
-  // console.log(response,url,".............")
+  // thunk.dispatch(SpinnerActions.hideSpinner())
+  status(response)
   return await response.json();
 };
 
-export const doGet = async (location, query, token) => {
+export const doGet = async (thunk, location, query, token) => {
   let url = getLocation(location) + ObjectHelper.getQueryString(query);
+  console.log(url, query, token)
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -83,8 +111,10 @@ export const doGet = async (location, query, token) => {
   if (token) {
     config.headers["Authorization"] = `Token ${token}`;
   }
+  // thunk.dispatch(SpinnerActions.showSpinner())
   const response = await fetch(url, config);
-  // status(response.json());
-  // console.log(response,url,".............")
+  // thunk.dispatch(SpinnerActions.hideSpinner())
+  status(response)
+  console.log(response, url, ".............")
   return await response.json();
 };

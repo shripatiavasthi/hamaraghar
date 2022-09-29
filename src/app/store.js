@@ -7,6 +7,8 @@ import LoginSlice from '../Slices/LoginSlice';
 import createUser from '../Slices/CreateUserSlice';
 import send_otp_phone from '../Slices/SendPhoneOtpSlice'
 import send_otp_email from '../Slices/SendEmailOtpSlice'
+import Belongslice from '../Slices/Belongslice';
+import loginSliceNew from "../containers/LoginScreen/loginSlice"
 
 
 
@@ -14,7 +16,9 @@ const reducers = combineReducers({
     LoginSlice,
     createUser,
     send_otp_phone,
-    send_otp_email
+    send_otp_email,
+    Belongslice,
+    loginSliceNew
 });
 
 const persistConfig = {
