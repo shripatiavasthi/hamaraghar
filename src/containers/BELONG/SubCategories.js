@@ -31,6 +31,7 @@ const DATA = [
 
 export const SubCategories = ( props  ) => {
 
+    const { navigation } = props
 
     const Item = ({ title }) => (
         <TouchableOpacity onPress={()=>{

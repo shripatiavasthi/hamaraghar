@@ -39,7 +39,9 @@ const DATA = [
 ];
 
 
-export const BelongThree = ({ props, navigation }) => {
+export const BelongThree = ( props ) => {
+
+    const { navigation } = props
 
 
     const Item = ({ title }) => (
@@ -92,7 +94,7 @@ export const BelongThree = ({ props, navigation }) => {
                         </View>
                         <View style={belongstyles.browseAll}>
                             <TouchableOpacity style={belongstyles.SubmitButton} onPress={() => {
-                                navigation.navigate(Screens.CreateBelong)
+                                navigation.push(Screens.CreateBelong)
                             }}>
                                 <Text style={belongstyles.SubmitButtonText}>Create your own community </Text>
                             </TouchableOpacity>

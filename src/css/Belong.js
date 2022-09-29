@@ -72,7 +72,7 @@ export default StyleSheet.create({
         margin: 5,
     },
     browseAll: {
-        marginTop: height / 22,
+        marginTop: height / 30,
         height: height / 10,
         borderColor: 'black',
         // borderWidth: 1,

@@ -5,6 +5,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
+import { navigate, Screens } from '../../helpers/Screens';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -73,7 +74,7 @@ export const Home = (props) => {
           </View>
           <View style={styles.Share}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", width: width / 4 }}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={navigation.push(Screens.Conversation)}>
                 <FontAwesome name="comment" size={25} color="black" />
               </TouchableOpacity>
               <TouchableOpacity>
