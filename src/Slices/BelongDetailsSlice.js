@@ -9,10 +9,10 @@ const initialState = {
   otpResp : {}
 };
 
-export const categories = createAsyncThunk(
+export const belong_Details = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(location.VERIFY_OTP_PHONE, data?.query, data?.body);
+    return await doPost(location.BELONG_DETAILS, data?.query, data?.body);
   }
 );
 
@@ -31,14 +31,14 @@ const addressSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(categories.pending, (state) => {
+      .addCase(belong_Details.pending, (state) => {
         state.pending = true;
       })
-      .addCase(categories.fulfilled, (state, action) => {
+      .addCase(belong_Details.fulfilled, (state, action) => {
         state.pending = false;
         state.otpResp = action.payload;
       })
-      .addCase(categories.rejected, (state) => {
+      .addCase(belong_Details.rejected, (state) => {
         state.pending = false;
         state.error = true;
       });

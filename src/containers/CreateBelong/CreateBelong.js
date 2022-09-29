@@ -16,6 +16,10 @@ export const CreateBelong = (props) => {
     const [isEnabledtwo, setIsEnabledtwo] = useState(false);
     const toggleSwitchtwo = () => setIsEnabledtwo(previousState => !previousState);
 
+    const [aliesname , setaliesname] = useState();
+    const [communityname , setcommunityname] = useState();
+    const [description , setdescription] = useState();
+
 
     return (
         <SafeAreaView>
@@ -34,15 +38,21 @@ export const CreateBelong = (props) => {
                         <View style={belongstyles.form}>
                             <View style={belongstyles.nameview}>
                                 <Text style={belongstyles.Subheading}>Name </Text>
-                                <TextInput placeholder="" style={belongstyles.forminput}></TextInput>
+                                <TextInput placeholder="" style={belongstyles.forminput} onChangeText={txt => {
+                                        setaliesname(txt)
+                                    }}></TextInput>
                             </View>
                             <View style={belongstyles.nameview}>
                                 <Text style={belongstyles.Subheading}>Name your community</Text>
-                                <TextInput placeholder="" style={belongstyles.forminput}></TextInput>
+                                <TextInput placeholder="" style={belongstyles.forminput} onChangeText={txt => {
+                                        setcommunityname(txt)
+                                    }}></TextInput>
                             </View>
                             <View style={belongstyles.DescribeView}>
                                 <Text style={belongstyles.Subheading}>Describe it</Text>
-                                <TextInput placeholder="" multiline={true} style={belongstyles.descibeforminput}></TextInput>
+                                <TextInput placeholder="" multiline={true} style={belongstyles.descibeforminput} onChangeText={txt => {
+                                        setdescription(txt)
+                                    }}></TextInput>
                             </View>
                             <View style={belongstyles.Suggestiontag}>
                                 <Text style={belongstyles.Subheading}>Suggested tags</Text>
@@ -76,8 +86,8 @@ export const CreateBelong = (props) => {
                                     query: {},
                                     body: {
                                         "category_id": 1,
-                                        "group_alias": 'grp12',
-                                        "group_name": 'grp',
+                                        "group_alias": aliesname,
+                                        "group_name": communityname,
                                         "is_active": true,
                                         "group_access_type": 'public',
                                         "group_profile_picture": "",

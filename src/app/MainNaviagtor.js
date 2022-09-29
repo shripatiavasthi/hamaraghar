@@ -335,12 +335,12 @@ export const MainNaviagtor = (props) => {
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen name={Screens.BelongDetails} component={BelongDetails} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.CreateBelong} component={CreateBelong} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SignUp} component={SignUp} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Post} component={Post} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Real} component={Real} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Home} component={Home} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.BelongDetails} component={BelongDetails} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.BelongThree} component={BelongThree} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Belongone} component={Belongone} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SingleGroup} component={SingleGroup} options={{ headerShown: false }} />
