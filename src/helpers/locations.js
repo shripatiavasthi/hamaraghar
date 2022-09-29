@@ -9,5 +9,6 @@ module.exports = {
   VERIFY_OTP_EMAIL: '/user/verify_otp/email',
   ALIES_EXIST : '/user/is_alias_exist',
   GET_CATEGORIES : '/group/get_categories',
-  GENERATE_GROUP : '/group/create'
+  GENERATE_GROUP : '/group/create',
+  GET_SUB_CATEGORIES : '/group/get_sub_categories',
 };

@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import React, { useState,useEffect} from 'react'
+import { connect , useDispatch } from 'react-redux'
 import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity , Alert } from 'react-native'
 import styles from '../../css/Maincss'
+import { getSubCategories } from '../../Slices/Belongslice'
 import belongstyles from '../../css/Belong'
 import { navigate, Screens } from '../../helpers/Screens';
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
@@ -29,12 +31,32 @@ const DATA = [
 
 
 
-export const SubCategories = ( props  ) => {
+export const SubCategories = (props) => {
+    
+    const [subCatData, setsubCatData] = useState([])
+    const dispatch = useDispatch()
 
+    const getSubCat = async () => {
 
+        const data = {
+            token : props?.token,
+            query : {
+                category_id : props?.route?.params?.item?.id
+            }
+        }
+      const resp = await dispatch(getSubCategories(data))
+      const rawData = await unwrapResult(resp)
+      setsubCatData(rawData?.data?.result ?? [])
+      console.log(rawData?.data?.result,"kkk")
+
+    }
+    useEffect(() => {
+        getSubCat()
+    }, [])
+    
     const Item = ({ title }) => (
         <TouchableOpacity onPress={()=>{
-            navigation.navigate(Screens.BelongThree)
+            props?.navigation?.navigate(Screens.BelongThree)
         }}>
         <ImageBackground source={image.image} style={belongstyles.categoryimage} >
             <Text style={belongstyles.categorytext}>{title}</Text>
@@ -43,7 +65,7 @@ export const SubCategories = ( props  ) => {
     );
 
     const renderItem = ({ item }) => (
-        <Item title={item.title} />
+        <Item title={item.name} item={item} />
     );
 
     return (
@@ -69,7 +91,7 @@ export const SubCategories = ( props  ) => {
                             <ScrollView>
                                 <View style={belongstyles.Category}>
                                     <FlatList
-                                        data={DATA}
+                                        data={subCatData}
                                         numColumns={3}
                                         renderItem={renderItem}
                                         keyExtractor={item => item.id}
@@ -84,7 +106,9 @@ export const SubCategories = ( props  ) => {
     )
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+    token : state?.loginSliceNew?.token
+})
 
 const mapDispatchToProps = {}
 
