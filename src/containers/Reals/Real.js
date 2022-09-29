@@ -27,6 +27,7 @@ const { height, width } = Dimensions.get('screen')
 const image = { uri: "https://reactjs.org/logo-og.png" };
 
 const Item = ({ title }) => (
+    <View style={styles.container}>
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <View style={styles.first}>
             <View style={styles.firstcolumn}>
@@ -60,8 +61,8 @@ const Item = ({ title }) => (
                 </TouchableOpacity>
             </View>
         </View>
-
     </ImageBackground>
+    </View>
 );
 
 export const Real = (props) => {
@@ -71,14 +72,11 @@ export const Real = (props) => {
     );
 
     return (
-        <View style={styles.container}>
-
             <FlatList
                 data={DATA}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
             />
-        </View>
     )
 }
 
