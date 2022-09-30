@@ -11,5 +11,6 @@ module.exports = {
   GET_CATEGORIES : '/group/get_categories',
   GENERATE_GROUP : '/group/create',
   GET_SUB_CATEGORIES : '/group/get_sub_categories',
-  GET_COMMUNITY : '/group/get_community'
+  GET_COMMUNITY : '/group/get_community',
+  BELONG_DETAILS : 'group/ (get Api)'
 };
