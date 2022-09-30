@@ -12,7 +12,7 @@ const initialState = {
 export const belong_Details = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(location.BELONG_DETAILS, data?.query, data?.body);
+    return await doPost(thunkAPI, location.BELONG_DETAILS, data?.query, data?.body);
   }
 );
 

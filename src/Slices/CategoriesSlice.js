@@ -12,7 +12,7 @@ const initialState = {
 export const categories = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(location.VERIFY_OTP_PHONE, data?.query, data?.body);
+    return await doPost(thunkAPI, location.VERIFY_OTP_PHONE, data?.query, data?.body);
   }
 );
 

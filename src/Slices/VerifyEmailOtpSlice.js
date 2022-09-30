@@ -13,7 +13,7 @@ const initialState = {
 export const verify_otp_email = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(location.VERIFY_OTP_EMAIL, data?.query, data?.body);
+    return await doPost(thunkAPI, location.VERIFY_OTP_EMAIL, data?.query, data?.body);
   }
 );
 

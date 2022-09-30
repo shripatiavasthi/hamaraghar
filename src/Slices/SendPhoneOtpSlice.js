@@ -13,7 +13,7 @@ const initialState = {
 export const send_otp_phone = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(location.SEND_OTP_PHONE, data?.query, data?.body);
+    return await doPost(thunkAPI, location.SEND_OTP_PHONE, data?.query, data?.body);
   }
 );
 

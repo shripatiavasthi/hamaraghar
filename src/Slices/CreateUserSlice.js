@@ -13,7 +13,7 @@ const initialState = {
 export const createUser = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(location.CREATE_USER, data?.query, data?.body);
+    return await doPost(thunkAPI, location.CREATE_USER, data?.query, data?.body);
   }
 );
 
