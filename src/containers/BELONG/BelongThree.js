@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import React, { useState,useEffect } from 'react'
+import { connect,useDispatch } from 'react-redux'
 import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity } from 'react-native'
 import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
+import { getSubCategoriesCommunity } from "../../Slices/Belongslice"
 import { navigate, Screens } from '../../helpers/Screens';
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
@@ -42,10 +44,24 @@ const DATA = [
 export const BelongThree = ( props ) => {
 
     const { navigation } = props
-
+    const [data, setData] = useState([])
+    const dispatch = useDispatch()
+    const getData = async() => {
+        
+        const data = {
+            token : props?.token
+        }
+        const resp = await dispatch(getSubCategoriesCommunity(data))
+        const rawData = await unwrapResult(resp)
+        setData(rawData?.data?.result ?? [])
+    }
+    useEffect(() => {    
+        getData()
+    }, [])
+    
+  
 
     const Item = ({ title }) => (
-
         <View style={belongstyles.card}>
             <Text style={belongstyles.subheadingtext}>{title.title}</Text>
             {title.details && title.details.map((item, index) => {
@@ -85,7 +101,7 @@ export const BelongThree = ( props ) => {
                             <ScrollView>
                                 <View style={belongstyles.Category}>
                                     <FlatList
-                                        data={DATA}
+                                        data={data}
                                         renderItem={renderItem}
                                         keyExtractor={item => item.id}
                                     />
@@ -106,7 +122,9 @@ export const BelongThree = ( props ) => {
     )
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+    token : state?.loginSliceNew?.token
+})
 
 const mapDispatchToProps = {}
 

@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity, Alert, Switch, Button } from 'react-native'
 import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
 import { navigate, Screens } from '../../helpers/Screens';
-import generate_group from '../../Slices/GenerateGroupSlice'
+import { generate_group }from '../../Slices/GenerateGroupSlice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 export const CreateBelong = (props) => {
 
     const { navigation } = props
-
+    const dispatch = useDispatch()
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -81,7 +82,7 @@ export const CreateBelong = (props) => {
                             </View> */}
                         </View>
                         <View style={belongstyles.browseAll}>
-                            <TouchableOpacity style={belongstyles.SubmitButton} onPress={async () => {
+                            <TouchableOpacity style={belongstyles.SubmitButton} onPress={ async () => {
                                 const data = {
                                     query: {},
                                     body: {
@@ -91,11 +92,12 @@ export const CreateBelong = (props) => {
                                         "is_active": true,
                                         "group_access_type": 'public',
                                         "group_profile_picture": "",
-                                    }
+                                    },
+                                    token : props?.token
                                 }
-                                const resp = await props?.create_group(data)
+                                const resp = await dispatch(generate_group(data))
                                 const rawData = await unwrapResult(resp)
-                                console.log(rawData, "create group data")
+                                console.log(rawData?.data, "create group data")
                                 // navigation.push(Screens.InvitePeople)
                             }}>
                                 <Text style={belongstyles.SubmitButtonText}>Create your own community </Text>
@@ -108,7 +110,9 @@ export const CreateBelong = (props) => {
     )
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+    token : state?.loginSliceNew?.token
+})
 
 const mapDispatchToProps = (dispatch) => {
     return {

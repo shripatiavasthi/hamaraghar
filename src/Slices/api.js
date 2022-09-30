@@ -35,7 +35,7 @@ export const doPost = async (thunk, location, query, body, token) => {
     body: JSON.stringify(body),
   };
   if (token) {
-    config.headers["Authorization"] = `Token ${token}`;
+    config.headers["Authorization"] = `${token}`;
   }
   const NetInfoData = await NetInfo.fetch()
   // thunk.dispatch(SpinnerActions.showSpinner())
@@ -108,7 +108,7 @@ export const doGet = async (thunk, location, query, token) => {
     },
   };
   if (token) {
-    config.headers["Authorization"] = `Token ${token}`;
+    config.headers["Authorization"] = `${token}`;
   }
   // thunk.dispatch(SpinnerActions.showSpinner())
   const response = await fetch(url, config);

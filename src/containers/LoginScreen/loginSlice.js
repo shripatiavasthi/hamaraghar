@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export const postUserLogin = createAsyncThunk(
-  "getOtplogin",
+  "postUserLoginNew",
   async (data, thunkAPI) => {
     return await doPost(thunkAPI,location.USERLOGIN, data?.query, data?.body);
   }
@@ -40,6 +40,7 @@ const loginSlice = createSlice({
         state.pending = false;
         state.token = action.payload.result;
         state.otpResp = action.payload
+        console.log( action.payload)
       })
       .addCase(postUserLogin.rejected, (state) => {
         state.pending = false;

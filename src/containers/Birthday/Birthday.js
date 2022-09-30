@@ -7,7 +7,7 @@ import { navigate, Screens } from '../../helpers/Screens';
 import styles from '../../css/Maincss'
 import DatePicker from 'react-native-date-picker'
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-
+import moment from 'moment';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -19,9 +19,12 @@ export const Birthday = ({ props, navigation }) => {
     const [open, setOpen] = useState(false)
     const [ChousenDate, setChousenDate] = useState(false)
     const [lessthen, setlessthen] = useState(false)
+    const [eighteenage , seteighteenage] = useState(false)
+    const [age , setage] = useState()
 
     var options = { year: 'numeric', month: 'long', day: 'numeric' };
-    console.log(date.toLocaleDateString("en-US",options), "selected date")
+
+    // console.log(date.toLocaleDateString("en-US",options), "selected date")
 
     const BirthdayData = async (value) => {
         navigation.navigate(Screens.SignUp)
@@ -32,7 +35,24 @@ export const Birthday = ({ props, navigation }) => {
         }
     }
 
-
+    function calculate_age(dob) { 
+        console.log(dob , "dob inside a function")
+        setDate(dob)
+        var diff_ms = Date.now() - dob.getTime();
+        var age_dt = new Date(diff_ms); 
+        console.log( Math.abs(age_dt.getUTCFullYear() - 1970) , "date difference")
+        if (Math.abs(age_dt.getUTCFullYear() - 1970) > 18){
+            setlessthen(true)
+            seteighteenage(true)
+            setage((age_dt.getUTCFullYear() - 1970))
+        }else if (Math.abs(age_dt.getUTCFullYear() - 1970) < 18 && Math.abs(age_dt.getUTCFullYear() - 1970) > 13 ) {
+            setlessthen(true)
+            setage((age_dt.getUTCFullYear() - 1970))
+        }else if(Math.abs(age_dt.getUTCFullYear() - 1970) < 13){
+            alert(" You are Less then 13 years ")
+        }
+    }
+    
 
     return (
         <SafeAreaView >
@@ -48,7 +68,7 @@ export const Birthday = ({ props, navigation }) => {
                             </View>
                             <View style={styles.Birthday}>
                                 <TouchableOpacity onPress={() => setOpen(true)} style={styles.datebutton}>
-                                    <Text style={{ margin: 10, fontSize: 16, fontWeight: 'bold' }}> {date ? date.toLocaleDateString("en-US", options) : "September 29 , 1997"}  </Text>
+                                    <Text style={{ margin: 10, fontSize: 16, fontWeight: 'bold' }}> {date ? moment(date).format('MMMM Do YYYY') : "September 29 , 1997"}  </Text>
                                 </TouchableOpacity>
                                 <DatePicker
                                     modal
@@ -57,7 +77,7 @@ export const Birthday = ({ props, navigation }) => {
                                     mode="date"
                                     onConfirm={(date) => {
                                         setOpen(false)
-                                        setDate(date)
+                                        calculate_age(date)
                                     }}
                                     onCancel={() => {
                                         setOpen(false)
@@ -74,15 +94,15 @@ export const Birthday = ({ props, navigation }) => {
                                     <TouchableOpacity
                                         onPress={() => {
                                             setcheck(true)
-                                            if (lessthen === true) {
-                                                setlessthen(false)
+                                            if (eighteenage === true) {
+                                                seteighteenage(false)
                                             } else {
-                                                alert("You are Less then 13 years ")
+                                                alert(" You are Less then 18 years ")
                                             }
                                         }}
                                     >
                                         <View style={styles.checkbox} >
-                                            {lessthen ?
+                                            {eighteenage ?
                                                 <IconAntDesign name="check" size={30} color="#900" />
                                                 : null}
                                         </View>
@@ -93,9 +113,9 @@ export const Birthday = ({ props, navigation }) => {
                             <View style={styles.SubmitButton}>
                                 <TouchableOpacity
                                     style={date && lessthen ? styles.button : styles.buttondisable}
-                                    // disabled={lessthen ? false : true}
+                                    disabled={lessthen && age ? false : true}
                                     onPress={() => {
-                                        BirthdayData()
+                                        BirthdayData(age)
                                     }}
                                 >
                                     <Text style={styles.buttonText}>Submit</Text>

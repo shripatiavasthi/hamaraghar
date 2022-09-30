@@ -5,6 +5,7 @@ import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
 import { navigate, Screens } from '../../helpers/Screens';
 import { getCategories } from '../../Slices/Belongslice'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
@@ -43,9 +44,15 @@ const DATA = [
 
 export const Belongone = ( props ) => {
     const dispatch = useDispatch()
+    const [data, setData] = useState([])
     const getCat = async () => {
-        const resp = await dispatch(getCategories())
-        console.log(resp,"MMMM")
+        const data = {
+            token : props?.token
+        }
+        const resp = await dispatch(getCategories(data))
+        const rawData = await unwrapResult(resp)
+        setData(rawData?.data?.result ?? [])
+        // console.log(rawData?.data?.result,"MMMM")
     }
     useEffect(() => {
         getCat() 
@@ -53,9 +60,9 @@ export const Belongone = ( props ) => {
     
     const { navigation } = props
 
-    const Item = ({ title }) => (
+    const Item = ({ title,item }) => (
         <TouchableOpacity onPress={()=>{
-            navigation.push(Screens.SubCategories)
+            navigation.push(Screens.SubCategories,{item : item })
         }}>
         <ImageBackground source={image.image} style={belongstyles.categoryimage} >
             <Text style={belongstyles.categorytext}>{title}</Text>
@@ -64,7 +71,7 @@ export const Belongone = ( props ) => {
     );
 
     const renderItem = ({ item }) => (
-        <Item title={item.title} />
+        <Item title={item.name} item={item} />
     );
 
     return (
@@ -90,7 +97,7 @@ export const Belongone = ( props ) => {
                             <ScrollView>
                                 <View style={belongstyles.Category}>
                                     <FlatList
-                                        data={DATA}
+                                        data={data}
                                         numColumns={3}
                                         renderItem={renderItem}
                                         keyExtractor={item => item.id}
@@ -110,7 +117,9 @@ export const Belongone = ( props ) => {
     )
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+    token : state?.loginSliceNew?.token
+})
 
 const mapDispatchToProps = {}
 

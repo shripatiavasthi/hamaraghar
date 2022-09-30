@@ -13,7 +13,21 @@ const initialState = {
 export const getCategories = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doGet(location.GET_CATEGORIES, {});
+    return await doGet(thunkAPI,location.GET_CATEGORIES, {},data?.token);
+  }
+);
+
+export const getSubCategories = createAsyncThunk(
+  "getSubCategories",
+  async (data, thunkAPI) => {
+    return await doGet(thunkAPI,location.GET_SUB_CATEGORIES, data?.query,data?.token);
+  }
+);
+
+export const getSubCategoriesCommunity = createAsyncThunk(
+  "getSubCategoriesCommunity",
+  async (data, thunkAPI) => {
+    return await doGet(thunkAPI,location.GET_COMMUNITY, {},data?.token);
   }
 );
 
