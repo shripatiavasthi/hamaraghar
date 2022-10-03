@@ -11,8 +11,9 @@ const initialState = {
 
 export const followed = createAsyncThunk(
   "getOtplogin",
+  
   async (data, thunkAPI) => {
-    return await doPost(thunkAPI, location.FOLLOWED, data?.query, data?.body);
+    return await doPost(thunkAPI, location.FOLLOWED, data?.query, data?.body,data?.token);
   }
 );
 
