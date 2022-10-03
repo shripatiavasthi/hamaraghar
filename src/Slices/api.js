@@ -61,7 +61,7 @@ export const doPut = async (thunk, location, query, body, token) => {
     body: JSON.stringify(body),
   };
   if (token) {
-    config.headers["Authorization"] = `Token ${token}`;
+    config.headers["Authorization"] = `${token}`;
   }
 
   const NetInfoData = await NetInfo.fetch()
