@@ -9,6 +9,7 @@ import { navigate, Screens } from '../../helpers/Screens';
 import { followers } from '../../Slices/FollowersSlice'
 import { followed } from '../../Slices/FollowedSlice'
 import DeviceInfo from 'react-native-device-info';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 export const InvitePeople = (props) => {
 
@@ -44,7 +45,9 @@ export const InvitePeople = (props) => {
 
     const getfollowers = async () => {
         const data = {
-            token: props?.token
+            token: props?.token,
+            query: {},
+            body : {}
         }
         const resp = await dispatch(followers(data))
         const rawData = await unwrapResult(resp)
@@ -55,7 +58,9 @@ export const InvitePeople = (props) => {
 
     const getfollowed = async () => {
         const data = {
-            token: props?.token
+            token: props?.token,
+            query: {},
+            body : {}
         }
         const resp = await dispatch(followed(data))
         const rawData = await unwrapResult(resp)
