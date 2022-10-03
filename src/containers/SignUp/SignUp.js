@@ -10,6 +10,7 @@ import Geolocation from '@react-native-community/geolocation';
 import { validateName } from '../../helpers/CommonValidator'
 import axios from 'axios'
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -75,6 +76,15 @@ const SignUp = (props) => {
         }).catch((e) => {
             console.log(e.response, "direct method")
         })
+    }
+
+    const alies = async (value) => {
+        navigation.navigate(Screens.SignUp)
+        try {
+            await AsyncStorage.setItem('alies', value)
+        } catch (e) {
+            console.log(e, "dob error")
+        }
     }
 
     return (
@@ -158,9 +168,11 @@ const SignUp = (props) => {
                                     const rawData = await unwrapResult(resp)
                                     console.log(rawData?.data, "here is data")
                                     if (rawData?.data?.message === 'Success') {
+                                        alies(Name)
                                         navigation.push(Screens.AddName)
                                     }else if (rawData?.data?.message === 'Failed'){
-                                        alert(`${rawData?.data?.Error}`)
+                                        alert(`${rawData?.data?.result}`)
+                                        navigation.push(Screens.AddName)
                                     }
                                 }
                             }}

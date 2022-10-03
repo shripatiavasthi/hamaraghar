@@ -1,6 +1,6 @@
-import React, { useState,useEffect } from 'react'
-import { connect,useDispatch } from 'react-redux'
-import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity , Alert } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { connect, useDispatch } from 'react-redux'
+import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity, Alert } from 'react-native'
 import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
 import { navigate, Screens } from '../../helpers/Screens';
@@ -42,12 +42,12 @@ const DATA = [
 
 
 
-export const Belongone = ( props ) => {
+export const Belongone = (props) => {
     const dispatch = useDispatch()
     const [data, setData] = useState([])
     const getCat = async () => {
         const data = {
-            token : props?.token
+            token: props?.token
         }
         const resp = await dispatch(getCategories(data))
         const rawData = await unwrapResult(resp)
@@ -55,18 +55,18 @@ export const Belongone = ( props ) => {
         // console.log(rawData?.data?.result,"MMMM")
     }
     useEffect(() => {
-        getCat() 
+        getCat()
     }, [])
-    
+
     const { navigation } = props
 
-    const Item = ({ title,item }) => (
-        <TouchableOpacity onPress={()=>{
-            navigation.push(Screens.SubCategories,{item : item })
+    const Item = ({ title, item }) => (
+        <TouchableOpacity onPress={() => {
+            navigation.push(Screens.SubCategories, { item: item })
         }}>
-        <ImageBackground source={image.image} style={belongstyles.categoryimage} >
-            <Text style={belongstyles.categorytext}>{title}</Text>
-        </ImageBackground>
+            <ImageBackground source={image.image} style={belongstyles.categoryimage} >
+                <Text style={belongstyles.categorytext}>{title}</Text>
+            </ImageBackground>
         </TouchableOpacity>
     );
 
@@ -118,7 +118,7 @@ export const Belongone = ( props ) => {
 }
 
 const mapStateToProps = (state) => ({
-    token : state?.loginSliceNew?.token
+    token: state?.loginSliceNew?.token
 })
 
 const mapDispatchToProps = {}

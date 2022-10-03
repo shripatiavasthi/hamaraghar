@@ -14,7 +14,7 @@ export default StyleSheet.create({
         padding: 10,
     },
     Headingdiv: {
-        height: height / 7,
+        height: height / 8,
         // backgroundColor: 'pink',
     },
     headingcontainer: {
@@ -26,7 +26,7 @@ export default StyleSheet.create({
         // fontSize: 30,
         // fontWeight: '400',
         // color: 'black',
-        fontSize: height / 20,
+        fontSize: 36,
         // fontFamily: Montserrat,
         fontWeight: '400',
         color: 'black'
@@ -177,7 +177,7 @@ export default StyleSheet.create({
         backgroundColor: 'white',
     },
     OPTIONS: {
-        height: height / 20,
+        height: height / 22,
         borderBottomColor: 'black',
         borderBottomWidth: 1,
         flexDirection: 'row',
@@ -216,7 +216,7 @@ export default StyleSheet.create({
     },
     detTxt: {
         color: 'black',
-        fontSize: 15,
+        fontSize: 12,
     },
     Browsealldiv: {
         marginTop: 10,
@@ -275,16 +275,16 @@ export default StyleSheet.create({
     },
     selectoptiontext : {
         color: 'black',
-        fontSize: 20,
+        fontSize: 18,
         fontWeight :'600'
     },
     unselectoptiontext : {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight :'600'
     },
     GenderText:{
         color: 'black',
-        fontSize: 15,
+        fontSize: 12,
         fontWeight :'600'
     },
     ImageContainer:{

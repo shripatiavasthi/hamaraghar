@@ -335,15 +335,27 @@ export const MainNaviagtor = (props) => {
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <Stack.Navigator>
-        <Stack.Screen name={Screens.Birthday} component={Birthday} options={{ headerShown: false }} />
+
+        <Stack.Screen name={Screens.InvitePeople} component={InvitePeople} options={{ headerShown: false }} />
 
         <Stack.Screen name={Screens.Login} component={Login} options={{ headerShown: false }} />
+
+
+
+        <Stack.Screen name={Screens.Home} component={Home} options={{ headerShown: false }} />
+
+        <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
+
+
+
+
+        <Stack.Screen name={Screens.Birthday} component={Birthday} options={{ headerShown: false }} />
+
           <Stack.Screen name={Screens.BelongDetails} component={BelongDetails} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.CreateBelong} component={CreateBelong} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SignUp} component={SignUp} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Post} component={Post} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Real} component={Real} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.Home} component={Home} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.BelongThree} component={BelongThree} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Belongone} component={Belongone} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SingleGroup} component={SingleGroup} options={{ headerShown: false }} />
@@ -351,11 +363,9 @@ export const MainNaviagtor = (props) => {
           <Stack.Screen name={Screens.Conversation} component={Conversation} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Tabs} component={Tabs} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.AddEmailorPhon} component={AddEmailorPhon} options={{ headerShown: false }} />
 
           <Stack.Screen name={Screens.InviteSucess} component={InviteSucess} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.InvitePeople} component={InvitePeople} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SubCategories} component={SubCategories} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.AddName} component={AddName} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.VerifyOtp} component={VerifyEmailorPhone} options={{ headerShown: false }} />

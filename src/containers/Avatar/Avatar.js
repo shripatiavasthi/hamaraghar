@@ -28,6 +28,7 @@ const Avatar = (props) => {
     const [birthday, setbirthday] = useState()
     const [email, setemail] = useState()
     const [phone , setphone] = useState()
+    const [alies , setalies] = useState()
 
 
 
@@ -60,8 +61,22 @@ const Avatar = (props) => {
         Gender()
         Email()
         Phone()
+        aliesname()
+        DateOfBirth()
     }, [])
 
+    const aliesname = async () => {
+        try {
+            const value = await AsyncStorage.getItem('alies')
+            if (value !== null) {
+                // value previously stored
+                setalies(value)
+                console.log(value, "fetching data")
+            }
+        } catch (e) {
+            // error reading value
+        }
+    }
 
     const Firstname = async () => {
         try {
@@ -104,10 +119,11 @@ const Avatar = (props) => {
 
     const DateOfBirth = async () => {
         try {
-            const value = await AsyncStorage.getItem('firstname')
+            const value = await AsyncStorage.getItem('Dob')
             if (value !== null) {
                 // value previously stored
-                console.log(value, "fetching data")
+                setbirthday(value)
+                console.log(value, "fetching dateof birth data")
             }
         } catch (e) {
             // error reading value
@@ -146,11 +162,11 @@ const Avatar = (props) => {
             method: 'post',
             url: `http://54.214.196.237:3000/user/create`,
             data:{
-                "user_alias": "Shubham4455",
+                "user_alias": alies,
                 "first_name": name,
                 "last_name": lastname,
                 "gender": gender,
-                "date_of_birth": "2005-12-17",
+                "date_of_birth": `${birthday}`,
                 "email": email,
                 "phone": phone,
                 "bio": "asdfghjkl",
@@ -160,7 +176,9 @@ const Avatar = (props) => {
             navigation.push(Screens.Belongone)
             console.log(response.data , "create user response");
           }).catch((e)=>{
-            console.log(e , "create user response error" )
+            alert(`${e.response.data.data.error}`)
+            console.log(e.response.data.data.error
+                , "create user response error" )
           })
     }
 

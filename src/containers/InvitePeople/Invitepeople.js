@@ -1,11 +1,18 @@
-import React, { useState, } from 'react'
-import { connect } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { connect, useDispatch } from 'react-redux'
 import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity, Image } from 'react-native'
 import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import { navigate, Screens } from '../../helpers/Screens';
+import { followers } from '../../Slices/FollowersSlice'
+import { followed } from '../../Slices/FollowedSlice'
+import DeviceInfo from 'react-native-device-info';
 
 export const InvitePeople = (props) => {
+
+    const { navigation } = props
 
     const [caseone, setcaseone] = useState(true)
     const [casetwo, setcasetwo] = useState(false)
@@ -15,6 +22,48 @@ export const InvitePeople = (props) => {
     const [optionindex, setoptionindex] = useState()
 
     const allgender = ['Female', 'Male', 'Non-binary', 'Tansgender', 'Prefer not to say', 'Male', 'Non-binary', 'Tansgender', 'Prefer not to say']
+
+
+    const dispatch = useDispatch()
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        getfollowers()
+        deviceid()
+        getfollowed()
+    },[])
+
+    console.log(props?.token ,"token")
+
+    const deviceid = () => {
+        DeviceInfo.getAndroidId().then((androidId) => {
+            // androidId here
+            console.log(androidId , "android id")
+          });
+    }
+
+    const getfollowers = async () => {
+        const data = {
+            token: props?.token
+        }
+        const resp = await dispatch(followers(data))
+        const rawData = await unwrapResult(resp)
+        console.log(rawData , "followers data")
+        // setData(rawData?.data?.result ?? [])
+        // console.log(rawData?.data?.result,"MMMM")
+    }
+
+    const getfollowed = async () => {
+        const data = {
+            token: props?.token
+        }
+        const resp = await dispatch(followed(data))
+        const rawData = await unwrapResult(resp)
+        console.log(rawData , "followers data")
+        // setData(rawData?.data?.result ?? [])
+        // console.log(rawData?.data?.result,"MMMM")
+    }
+
 
     const Followers = () => {
         return (
@@ -35,21 +84,23 @@ export const InvitePeople = (props) => {
                             <View style={belongstyles.option}>
                                 <View style={belongstyles.optionname}>
                                     <View style={belongstyles.user}>
-                                        <EvilIcons name="user" size={45} color="black" />
+                                        <EvilIcons name="user" size={30} color="black" />
                                     </View>
                                     <View>
                                         <Text style={belongstyles.GenderText}>{item}</Text>
-                                        <Text>Shared groups heavens</Text>
+                                        <Text style={{ fontSize: 12 }}>Shared groups heavens</Text>
                                     </View>
                                 </View>
                                 <View style={styles.checkbox} >
                                     {optionindex === index ?
-                                        <Image
-                                            style={styles.tinyLogo}
-                                            source={{
-                                                uri: 'https://reactnative.dev/img/tiny_logo.png',
-                                            }}
-                                        /> : null}
+                                        // <Image
+                                        //     style={styles.tinyLogo}
+                                        //     source={{
+                                        //         uri: 'https://reactnative.dev/img/tiny_logo.png',
+                                        //     }}
+                                        // />
+                                        <IconAntDesign name="check" size={30} color="#900" />
+                                        : null}
                                 </View >
                             </View>
                         </TouchableOpacity>
@@ -87,12 +138,14 @@ export const InvitePeople = (props) => {
                                 </View>
                                 <View style={styles.checkbox} >
                                     {optionindex === index ?
-                                        <Image
-                                            style={styles.tinyLogo}
-                                            source={{
-                                                uri: 'https://reactnative.dev/img/tiny_logo.png',
-                                            }}
-                                        /> : null}
+                                        // <Image
+                                        //     style={styles.tinyLogo}
+                                        //     source={{
+                                        //         uri: 'https://reactnative.dev/img/tiny_logo.png',
+                                        //     }}
+                                        // />
+                                        <IconAntDesign name="check" size={30} color="#900" />
+                                        : null}
                                 </View >
                             </View>
                         </TouchableOpacity>
@@ -130,12 +183,14 @@ export const InvitePeople = (props) => {
                                 </View>
                                 <View style={styles.checkbox} >
                                     {optionindex === index ?
-                                        <Image
-                                            style={styles.tinyLogo}
-                                            source={{
-                                                uri: 'https://reactnative.dev/img/tiny_logo.png',
-                                            }}
-                                        /> : null}
+                                        // <Image
+                                        //     style={styles.tinyLogo}
+                                        //     source={{
+                                        //         uri: 'https://reactnative.dev/img/tiny_logo.png',
+                                        //     }}
+                                        // />
+                                        <IconAntDesign name="check" size={30} color="#900" />
+                                        : null}
                                 </View >
                             </View>
                         </TouchableOpacity>
@@ -201,7 +256,9 @@ export const InvitePeople = (props) => {
                             <TouchableOpacity style={belongstyles.SubmitButton}>
                                 <Text style={belongstyles.SubmitButtonText}>Invite </Text>
                             </TouchableOpacity>
-                            <TouchableOpacity >
+                            <TouchableOpacity
+                            // onPress={navigation.push(Screens.Home)}
+                            >
                                 <Text >Later </Text>
                             </TouchableOpacity>
                         </View>
@@ -212,7 +269,9 @@ export const InvitePeople = (props) => {
     )
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+    token : state?.loginSliceNew?.token
+})
 
 const mapDispatchToProps = {}
 

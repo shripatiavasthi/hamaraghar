@@ -74,7 +74,9 @@ export const Home = (props) => {
           </View>
           <View style={styles.Share}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", width: width / 4 }}>
-              <TouchableOpacity onPress={navigation.push(Screens.Conversation)}>
+              <TouchableOpacity 
+              // onPress={navigation.push(Screens.Conversation)}
+              >
                 <FontAwesome name="comment" size={25} color="black" />
               </TouchableOpacity>
               <TouchableOpacity>

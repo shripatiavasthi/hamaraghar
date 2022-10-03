@@ -25,6 +25,7 @@
     "react-native-axios": "^0.17.1",
     "react-native-calendars": "^1.1288.2",
     "react-native-date-picker": "^4.2.5",
+    "react-native-device-info": "^10.2.0",
     "react-native-gesture-handler": "^2.6.0",
     "react-native-image-picker": "^4.10.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",

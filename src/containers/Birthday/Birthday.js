@@ -29,7 +29,7 @@ export const Birthday = ({ props, navigation }) => {
     const BirthdayData = async (value) => {
         navigation.navigate(Screens.SignUp)
         try {
-            await AsyncStorage.setItem('Dob', dob)
+            await AsyncStorage.setItem('Dob', value)
         } catch (e) {
             console.log(e, "dob error")
         }
@@ -115,7 +115,7 @@ export const Birthday = ({ props, navigation }) => {
                                     style={date && lessthen ? styles.button : styles.buttondisable}
                                     disabled={lessthen && age ? false : true}
                                     onPress={() => {
-                                        BirthdayData(age)
+                                        BirthdayData(moment(date).format('MMMM Do YYYY'))
                                     }}
                                 >
                                     <Text style={styles.buttonText}>Submit</Text>

@@ -12,5 +12,7 @@ module.exports = {
   GENERATE_GROUP : '/group/create',
   GET_SUB_CATEGORIES : '/group/get_sub_categories',
   GET_COMMUNITY : '/group/get_community',
-  BELONG_DETAILS : 'group/ (get Api)'
+  BELONG_DETAILS : 'group/ (get Api)',
+  FOLLOWERS : '/user/follower_list',
+  FOLLOWED : '/user/followed_list'
 };
