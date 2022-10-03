@@ -64,8 +64,25 @@ const SignUp = (props) => {
         console.log(info?.coords?.latitude, "location data ")
     }
     );
-
+    const getAliasName = async () =>{
+        const data = {
+            query: {},
+            body: {
+                "alias": Name,
+            }
+        }
+        const resp = await props?.aliesexist(data)
+        const rawData = await unwrapResult(resp)
+        console.log(rawData, "alies response")
+    }
     useEffect(() => { getlocation() }, [lat && lon])
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            getAliasName()
+        }, 3000)
+    
+        return () => clearTimeout(delayDebounceFn)
+      }, [Name])
 
     const getlocation = () => {
         axios({
@@ -103,15 +120,7 @@ const SignUp = (props) => {
                                 onChangeText={ async txt => {
                                     setName(txt), 
                                     _nameValidate(txt);
-                                    const data = {
-                                        query: {},
-                                        body: {
-                                            "alias": txt,
-                                        }
-                                    }
-                                    const resp = await props?.aliesexist(data)
-                                    const rawData = await unwrapResult(resp)
-                                    console.log(rawData, "alies response")
+                                    
                                 }}
                             />
                             {errorName != null ? (
