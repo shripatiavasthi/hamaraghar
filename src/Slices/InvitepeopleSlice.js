@@ -12,7 +12,7 @@ const initialState = {
 export const invite = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(thunkAPI, location.FOLLOWERS, data?.query, data?.body);
+    return await doPost(thunkAPI, location.INVITE, data?.query, data?.body);
   }
 );
 
