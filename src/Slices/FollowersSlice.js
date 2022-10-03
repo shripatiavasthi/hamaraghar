@@ -12,7 +12,7 @@ const initialState = {
 export const followers = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(thunkAPI, location.FOLLOWERS, data?.query, data?.body);
+    return await doPost(thunkAPI, location.FOLLOWERS, data?.query, data?.body,data?.token);
   }
 );
 

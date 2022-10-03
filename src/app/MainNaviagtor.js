@@ -335,10 +335,10 @@ export const MainNaviagtor = (props) => {
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <Stack.Navigator>
-
+        <Stack.Screen name={Screens.Login} component={Login} options={{ headerShown: false }} />
         <Stack.Screen name={Screens.InvitePeople} component={InvitePeople} options={{ headerShown: false }} />
 
-        <Stack.Screen name={Screens.Login} component={Login} options={{ headerShown: false }} />
+        
 
 
 

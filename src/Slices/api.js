@@ -47,7 +47,7 @@ export const doPost = async (thunk, location, query, body, token) => {
   const response = await fetch(url, config);
   // thunk.dispatch(SpinnerActions.hideSpinner())
   status(response)
-  // console.log(response, url, ".............")
+  console.log(response, url, ".............")
   return await response.json();
 };
 
@@ -95,6 +95,7 @@ export const doDel = async (thunk, location, query, body, token) => {
   // thunk.dispatch(SpinnerActions.showSpinner())
   const response = await fetch(url, config);
   // thunk.dispatch(SpinnerActions.hideSpinner())
+  console.log(response, url, ".............")
   status(response)
   return await response.json();
 };
