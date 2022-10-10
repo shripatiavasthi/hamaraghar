@@ -171,7 +171,7 @@ const SignUp = (props) => {
                     <View style={styles.titleCons}>
                         <TouchableOpacity
                             style={styles.btnCon}
-                            disabled={errorName && errorPassword  ? true : false}
+                            disabled={errorName && errorPassword && alies_exist ? true : false}
                             onPress={async () => {
                                 if (errorName && errorPassword ) {
                                     alert('Please Enter correct User id and password')
