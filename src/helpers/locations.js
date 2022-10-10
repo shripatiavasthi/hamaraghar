@@ -15,5 +15,6 @@ module.exports = {
   BELONG_DETAILS : 'group/ (get Api)',
   FOLLOWERS : '/user/follower_list',
   FOLLOWED : '/user/followed_list',
-  INVITE : '/group/bulk_user_invite'
+  INVITE : '/group/bulk_user_invite',
+  CREATEPOST : '/post/create'
 };
