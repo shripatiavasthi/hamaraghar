@@ -16,5 +16,6 @@ module.exports = {
   FOLLOWERS : '/user/follower_list',
   FOLLOWED : '/user/followed_list',
   INVITE : '/group/bulk_user_invite',
-  CREATEPOST : '/post/create'
+  CREATEPOST : '/post/create',
+  GET_CURATED_TIMELINE : '/post/get_curated_timeline'
 };

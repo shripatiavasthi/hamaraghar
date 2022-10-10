@@ -1,11 +1,13 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React,{useEffect} from 'react'
+import { connect,useDispatch } from 'react-redux'
 import { View, Text, SafeAreaView, StyleSheet, Image, Dimensions, FlatList, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
+import { get_curated_timeline } from '../../Slices/TimelineSlice';
 import { navigate, Screens } from '../../helpers/Screens';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -42,6 +44,24 @@ const DATA = [
 
 export const Home = (props) => {
 
+
+  const dispatch = useDispatch()
+
+  const getCuratedTimeline = async () => {
+    const data = {
+      token : props?.token,
+    }
+    const resp = await dispatch(get_curated_timeline(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData,"kkkkk")
+  }
+
+  useEffect(() => {
+    
+    getCuratedTimeline()
+    
+  }, [])
+  
   const { navigation } = props
 
   const image = { image: require("../../staticdata/images/logo.jpeg") }
@@ -245,7 +265,9 @@ const styles = StyleSheet.create({
   }
 })
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+  token: state?.loginSliceNew?.token
+})
 
 const mapDispatchToProps = {}
 

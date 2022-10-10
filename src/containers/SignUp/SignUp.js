@@ -25,9 +25,9 @@ const SignUp = (props) => {
     const [errorPassword, setErrorPassword] = useState(null);
     const [Name, setName] = useState('');
     const [errorName, setErrorName] = useState(null);
-    const [alies_exist , setalies_exist] = useState(false);
+    const [alies_exist_state , setalies_exist] = useState(false);
 
-    console.log(alies_exist , "alies true or false")
+    console.log(alies_exist_state , "alies true or false")
 
     const _passwordvalidate = pass => {
         var passwordRegex =
@@ -171,7 +171,7 @@ const SignUp = (props) => {
                     <View style={styles.titleCons}>
                         <TouchableOpacity
                             style={styles.btnCon}
-                            disabled={errorName && errorPassword && alies_exist ? true : false}
+                            disabled={errorName && errorPassword && alies_exist_state ? true : false}
                             onPress={async () => {
                                 if (errorName && errorPassword ) {
                                     alert('Please Enter correct User id and password')
