@@ -89,7 +89,8 @@ export const InvitePeople = (props) => {
         const resp = await dispatch(invite(data))
         const rawData = await unwrapResult(resp)
         console.log(rawData, "invitedata data")
-        
+
+        // navigation.push(Screens.Sucess)
         // setData(rawData?.data?.result ?? [])
         // console.log(rawData?.data?.result,"MMMM")
     }
