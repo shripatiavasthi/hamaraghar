@@ -8,7 +8,7 @@ import {
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { createpostslice } from '../../Slices/CreateUserSlice'
+import { createpostslice } from '../../Slices/CreatePostSlice'
 import { connect, useDispatch } from 'react-redux'
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo'

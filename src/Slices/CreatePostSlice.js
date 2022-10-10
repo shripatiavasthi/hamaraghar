@@ -10,9 +10,9 @@ const initialState = {
 };
 
 export const createpostslice = createAsyncThunk(
-  "getOtplogin",
+  "createpostslice",
   async (data, thunkAPI) => {
-    return await doPost(thunkAPI, location.VERIFY_OTP_PHONE, data?.query, data?.body , data?.token);
+    return await doPost(thunkAPI, location.CREATEPOST, data?.query, data?.body , data?.token);
   }
 );
 
