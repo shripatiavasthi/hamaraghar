@@ -98,7 +98,7 @@ export const CreateBelong = (props) => {
                                 const resp = await dispatch(generate_group(data))
                                 const rawData = await unwrapResult(resp)
                                 console.log(rawData?.data, "create group data")
-                                navigation.push(Screens.InvitePeople )
+                                // navigation.push(Screens.InvitePeople )
                             }}>
                                 <Text style={belongstyles.SubmitButtonText}>Create your own community </Text>
                             </TouchableOpacity>

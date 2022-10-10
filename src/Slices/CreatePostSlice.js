@@ -9,10 +9,10 @@ const initialState = {
   otpResp : {}
 };
 
-export const invite = createAsyncThunk(
+export const createpostslice = createAsyncThunk(
   "getOtplogin",
   async (data, thunkAPI) => {
-    return await doPost(thunkAPI, location.INVITE, data?.query, data?.body,data?.token);
+    return await doPost(thunkAPI, location.VERIFY_OTP_PHONE, data?.query, data?.body , data?.token);
   }
 );
 
@@ -31,14 +31,14 @@ const addressSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(invite.pending, (state) => {
+      .addCase(createpostslice.pending, (state) => {
         state.pending = true;
       })
-      .addCase(invite.fulfilled, (state, action) => {
+      .addCase(createpostslice.fulfilled, (state, action) => {
         state.pending = false;
         state.otpResp = action.payload;
       })
-      .addCase(invite.rejected, (state) => {
+      .addCase(createpostslice.rejected, (state) => {
         state.pending = false;
         state.error = true;
       });

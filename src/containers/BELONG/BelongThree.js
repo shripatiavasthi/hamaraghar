@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from 'react'
-import { connect,useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { connect, useDispatch } from 'react-redux'
 import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity } from 'react-native'
 import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
@@ -41,41 +41,58 @@ const DATA = [
 ];
 
 
-export const BelongThree = ( props ) => {
+export const BelongThree = (props) => {
 
     const { navigation } = props
     const [data, setData] = useState([])
     const dispatch = useDispatch()
-    const getData = async() => {
-        
+    const getData = async () => {
+
         const data = {
-            token : props?.token
+            token: props?.token
         }
         const resp = await dispatch(getSubCategoriesCommunity(data))
         const rawData = await unwrapResult(resp)
         setData(rawData?.data?.result ?? [])
     }
-    useEffect(() => {    
+    useEffect(() => {
         getData()
     }, [])
-    
-  
 
-    const Item = ({ title }) => (
+    console.log(data, "data in belong three")
+
+    //   const Item = ({ title, item }) => (
+    //     <TouchableOpacity onPress={() => {
+    //         navigation.push(Screens.SubCategories, { item: item })
+    //     }}>
+    //         {/* <ImageBackground source={image.image} style={belongstyles.categoryimage} > */}
+    //             <Text style={belongstyles.categorytext}>{title}</Text>
+    //         {/* </ImageBackground> */}
+    //     </TouchableOpacity>
+    // );
+
+
+
+    const Item = ({ title, item }) => (
         <View style={belongstyles.card}>
-            <Text style={belongstyles.subheadingtext}>{title.title}</Text>
-            {title.details && title.details.map((item, index) => {
+            <Text style={belongstyles.subheadingtext}>hello</Text>
+            <View >
+                <Text style={{ color: 'black' }}>{title}</Text>
+            </View>
+
+            {/* {title && title.map((item, index) => {
+                console.log(item , "items")
                 return (
                     <View key={index}>
-                        <Text style={{color:'black'}}>{item}</Text>
+                        <Text style={{color:'black'}}></Text>
                     </View>
                 )
-            })}
+            })}  */}
         </View>
     );
 
     const renderItem = ({ item }) => (
-        <Item title={item} />
+        <Item title={item.name} item={item} />
     );
 
     return (
@@ -88,8 +105,8 @@ export const BelongThree = ( props ) => {
                                 <Text style={belongstyles.headingtext}>Belong</Text>
                             </View>
                             <View style={belongstyles.headingcontainer}>
-                                <Text style={{color:'black'}}>Select from existing communities or</Text>
-                                <Text style={{color:'black'}}>create your own</Text>
+                                <Text style={{ color: 'black' }}>Select from existing communities or</Text>
+                                <Text style={{ color: 'black' }}>create your own</Text>
                             </View>
                         </View>
                         <View style={belongstyles.Searchsection}>
@@ -103,7 +120,7 @@ export const BelongThree = ( props ) => {
                                     <FlatList
                                         data={data}
                                         renderItem={renderItem}
-                                        keyExtractor={item => item.id}
+                                        keyExtractor={item => item}
                                     />
                                 </View>
                             </ScrollView>
@@ -123,7 +140,7 @@ export const BelongThree = ( props ) => {
 }
 
 const mapStateToProps = (state) => ({
-    token : state?.loginSliceNew?.token
+    token: state?.loginSliceNew?.token
 })
 
 const mapDispatchToProps = {}

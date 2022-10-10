@@ -94,14 +94,14 @@ const LoginScreen = (props) => {
                                 onChangeText={async txt => {
                                     setName(txt),
                                         setErrorName(_nameValidate(txt))
-                                    const data = {
-                                        query: {},
-                                        body: {
-                                            "alias": txt,
-                                        }
-                                    }
-                                    const resp = await props?.aliesexist(data)
-                                    const rawData = await unwrapResult(resp)
+                                    // const data = {
+                                    //     query: {},
+                                    //     body: {
+                                    //         "alias": txt,
+                                    //     }
+                                    // }
+                                    // const resp = await props?.aliesexist(data)
+                                    // const rawData = await unwrapResult(resp)
                                 }}
                             />
                             {errorName != null ? (

@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { connect, useDispatch } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit'
 import { postLogin } from '../../Slices/LoginSlice'
-import {alies_exist } from '../../Slices/AliesCheckSlice'
+import { alies_exist } from '../../Slices/AliesCheckSlice'
 import { navigate, Screens } from '../../helpers/Screens';
 import Geolocation from '@react-native-community/geolocation';
 import { validateName } from '../../helpers/CommonValidator'
@@ -25,8 +25,9 @@ const SignUp = (props) => {
     const [errorPassword, setErrorPassword] = useState(null);
     const [Name, setName] = useState('');
     const [errorName, setErrorName] = useState(null);
+    const [alies_exist , setalies_exist] = useState(false);
 
-
+    console.log(alies_exist , "alies true or false")
 
     const _passwordvalidate = pass => {
         var passwordRegex =
@@ -64,25 +65,34 @@ const SignUp = (props) => {
         console.log(info?.coords?.latitude, "location data ")
     }
     );
-    const getAliasName = async () =>{
-        const data = {
-            query: {},
-            body: {
-                "alias": Name,
+    const getAliasName = async () => {
+        if (Name.length > 0) {
+            const data = {
+                query: {},
+                body: {
+                    "alias": Name,
+                }
+            }
+            const resp = await props?.aliesexist(data)
+            const rawData = await unwrapResult(resp)
+            console.log(rawData.data.is_exist, "alies response")
+            if (rawData.data.is_exist == true) {
+                setalies_exist(true)
+                alert("this alies alreay exist")
+            }else if (rawData.data.is_exist == false) {
+                setalies_exist(false)
             }
         }
-        const resp = await props?.aliesexist(data)
-        const rawData = await unwrapResult(resp)
-        console.log(rawData, "alies response")
     }
+
     useEffect(() => { getlocation() }, [lat && lon])
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             getAliasName()
-        }, 3000)
-    
+        }, 1000)
+
         return () => clearTimeout(delayDebounceFn)
-      }, [Name])
+    }, [Name])
 
     const getlocation = () => {
         axios({
@@ -117,10 +127,10 @@ const SignUp = (props) => {
                                 style={styles.useText}
                                 placeholder='user name'
                                 placeholderTextColor={'#000000'}
-                                onChangeText={ async txt => {
-                                    setName(txt), 
-                                    _nameValidate(txt);
-                                    
+                                onChangeText={async txt => {
+                                    setName(txt),
+                                        _nameValidate(txt);
+
                                 }}
                             />
                             {errorName != null ? (
@@ -161,9 +171,9 @@ const SignUp = (props) => {
                     <View style={styles.titleCons}>
                         <TouchableOpacity
                             style={styles.btnCon}
-                            disabled={errorName && errorPassword ? true : false}
+                            disabled={errorName && errorPassword  ? true : false}
                             onPress={async () => {
-                                if (errorName && errorPassword) {
+                                if (errorName && errorPassword ) {
                                     alert('Please Enter correct User id and password')
                                 } else {
                                     const data = {
@@ -179,7 +189,7 @@ const SignUp = (props) => {
                                     if (rawData?.data?.message === 'Success') {
                                         alies(Name)
                                         navigation.push(Screens.AddName)
-                                    }else if (rawData?.data?.message === 'Failed'){
+                                    } else if (rawData?.data?.message === 'Failed') {
                                         alert(`${rawData?.data?.result}`)
                                         navigation.push(Screens.AddName)
                                     }
@@ -190,7 +200,7 @@ const SignUp = (props) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.forCon}>
-                        <TouchableOpacity onPress={()=>{
+                        <TouchableOpacity onPress={() => {
                             navigation.push(Screens.Login)
                         }}>
                             <Text style={styles.anTxt}>Have an account, log in!</Text>
@@ -208,7 +218,7 @@ const styles = StyleSheet.create({
         // backgroundColor: 'cyan',
     },
     MainDiv: {
-        height: height ,
+        height: height,
         width: width / 1,
         // backgroundColor: 'lightblue',
     },

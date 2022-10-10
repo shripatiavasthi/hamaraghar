@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect, useDispatch } from 'react-redux'
-import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity, Image } from 'react-native'
+import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity, Image  } from 'react-native'
 import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -10,6 +10,8 @@ import { followers } from '../../Slices/FollowersSlice'
 import { followed } from '../../Slices/FollowedSlice'
 import DeviceInfo from 'react-native-device-info';
 import { unwrapResult } from '@reduxjs/toolkit';
+import Contacts from 'react-native-contacts';
+import { invite } from '../../Slices/InvitepeopleSlice'
 
 export const InvitePeople = (props) => {
 
@@ -18,12 +20,16 @@ export const InvitePeople = (props) => {
     const [caseone, setcaseone] = useState(true)
     const [casetwo, setcasetwo] = useState(false)
     const [casethree, setcasethree] = useState(false)
+    const [followdata, setfollowdata] = useState([])
+    const [followeddata, setfollowed] = useState([])
+    const [invitelist , setinvitelist] = useState([])
+
+    console.log(invitelist , "<<<>>>>>")
 
     const [option, setoption] = useState()
     const [optionindex, setoptionindex] = useState()
 
-    const allgender = ['Female', 'Male', 'Non-binary', 'Tansgender', 'Prefer not to say', 'Male', 'Non-binary', 'Tansgender', 'Prefer not to say']
-
+    const allgender = ['Female', 'Male', 'Non-binary', 'Tansgender', 'Prefer not to say',]
 
     const dispatch = useDispatch()
     const [data, setData] = useState([])
@@ -32,26 +38,27 @@ export const InvitePeople = (props) => {
         getfollowers()
         deviceid()
         getfollowed()
-    },[])
+    }, [])
 
-    console.log(props?.token ,"token")
+    console.log(props?.token, "token")
 
     const deviceid = () => {
         DeviceInfo.getAndroidId().then((androidId) => {
             // androidId here
-            console.log(androidId , "android id")
-          });
+            console.log(androidId, "android id")
+        });
     }
 
     const getfollowers = async () => {
         const data = {
             token: props?.token,
             query: {},
-            body : {}
+            body: {}
         }
         const resp = await dispatch(followers(data))
         const rawData = await unwrapResult(resp)
-        console.log(rawData , "followers data")
+        console.log(rawData.data.results, "followers data")
+        setfollowdata(rawData.data.results)
         // setData(rawData?.data?.result ?? [])
         // console.log(rawData?.data?.result,"MMMM")
     }
@@ -60,11 +67,29 @@ export const InvitePeople = (props) => {
         const data = {
             token: props?.token,
             query: {},
-            body : {}
+            body: {}
         }
         const resp = await dispatch(followed(data))
         const rawData = await unwrapResult(resp)
-        console.log(rawData , "followers data")
+        console.log(rawData.data.results, "followerd data")
+        setfollowed(rawData.data.results)
+        // setData(rawData?.data?.result ?? [])
+        // console.log(rawData?.data?.result,"MMMM")
+    }
+
+    const Invitepeople = async () => {
+        const data = {
+            token: props?.token,
+            query: {},
+            body: {
+                "group_id" : "",
+                "invitee_user_ids" : invitelist
+            }
+        }
+        const resp = await dispatch(invite(data))
+        const rawData = await unwrapResult(resp)
+        console.log(rawData, "invitedata data")
+        
         // setData(rawData?.data?.result ?? [])
         // console.log(rawData?.data?.result,"MMMM")
     }
@@ -73,7 +98,7 @@ export const InvitePeople = (props) => {
     const Followers = () => {
         return (
             <View style={belongstyles.followers}>
-                {allgender.map((item, index) => {
+                {followdata.map((item, index) => {
                     return (
                         <TouchableOpacity
                             style={belongstyles.options}
@@ -85,6 +110,7 @@ export const InvitePeople = (props) => {
                                     setoption()
                                     setoptionindex()
                                 }
+                                invitelist.push(item?.user_followers_id)
                             }}>
                             <View style={belongstyles.option}>
                                 <View style={belongstyles.optionname}>
@@ -92,7 +118,7 @@ export const InvitePeople = (props) => {
                                         <EvilIcons name="user" size={30} color="black" />
                                     </View>
                                     <View>
-                                        <Text style={belongstyles.GenderText}>{item}</Text>
+                                        <Text style={belongstyles.GenderText}>{item?.first_name} {item?.last_name} </Text>
                                         <Text style={{ fontSize: 12 }}>Shared groups heavens</Text>
                                     </View>
                                 </View>
@@ -118,7 +144,7 @@ export const InvitePeople = (props) => {
     const Following = () => {
         return (
             <View style={belongstyles.followers}>
-                {allgender.map((item, index) => {
+                {followeddata.map((item, index) => {
                     return (
                         <TouchableOpacity
                             style={belongstyles.options}
@@ -130,6 +156,7 @@ export const InvitePeople = (props) => {
                                     setoption()
                                     setoptionindex()
                                 }
+                                invitelist.push(item?.user_followers_id)
                             }}>
                             <View style={belongstyles.option}>
                                 <View style={belongstyles.optionname}>
@@ -137,7 +164,7 @@ export const InvitePeople = (props) => {
                                         <EvilIcons name="user" size={45} color="black" />
                                     </View>
                                     <View>
-                                        <Text style={belongstyles.GenderText}>{item}</Text>
+                                        <Text style={belongstyles.GenderText}>{item?.first_name} {item?.last_name}</Text>
                                         <Text>Shared groups heavens</Text>
                                     </View>
                                 </View>
@@ -175,6 +202,7 @@ export const InvitePeople = (props) => {
                                     setoption()
                                     setoptionindex()
                                 }
+                                allcontact()
                             }}>
                             <View style={belongstyles.option}>
                                 <View style={belongstyles.optionname}>
@@ -205,6 +233,7 @@ export const InvitePeople = (props) => {
         )
     }
 
+    
 
     return (
         <SafeAreaView>
@@ -258,7 +287,9 @@ export const InvitePeople = (props) => {
                             </ScrollView>
                         </View>
                         <View style={belongstyles.browseAll}>
-                            <TouchableOpacity style={belongstyles.SubmitButton}>
+                            <TouchableOpacity style={belongstyles.SubmitButton} onPress={()=>{
+                                Invitepeople()
+                            }}>
                                 <Text style={belongstyles.SubmitButtonText}>Invite </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -275,7 +306,7 @@ export const InvitePeople = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    token : state?.loginSliceNew?.token
+    token: state?.loginSliceNew?.token
 })
 
 const mapDispatchToProps = {}

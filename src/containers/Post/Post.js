@@ -1,38 +1,103 @@
-// import React from 'react'
-// import { connect } from 'react-redux'
-// import {View , Text , TouchableOpacity} from 'react-native'
-
-// export const Post = (props) => {
-//   return (
-//     <View>
-//         <Text>Post</Text>
-//         <TouchableOpacity>
-//             <Text>Camera</Text>
-//         </TouchableOpacity>
-//     </View>
-//   )
-// }
-
-// const mapStateToProps = (state) => ({})
-
-// const mapDispatchToProps = {}
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Post)
-
-
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Dimensions, StyleSheet, Text, View, KeyboardAvoidingView,
   Image,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native'
-import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
+import { createpostslice } from '../../Slices/CreateUserSlice'
+import { connect, useDispatch } from 'react-redux'
+import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo'
+// import VideoRecorder from 'react-native-beautiful-video-recorder';
+import ImagePicker from 'react-native-image-picker';
+import DeviceInfo from 'react-native-device-info';
 
 const { height, width } = Dimensions.get('screen')
 const Newpage = () => {
+
+  const [Deviceid, setdeviceid] = useState()
+  const [content, setcontent] = useState("")
+
+  const dispatch = useDispatch()
+
+  const Invitepeople = async () => {
+    const data = {
+      token: props?.token,
+      query: {
+        post_text: content,
+        location: "Delhi",
+        device_id: Deviceid,
+        group_id: "1"
+      },
+      body: {}
+    }
+    const resp = await dispatch(createpostslice(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData, "create response data")
+
+    // setData(rawData?.data?.result ?? [])
+    // console.log(rawData?.data?.result,"MMMM")
+  }
+
+  const [filePath, setFilePath] = useState({});
+
+  const chooseFile = () => {
+    let options = {
+      title: 'Select Image',
+      customButtons: [
+        {
+          name: 'customOptionKey',
+          title: 'Choose Photo from Custom Option'
+        },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log(
+          'User tapped custom button: ',
+          response.customButton
+        );
+        alert(response.customButton);
+      } else {
+        let source = response;
+        // You can also display the image using data:
+        // let source = {
+        //   uri: 'data:image/jpeg;base64,' + response.data
+        // };
+        setFilePath(source);
+      }
+    });
+  };
+
+
+
+  useEffect(() => {
+    deviceid()
+  }, [])
+
+  const deviceid = () => {
+    DeviceInfo.getAndroidId().then((androidId) => {
+      // androidId here
+      setdeviceid(androidId)
+      console.log(androidId, "android id")
+    });
+  }
+
+
   return (
     <View style={styles.mainContainer}>
       <SafeAreaView style={styles.safeCon}>
@@ -50,7 +115,9 @@ const Newpage = () => {
             <Text style={styles.bookTxt}>Write Post</Text>
           </View>
         </View>
-        <TextInput placeholder='Name' />
+        <TextInput placeholder='Name' onChangeText={(txt) => {
+          setcontent(txt)
+        }} />
         <View>
           <KeyboardAwareScrollView extraScrollHeight={10} enableOnAndroid={true}
             keyboardShouldPersistTaps='handled'>
@@ -73,28 +140,38 @@ const Newpage = () => {
               </View>
               <View style={styles.downContainer}>
                 <View style={styles.imgCons}>
-                  <View style={styles.imgCon}>
+                  <TouchableOpacity style={styles.imgCon} >
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
-                  </View>
-                  <View style={styles.imgCon}>
+                    <Feather name="camera" size={35} color="black" />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.imgCon} onPress={() => { chooseFile() }}>
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
-                  </View>
+                    <Entypo name="images" size={35} color="black" />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.btnContainer}>
+                <TouchableOpacity onPress={() => {
+                  Invitepeople()
+                }} style={styles.btnContainer} >
                   <Text style={styles.btnTxt}>Next</Text>
                 </TouchableOpacity>
               </View>
             </ScrollView>
           </KeyboardAwareScrollView>
         </View>
-
-
       </SafeAreaView>
     </View>
   )
 }
 
-export default Newpage
+// export default Newpage
+
+const mapStateToProps = (state) => ({
+  token: state?.loginSliceNew?.token
+})
+
+const mapDispatchToProps = {}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Newpage)
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -199,7 +276,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
     borderColor: '#C5C5C5',
     paddingHorizontal: 10,
-    padding:8
+    padding: 8
   },
   imgCon: {
     height: height / 16,
@@ -209,14 +286,14 @@ const styles = StyleSheet.create({
     // alignItems: 'center'
   },
   imgCons: {
-    height: height / 16,
+    height: height / 19,
     width: width / 2.5,
     // backgroundColor: 'blue',
     flexDirection: 'row',
 
   },
   btnContainer: {
-    height: height / 25,
+    height: height / 28,
     width: width / 3,
     backgroundColor: '#FFA500',
     justifyContent: 'center',
