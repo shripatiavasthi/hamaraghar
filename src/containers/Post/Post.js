@@ -9,10 +9,11 @@ import {
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { createpostslice } from '../../Slices/CreatePostSlice'
+import { createpostslice, getGroupListApi } from '../../Slices/CreatePostSlice'
 import { connect, useDispatch } from 'react-redux'
 import Feather from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo'
+import Entypo from 'react-native-vector-icons/Entypo';
+import { unwrapResult } from '@reduxjs/toolkit'
 // import VideoRecorder from 'react-native-beautiful-video-recorder';
 // import ImagePicker from 'react-native-image-picker';
 import {
@@ -22,10 +23,12 @@ import {
 import DeviceInfo from 'react-native-device-info';
 
 const { height, width } = Dimensions.get('screen')
-const Newpage = () => {
+const Newpage = (props) => {
 
   const [Deviceid, setdeviceid] = useState()
   const [content, setcontent] = useState("")
+  const [groupsList, setGroupsList] = useState([])
+  const [GroupId, setgroupId] = useState()
 
   const dispatch = useDispatch()
 
@@ -36,7 +39,7 @@ const Newpage = () => {
         post_text: content,
         location: "Delhi",
         device_id: Deviceid,
-        group_id: "1"
+        group_id: GroupId
       },
       body: {}
     }
@@ -47,9 +50,20 @@ const Newpage = () => {
     // setData(rawData?.data?.result ?? [])
     // console.log(rawData?.data?.result,"MMMM")
   }
+  const getGroupList = async () => {
+    const data = {
+      query: {},
+      token: props?.token,
+    }
+    const resp = await dispatch(getGroupListApi(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData?.data?.result)
+    setGroupsList(rawData?.data?.result)
+  }
 
   useEffect(() => {
     deviceid()
+    getGroupList()
   }, [])
 
   const deviceid = () => {
@@ -61,7 +75,7 @@ const Newpage = () => {
   }
 
   const [filePath, setFilePath] = useState({});
- 
+
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -80,7 +94,7 @@ const Newpage = () => {
       }
     } else return true;
   };
- 
+
   const requestExternalWritePermission = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -100,7 +114,7 @@ const Newpage = () => {
       return false;
     } else return true;
   };
- 
+
   const captureImage = async (type) => {
     let options = {
       mediaType: type,
@@ -116,7 +130,7 @@ const Newpage = () => {
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, (response) => {
         console.log('Response = ', response);
- 
+
         if (response.didCancel) {
           alert('User cancelled camera picker');
           return;
@@ -141,7 +155,7 @@ const Newpage = () => {
       });
     }
   };
- 
+
   const chooseFile = (type) => {
     let options = {
       mediaType: type,
@@ -151,7 +165,7 @@ const Newpage = () => {
     };
     launchImageLibrary(options, (response) => {
       console.log('Response = ', response);
- 
+
       if (response.didCancel) {
         alert('User cancelled camera picker');
         return;
@@ -175,6 +189,8 @@ const Newpage = () => {
       setFilePath(response);
     });
   };
+
+
 
   return (
     <View style={styles.mainContainer}>
@@ -201,17 +217,23 @@ const Newpage = () => {
             keyboardShouldPersistTaps='handled'>
             <ScrollView>
               <View style={styles.downCon}>
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={styles.txtCon}>
-                    <Text style={styles.lstTxt}>junglecats</Text>
-                  </View>
-                  <View style={styles.txtCon}>
-                    <Text style={styles.lstTxt}>streetcats</Text>
-                  </View>
-                  <View style={styles.txtCon}>
-                    <Text style={styles.lstTxt}>desire</Text>
-                  </View>
-                </View>
+                {/* <ScrollView> */}
+
+                {groupsList?.map((item) => {
+                  return (
+                    <TouchableOpacity
+                    onPress={() => {
+                      setgroupId(item.id)
+                    }}>
+                      <View style={{ flexDirection: 'row' }}>
+                        <View style={styles.txtCon}>
+                          <Text style={styles.lstTxt}>{item?.name}</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>)
+                })}
+
+                {/* </ScrollView> */}
                 <TouchableOpacity style={styles.serchCon}>
                   {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                 </TouchableOpacity>
@@ -222,7 +244,7 @@ const Newpage = () => {
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                     <Feather name="camera" size={35} color="black" />
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.imgCon}  onPress={() => chooseFile('photo')}>
+                  <TouchableOpacity style={styles.imgCon} onPress={() => chooseFile('photo')}>
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                     <Entypo name="images" size={35} color="black" />
                   </TouchableOpacity>

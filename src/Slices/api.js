@@ -47,7 +47,7 @@ export const doPost = async (thunk, location, query, body, token) => {
   const response = await fetch(url, config);
   // thunk.dispatch(SpinnerActions.hideSpinner())
   status(response)
-  console.log(response, url, ".............")
+  console.log(response, url, body,".............")
   return await response.json();
 };
 
@@ -74,7 +74,7 @@ export const doPut = async (thunk, location, query, body, token) => {
 
   const response = await fetch(url, config);
   thunk.dispatch(SpinnerActions.hideSpinner())
-  console.log(url, response, "..................")
+  console.log(url, response,body, "..................")
   status(response)
   return await response.json();
 };
@@ -95,7 +95,7 @@ export const doDel = async (thunk, location, query, body, token) => {
   // thunk.dispatch(SpinnerActions.showSpinner())
   const response = await fetch(url, config);
   // thunk.dispatch(SpinnerActions.hideSpinner())
-  console.log(response, url, ".............")
+  console.log(response, url, body,".............")
   status(response)
   return await response.json();
 };
@@ -115,6 +115,6 @@ export const doGet = async (thunk, location, query, token) => {
   const response = await fetch(url, config);
   // thunk.dispatch(SpinnerActions.hideSpinner())
   status(response)
-  console.log(response, url, ".............")
+  console.log(response, url,token, ".............")
   return await response.json();
 };

@@ -16,6 +16,12 @@ export const createpostslice = createAsyncThunk(
   }
 );
 
+export const getGroupListApi = createAsyncThunk(
+  "createpostslice",
+  async (data, thunkAPI) => {
+    return await doGet(thunkAPI, location.GET_GROUP_LIST, {}, data?.token);
+  }
+);
 
 const addressSlice = createSlice({
   name: "StoreAddress",
