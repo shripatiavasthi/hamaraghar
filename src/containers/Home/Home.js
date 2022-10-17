@@ -64,8 +64,6 @@ export const Home = (props) => {
     setDATA(rawData?.data?.result)
   }
 
-  // get_post_replies 
-
   const get_post_reply = async () => {
     const data = {
       query : {
