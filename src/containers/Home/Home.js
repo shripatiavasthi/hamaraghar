@@ -5,7 +5,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
-import { get_curated_timeline } from '../../Slices/TimelineSlice';
+import { get_curated_timeline,get_post_replies } from '../../Slices/TimelineSlice';
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { externalshareslice } from '../../Slices/ExternalshareSlice';
@@ -64,9 +64,26 @@ export const Home = (props) => {
     setDATA(rawData?.data?.result)
   }
 
+  // get_post_replies 
+
+  const get_post_reply = async () => {
+    const data = {
+      query : {
+        post_id : 27
+      },
+      token: props?.token,
+    }
+    const resp = await dispatch(get_post_replies(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData, "kkkkk")
+
+  }
+
+
   useEffect(() => {
 
     getCuratedTimeline()
+    get_post_reply()
 
   }, [])
 
