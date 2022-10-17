@@ -5,7 +5,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
-import { get_curated_timeline,get_post_replies } from '../../Slices/TimelineSlice';
+import { get_curated_timeline, get_search_timeline } from '../../Slices/TimelineSlice';
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { externalshareslice } from '../../Slices/ExternalshareSlice'
@@ -63,34 +63,41 @@ export const Home = (props) => {
 
   // get_post_replies 
 
-  const get_post_reply = async () => {
+
+
+  const get_search_timeline_data = async (value = '') => {
+    //   start_date: <datetime>, 
+    // end_date: <datetime>, 
+    // alias_name: <string>, 
+    // user_id: <number></number>
     const data = {
-      query : {
-        post_id : 27
+      query: {
+        alias_name : value
       },
       token: props?.token,
     }
-    const resp = await dispatch(get_post_replies(data))
+    const resp = await dispatch(get_search_timeline(data))
     const rawData = await unwrapResult(resp)
-    console.log(rawData, "kkkkk")
+    console.log(rawData, "yyyyy")
 
   }
 
 
+
+
+
+
   useEffect(() => {
-
     getCuratedTimeline()
-    get_post_reply()
-
   }, [])
 
   const image = { image: require("../../staticdata/images/logo.jpeg") }
 
-  const sharepost = async ( post_id , group_id  ) => {
-    const data = { 
-      query: { 
-        post_id: post_id, 
-        group_id: group_id, 
+  const sharepost = async (post_id, group_id) => {
+    const data = {
+      query: {
+        post_id: post_id,
+        group_id: group_id,
       },
       body: {}
     }
@@ -152,7 +159,7 @@ export const Home = (props) => {
             <View style={{ flexDirection: "row", justifyContent: "space-between", width: width / 4 }}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.push(Screens.Conversation)
+                  navigation.push(Screens.Conversation,{ id : title?.post_id })
                 }}
               >
                 <FontAwesome name="comment" size={25} color="black" />
@@ -161,7 +168,7 @@ export const Home = (props) => {
                 <FontAwesome name="bookmark" size={25} color="black" />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
-                sharepost(title?.post_id , title?.group_id)
+                sharepost(title?.post_id, title?.group_id)
               }}>
                 <Feather name="send" size={25} color="black" />
               </TouchableOpacity>
@@ -211,6 +218,10 @@ export const Home = (props) => {
             />
           </View>
           <View style={styles.brandlogo}>
+            <TextInput
+              onChangeText={(value) => {
+                get_search_timeline_data(value)
+              }} />
             <EvilIcons name="search" size={35} color="black" />
             <EvilIcons name="user" size={35} color="black" />
           </View>

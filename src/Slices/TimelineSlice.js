@@ -25,4 +25,11 @@ export const get_post_replies = createAsyncThunk(
     }
   );
   
-
+  export const get_search_timeline = createAsyncThunk(
+    "get_search_timeline",
+    async (data, thunkAPI) => {
+      return await doGet(thunkAPI,location.POST_SEARCH_TIMELINE, data?.query,data?.token);
+    }
+  );
+  
+  

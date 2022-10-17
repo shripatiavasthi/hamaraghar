@@ -1,9 +1,11 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { connect,useDispatch } from 'react-redux'
 import { View, Text, StyleSheet, Dimensions, FlatList, SafeAreaView, StatusBar, TextInput, TouchableOpacity } from 'react-native'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
+import { get_post_replies } from '../../Slices/TimelineSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -22,7 +24,10 @@ const DATA = [
   },
 ];
 
+
+
 const Item = ({ title }) => (
+
   <View style={styles.item}>
     <View style={styles.commentbox}>
       <View>
@@ -48,6 +53,25 @@ const Item = ({ title }) => (
 );
 
 export const Conversation = (props) => {
+
+  const dispatch = useDispatch()
+
+  const get_post_reply = async (id) => {
+    const data = {
+      query: {
+        post_id: id
+      },
+      token: props?.token,
+    }
+    const resp = await dispatch(get_post_replies(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData, "here")
+
+  }
+
+  useEffect(() => {
+    get_post_reply(props?.route?.params?.id)
+  }, [])
 
   const renderItem = ({ item }) => (
     <Item title={item.title} />
@@ -130,37 +154,39 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 12,
-    color:'black',
+    color: 'black',
   },
-  replysection:{
-    height : height / 35,
-    width : width / 1.2,
+  replysection: {
+    height: height / 35,
+    width: width / 1.2,
     marginLeft: width * 0.1,
-    
+
     // backgroundColor : 'lightblue',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  options:{
-    width : width / 2.7,
+  options: {
+    width: width / 2.7,
     flexDirection: 'row',
-    borderColor : 'black',
+    borderColor: 'black',
     // borderWidth : 1,
-    alignItems : 'center',
-    justifyContent : 'space-between',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  more:{
-    alignItems : 'center',
+  more: {
+    alignItems: 'center',
     justifyContent: 'center',
-    borderColor : 'black',
+    borderColor: 'black',
     // borderWidth : 1,
   },
-  optiontxt:{
+  optiontxt: {
     fontSize: 10,
   }
 })
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+  token: state?.loginSliceNew?.token
+})
 
 const mapDispatchToProps = {}
 

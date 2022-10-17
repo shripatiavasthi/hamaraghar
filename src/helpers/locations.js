@@ -20,5 +20,7 @@ module.exports = {
   GET_CURATED_TIMELINE : '/post/get_curated_timeline',
   GET_GROUP_LIST : '/group/get_group_list',
   EXTERNAL_SHARE : '/post/share_externally',
-  POST_ALL_REPLIES : '/post/all_replies'
+  POST_ALL_REPLIES : '/post/all_replies',
+  POST_SEARCH_TIMELINE : '/post/search_timeline'
+
 };
