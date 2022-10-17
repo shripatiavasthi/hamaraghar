@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect } from 'react'
 import { connect, useDispatch } from 'react-redux'
 import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity, Alert, Switch, Button } from 'react-native'
 import styles from '../../css/Maincss'
@@ -6,10 +6,14 @@ import belongstyles from '../../css/Belong'
 import { navigate, Screens } from '../../helpers/Screens';
 import { generate_group }from '../../Slices/GenerateGroupSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const CreateBelong = (props) => {
 
     const { navigation } = props
+
+    console.log(props?.route?.params?.categoryid?.category_id        , "props in create belong")
+
     const dispatch = useDispatch()
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -21,6 +25,22 @@ export const CreateBelong = (props) => {
     const [communityname , setcommunityname] = useState();
     const [description , setdescription] = useState();
 
+    useEffect(() => {
+        gettingaliesname()
+    }, [])
+
+    const gettingaliesname = async () => {
+        try {
+            const value = await AsyncStorage.getItem('alies')
+            if (value !== null) {
+                // value previously stored
+                setaliesname(value)
+                console.log(value, "fetching data")
+            }
+        } catch (e) {
+            // error reading value
+        }
+    }
 
     return (
         <SafeAreaView>
@@ -38,8 +58,8 @@ export const CreateBelong = (props) => {
                         </View>
                         <View style={belongstyles.form}>
                             <View style={belongstyles.nameview}>
-                                <Text style={belongstyles.Subheading}>Name </Text>
-                                <TextInput placeholder="" style={belongstyles.forminput} onChangeText={txt => {
+                                <Text style={belongstyles.Subheading}>Alies Name </Text>
+                                <TextInput placeholder="" value={description} style={belongstyles.forminput} onChangeText={txt => {
                                         setaliesname(txt)
                                     }}></TextInput>
                             </View>
@@ -86,7 +106,7 @@ export const CreateBelong = (props) => {
                                 const data = {
                                     query: {},
                                     body: {
-                                        "category_id": 1,
+                                        "category_id": props?.route?.params?.categoryid?.category_id,
                                         "group_alias": aliesname,
                                         "group_name": communityname,
                                         "is_active": true,
@@ -97,8 +117,10 @@ export const CreateBelong = (props) => {
                                 }
                                 const resp = await dispatch(generate_group(data))
                                 const rawData = await unwrapResult(resp)
-                                console.log(rawData?.data, "create group data")
-                                // navigation.push(Screens.InvitePeople )
+                                console.log(rawData?.data?.message  , "create group data")
+                                if(rawData?.data?.message === 'Success'){
+                                    navigation.push(Screens.InvitePeople , {rawData } )
+                                }
                             }}>
                                 <Text style={belongstyles.SubmitButtonText}>Create your own community </Text>
                             </TouchableOpacity>

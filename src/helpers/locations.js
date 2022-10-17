@@ -18,5 +18,6 @@ module.exports = {
   INVITE : '/group/bulk_user_invite',
   CREATEPOST : '/post/create',
   GET_CURATED_TIMELINE : '/post/get_curated_timeline',
-  GET_GROUP_LIST : '/group/get_group_list'
+  GET_GROUP_LIST : '/group/get_group_list',
+  EXTERNAL_SHARE : '/post/share_externally'
 };

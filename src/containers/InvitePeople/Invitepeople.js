@@ -17,6 +17,9 @@ export const InvitePeople = (props) => {
 
     const { navigation } = props
 
+    console.log(props?.route?.params?.rawData?.data?.result?.group_id  , "props in invite people")
+
+    const [groupid , setgroupid] = useState(props?.route?.params?.rawData?.data?.result?.group_id)
     const [caseone, setcaseone] = useState(true)
     const [casetwo, setcasetwo] = useState(false)
     const [casethree, setcasethree] = useState(false)
@@ -82,15 +85,14 @@ export const InvitePeople = (props) => {
             token: props?.token,
             query: {},
             body: {
-                "group_id" : "",
+                "group_id" : groupid,
                 "invitee_user_ids" : invitelist
             }
         }
         const resp = await dispatch(invite(data))
         const rawData = await unwrapResult(resp)
         console.log(rawData, "invitedata data")
-
-        // navigation.push(Screens.Sucess)
+        navigation.push(Screens.InviteSucess)
         // setData(rawData?.data?.result ?? [])
         // console.log(rawData?.data?.result,"MMMM")
     }

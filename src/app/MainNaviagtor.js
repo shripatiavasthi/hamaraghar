@@ -205,7 +205,7 @@ import VerifyEmailorPhone from '../containers/VerifyEmailorPhone/VerifyEmailorPh
 import CreateUser from '../containers/CreateUser/CreateUser'
 import SignUp from '../containers/SignUp/SignUp'
 import Home from '../containers/Home/Home'
-import { Screens } from '../helpers/Screens'
+import { navigate , Screens } from '../helpers/Screens'
 import Gender from '../containers/Gender/Gender'
 import Birthday from '../containers/Birthday/Birthday'
 import AddName from '../containers/AddName/AddName'
@@ -269,9 +269,9 @@ const Tabs = props => {
         }}
       />
 
-      {/* <BottomTabs.Screen
-        name={Screens.Home}
-        component={Home}
+      <BottomTabs.Screen
+        name={Screens.Post}
+        component={Post}
         listeners={{
           tabPress: e => {
             navigate(Screens.ALLPACKAGE, {
@@ -296,15 +296,15 @@ const Tabs = props => {
               //   )}
               // </View>
             // ),
-            tabBarLabel: 'All Packages',
+            tabBarLabel: 'Post',
             headerShown: false,
           };
         }}
-      /> */}
+      />
 
-      {/* <BottomTabs.Screen
-        name={Screens.Home}
-        component={Home}
+      <BottomTabs.Screen
+        name={Screens.ConversationGroups}
+        component={ConversationGroups}
         options={({ navigation }) => {
           return {
             // tabBarIcon: ({ focused }) => (
@@ -320,11 +320,11 @@ const Tabs = props => {
             //     )}
             //   </View>
             // ),
-            tabBarLabel: 'My Profile',
+            tabBarLabel: 'Conversation',
             headerShown: false,
           };
         }}
-      /> */}
+      />
     </BottomTabs.Navigator>
   );
 };
@@ -334,13 +334,16 @@ export const MainNaviagtor = (props) => {
   return (
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator  
+        initialRouteName={props.token ? Screens.Tabs : Screens.Gender}
+        > 
+          <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Post} component={Post} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.InvitePeople} component={InvitePeople} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SignUp} component={SignUp} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.CreateBelong} component={CreateBelong} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.BelongThree} component={BelongThree} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Login} component={Login} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Home} component={Home} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Birthday} component={Birthday} options={{ headerShown: false }} />
@@ -351,7 +354,6 @@ export const MainNaviagtor = (props) => {
           <Stack.Screen name={Screens.ConversationGroups} component={ConversationGroups} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Conversation} component={Conversation} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Tabs} component={Tabs} options={{ headerShown: false }} />
-          <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.AddEmailorPhon} component={AddEmailorPhon} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.InviteSucess} component={InviteSucess} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SubCategories} component={SubCategories} options={{ headerShown: false }} />
@@ -365,7 +367,9 @@ export const MainNaviagtor = (props) => {
   )
 }
 
-const mapStateToProps = (state) => ({})
+const mapStateToProps = (state) => ({
+  token: state?.loginSliceNew?.token
+})
 
 const mapDispatchToProps = {}
 

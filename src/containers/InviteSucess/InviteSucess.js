@@ -5,10 +5,11 @@ import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import { navigate, Screens } from '../../helpers/Screens';
 
 export const InviteSucess = (props) => {
 
-
+    const { navigation } = props
 
     return (
         <SafeAreaView>
@@ -31,7 +32,9 @@ export const InviteSucess = (props) => {
                             </View>
                         </View>
                         <View style={belongstyles.browseAll}>
-                            <TouchableOpacity style={belongstyles.SubmitButton}>
+                            <TouchableOpacity style={belongstyles.SubmitButton} onPress={()=>{
+                                 navigation.push(Screens.Tabs)
+                            }}>
                                 <Text style={belongstyles.SubmitButtonText}>Done </Text>
                             </TouchableOpacity>
 

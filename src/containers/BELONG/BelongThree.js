@@ -44,6 +44,11 @@ const DATA = [
 export const BelongThree = (props) => {
 
     const { navigation } = props
+
+    console.log(props?.route?.params?.item, "props in BelongThree")
+
+    const [categoryid  , setcategoryid] = useState(props?.route?.params?.item)
+
     const [data, setData] = useState([])
     const dispatch = useDispatch()
     const getData = async () => {
@@ -127,7 +132,7 @@ export const BelongThree = (props) => {
                         </View>
                         <View style={belongstyles.browseAll}>
                             <TouchableOpacity style={belongstyles.SubmitButton} onPress={() => {
-                                navigation.push(Screens.CreateBelong)
+                                navigation.push(Screens.CreateBelong , {categoryid})
                             }}>
                                 <Text style={belongstyles.SubmitButtonText}>Create your own community </Text>
                             </TouchableOpacity>

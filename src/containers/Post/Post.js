@@ -21,9 +21,12 @@ import {
   launchImageLibrary
 } from 'react-native-image-picker';
 import DeviceInfo from 'react-native-device-info';
+import { navigate, Screens } from '../../helpers/Screens';
 
 const { height, width } = Dimensions.get('screen')
 const Newpage = (props) => {
+
+  const { navigation } = props
 
   const [Deviceid, setdeviceid] = useState()
   const [content, setcontent] = useState("")
@@ -45,7 +48,11 @@ const Newpage = (props) => {
     }
     const resp = await dispatch(createpostslice(data))
     const rawData = await unwrapResult(resp)
-    console.log(rawData, "create response data")
+    console.log(rawData?.data?.message, "create post response data")
+    if(rawData?.data?.message === 'success'){
+      alert(rawData?.data?.result  )
+      navigation.push(Screens.Tabs)
+    }
 
     // setData(rawData?.data?.result ?? [])
     // console.log(rawData?.data?.result,"MMMM")
@@ -278,6 +285,7 @@ const styles = StyleSheet.create({
     height: height / 1,
     width: width / 1,
     backgroundColor: '#FFFFFF',
+    
   },
   hederTxt: {
     height: height / 16,
@@ -313,9 +321,8 @@ const styles = StyleSheet.create({
   },
 
   safeCon: {
-    height: height / 1.1,
+    height: height / 1.2,
     justifyContent: 'space-between',
-
   },
   imgStyle: {
     height: 35,

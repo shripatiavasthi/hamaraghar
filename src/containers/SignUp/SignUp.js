@@ -171,7 +171,7 @@ const SignUp = (props) => {
                     <View style={styles.titleCons}>
                         <TouchableOpacity
                             style={styles.btnCon}
-                            disabled={errorName && errorPassword && alies_exist_state ? true : false}
+                            disabled={ alies_exist_state ? true : false}
                             onPress={async () => {
                                 if (errorName && errorPassword ) {
                                     alert('Please Enter correct User id and password')
@@ -188,8 +188,9 @@ const SignUp = (props) => {
                                     console.log(rawData?.data, "here is data")
                                     if (rawData?.data?.message === 'Success') {
                                         alies(Name)
-                                        navigation.push(Screens.AddName)
-                                    } else if (rawData?.data?.message === 'Failed') {
+                                        // navigation.push(Screens.AddName)
+                                    } else if (rawData?.data?.message === 'Failed' && rawData?.data?.Error === "user does not exist." ) {
+                                        alies(Name)
                                         alert(`${rawData?.data?.result}`)
                                         navigation.push(Screens.AddName)
                                     }

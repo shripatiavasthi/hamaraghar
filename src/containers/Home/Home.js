@@ -1,6 +1,6 @@
-import React,{useEffect} from 'react'
-import { connect,useDispatch } from 'react-redux'
-import { View, Text, SafeAreaView, StyleSheet, Image, Dimensions, FlatList, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { connect, useDispatch } from 'react-redux'
+import { View, Text, SafeAreaView, StyleSheet, Image, Dimensions, FlatList, TouchableOpacity, TextInput, KeyboardAvoidingView, Share, } from 'react-native'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -8,65 +8,104 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { get_curated_timeline } from '../../Slices/TimelineSlice';
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { externalshareslice } from '../../Slices/ExternalshareSlice'
 
 const { height, width } = Dimensions.get('screen')
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-  },
-];
+// const DATA = [
+//   {
+//     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+//     title: 'First Item',
+//   },
+//   {
+//     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+//     title: 'Second Item',
+//   },
+//   {
+//     id: '58694a0f-3da1-471f-bd96-145571e29d72',
+//     title: 'Third Item',
+//   },
+//   {
+//     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+//     title: 'Second Item',
+//   },
+//   {
+//     id: '58694a0f-3da1-471f-bd96-145571e29d72',
+//     title: 'Third Item',
+//   },
+//   {
+//     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+//     title: 'Second Item',
+//   },
+//   {
+//     id: '58694a0f-3da1-471f-bd96-145571e29d72',
+//     title: 'Third Item',
+//   },
+// ];
 
 export const Home = (props) => {
 
+  const { navigation } = props
 
   const dispatch = useDispatch()
 
+  const [DATA, setDATA] = useState()
+
   const getCuratedTimeline = async () => {
     const data = {
-      token : props?.token,
+      token: props?.token,
     }
     const resp = await dispatch(get_curated_timeline(data))
     const rawData = await unwrapResult(resp)
-    console.log(rawData,"kkkkk")
+    console.log(rawData?.data?.result, "kkkkk")
+    setDATA(rawData?.data?.result)
   }
 
   useEffect(() => {
-    
+
     getCuratedTimeline()
-    
+
   }, [])
-  
-  const { navigation } = props
 
   const image = { image: require("../../staticdata/images/logo.jpeg") }
 
-  const Item = ({ title }) => (
+  const sharepost = async ( post_id , group_id  ) => {
+    const data = { 
+      query: { 
+        post_id: post_id, 
+        group_id: group_id, 
+      },
+      body: {}
+    }
+    const resp = await dispatch(externalshareslice(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData, "share post response")
+  }
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'React Native | A framework for building native apps using React',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+
+
+  const Item = ({ title }) =>
+  (
     <View style={styles.Post}>
       <View>
         <Image
@@ -79,11 +118,11 @@ export const Home = (props) => {
       <View style={styles.PostContent}>
         <View style={styles.content}>
           <View style={styles.Userdetails}>
-            <View style={{ flexDirection: "row" , alignItems: 'center' }}>
+            <View style={{ flexDirection: "row", alignItems: 'center' }}>
               <EvilIcons name="user" size={25} color="black" />
               <View>
-                <Text style={{color:"black" , fontSize:12 , fontWeight:'600'}}>lopamudra</Text>
-                <Text style={{color:"black" , fontSize:10 , fontWeight:'400'}}>/junglecats</Text>
+                <Text style={{ color: "black", fontSize: 12, fontWeight: '600' }}>{title?.user_alias}</Text>
+                <Text style={{ color: "black", fontSize: 10, fontWeight: '400' }}>/junglecats</Text>
               </View>
             </View>
             <View>
@@ -94,39 +133,43 @@ export const Home = (props) => {
           </View>
           <View style={styles.Share}>
             <View style={{ flexDirection: "row", justifyContent: "space-between", width: width / 4 }}>
-              <TouchableOpacity 
-              // onPress={navigation.push(Screens.Conversation)}
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.push(Screens.Conversation)
+                }}
               >
                 <FontAwesome name="comment" size={25} color="black" />
               </TouchableOpacity>
               <TouchableOpacity>
                 <FontAwesome name="bookmark" size={25} color="black" />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                sharepost()
+              }}>
                 <Feather name="send" size={25} color="black" />
               </TouchableOpacity>
             </View>
             <View>
-              <Text style={{color:"black" , fontSize:12 , fontWeight:'600'}}>100+ Comments</Text>
+              <Text style={{ color: "black", fontSize: 12, fontWeight: '600' }}>100+ Comments</Text>
             </View>
           </View>
           <View style={styles.Description}>
-            <Text style={{color:"black" , fontSize:13 , fontWeight:'600'}}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
+            <Text style={{ color: "black", fontSize: 13, fontWeight: '600' }}>{title?.post_media}</Text>
           </View>
           <View style={styles.noofdays}>
-            <Text style={{ fontSize:10 }}>1 day ago</Text>
+            <Text style={{ fontSize: 10 }}>1 day ago</Text>
           </View>
           <View style={styles.CommentSection}>
             <View style={styles.ComenterDetails}>
               <EvilIcons name="user" size={25} color="black" />
-              <Text style={{color:"black" , fontSize:12}}>Kali_bili</Text>
+              <Text style={{ color: "black", fontSize: 12 }}>Kali_bili</Text>
             </View>
             <ScrollView>
-            <View style={styles.CommentInput}>
-              <KeyboardAvoidingView behavior='position'>
-                <TextInput placeholder='Add your comment here'></TextInput>
-              </KeyboardAvoidingView>
-            </View>
+              <View style={styles.CommentInput}>
+                <KeyboardAvoidingView behavior='position'>
+                  <TextInput placeholder='Add your comment here'></TextInput>
+                </KeyboardAvoidingView>
+              </View>
             </ScrollView>
           </View>
         </View>
@@ -135,8 +178,8 @@ export const Home = (props) => {
   );
 
   const renderItem = ({ item }) => (
-    
-    <Item title={item.title} />
+
+    <Item title={item} />
 
   );
 
@@ -155,14 +198,14 @@ export const Home = (props) => {
             <EvilIcons name="user" size={35} color="black" />
           </View>
         </View>
-          <View style={styles.Posts} >
-            <FlatList
-              contentContainerStyle={{ paddingBottom: 190 }}
-              data={DATA}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-            />
-          </View>
+        <View style={styles.Posts} >
+          <FlatList
+            contentContainerStyle={{ paddingBottom: 190 }}
+            data={DATA}
+            renderItem={renderItem}
+            keyExtractor={item => item.id}
+          />
+        </View>
       </View>
     </SafeAreaView>
   )
@@ -228,7 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   content: {
-    padding : 5,
+    padding: 5,
     // backgroundColor: 'lightblue',
     borderColor: 'black',
     // borderWidth: 1,

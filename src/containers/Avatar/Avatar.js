@@ -30,8 +30,6 @@ const Avatar = (props) => {
     const [phone , setphone] = useState()
     const [alies , setalies] = useState()
 
-
-
     Details = [
         {
             type: "Party",
@@ -158,6 +156,7 @@ const Avatar = (props) => {
 
 
     const createuser = ( ) => {
+        console.log(alies , name , lastname , gender , birthday , email , phone  )
         axios({
             method: 'post',
             url: `http://54.214.196.237:3000/user/create`,
@@ -173,10 +172,10 @@ const Avatar = (props) => {
                 "country": 5,
             }
           }).then((response) => {
-            navigation.push(Screens.Belongone)
+            navigation.push(Screens.Login)
             console.log(response.data , "create user response");
           }).catch((e)=>{
-            alert(`${e.response.data.data.error}`)
+            // alert(`${e.response.data.data.error}`)
             console.log(e.response.data.data.error
                 , "create user response error" )
           })
