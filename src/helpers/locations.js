@@ -22,5 +22,8 @@ module.exports = {
   EXTERNAL_SHARE : '/post/share_externally',
   BOOKMARK_SAVE : '/post/bookmark',
   BOOKMARK_DELETE : '/post/delete_bookmark',
-  POST_ALL_REPLIES : '/post/all_replies'
+  POST_ALL_REPLIES : '/post/all_replies',
+  POST_ALL_REPLIES : '/post/all_replies',
+  POST_SEARCH_TIMELINE : '/post/search_timeline'
+
 };
