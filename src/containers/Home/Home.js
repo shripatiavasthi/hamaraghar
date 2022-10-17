@@ -8,7 +8,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { get_curated_timeline } from '../../Slices/TimelineSlice';
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { externalshareslice } from '../../Slices/ExternalshareSlice'
+import { externalshareslice } from '../../Slices/ExternalshareSlice';
+import { bookmarksave } from '../../Slices/BookmarkSaveSlice';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -69,11 +70,26 @@ export const Home = (props) => {
 
   const image = { image: require("../../staticdata/images/logo.jpeg") }
 
-  const sharepost = async ( post_id , group_id  ) => {
-    const data = { 
-      query: { 
-        post_id: post_id, 
-        group_id: group_id, 
+  const bookmark = async (post_id, group_id) => {
+    const data = {
+      token: props?.token,
+      query: {
+        post_id: post_id,
+        group_id: group_id,
+      },
+      body: {}
+    }
+    const resp = await dispatch(bookmarksave(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData, "share bookmark response")
+  }
+
+  const sharepost = async (post_id, group_id) => {
+    const data = {
+      token: props?.token,
+      query: {
+        post_id: post_id,
+        group_id: group_id,
       },
       body: {}
     }
@@ -140,11 +156,13 @@ export const Home = (props) => {
               >
                 <FontAwesome name="comment" size={25} color="black" />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                bookmark(title?.post_id, title?.group_id)
+              }}>
                 <FontAwesome name="bookmark" size={25} color="black" />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
-                sharepost(title?.post_id , title?.group_id)
+                sharepost(title?.post_id, title?.group_id)
               }}>
                 <Feather name="send" size={25} color="black" />
               </TouchableOpacity>

@@ -19,5 +19,6 @@ module.exports = {
   CREATEPOST : '/post/create',
   GET_CURATED_TIMELINE : '/post/get_curated_timeline',
   GET_GROUP_LIST : '/group/get_group_list',
-  EXTERNAL_SHARE : '/post/share_externally'
+  EXTERNAL_SHARE : '/post/share_externally',
+  BOOKMARK_SAVE : '/post/bookmark',
 };

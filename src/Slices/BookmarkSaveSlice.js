@@ -10,10 +10,10 @@ const initialState = {
   CreateRes : {}
 };
 
-export const externalshareslice = createAsyncThunk(
-  "getlinkshare",
+export const bookmarksave = createAsyncThunk(
+  "getbookmark",
   async (data, thunkAPI) => {
-    return await doPost(thunkAPI, location.EXTERNAL_SHARE, data?.query, data?.body , data?.token );
+    return await doPost(thunkAPI, location.BOOKMARK_SAVE, data?.query, data?.body , data?.token );
   }
 );
 
@@ -31,14 +31,14 @@ const addressSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(externalshareslice.pending, (state) => {
+      .addCase(bookmarksave.pending, (state) => {
         state.pending = true;
       })
-      .addCase(externalshareslice.fulfilled, (state, action) => {
+      .addCase(bookmarksave.fulfilled, (state, action) => {
         state.pending = false;
         state.CreateRes = action.payload;
       })
-      .addCase(externalshareslice.rejected, (state) => {
+      .addCase(bookmarksave.rejected, (state) => {
         state.pending = false;
         state.error = true;
       });
