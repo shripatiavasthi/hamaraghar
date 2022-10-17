@@ -144,7 +144,7 @@ export const Home = (props) => {
                 <FontAwesome name="bookmark" size={25} color="black" />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
-                sharepost()
+                sharepost(title?.post_id , title?.group_id)
               }}>
                 <Feather name="send" size={25} color="black" />
               </TouchableOpacity>
