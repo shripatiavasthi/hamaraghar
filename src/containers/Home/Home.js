@@ -10,6 +10,7 @@ import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { externalshareslice } from '../../Slices/ExternalshareSlice';
 import { bookmarksave } from '../../Slices/BookmarkSaveSlice';
+import { bookmarkdelete } from '../../Slices/DeleteBookmarkSlice';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -51,6 +52,7 @@ export const Home = (props) => {
   const dispatch = useDispatch()
 
   const [DATA, setDATA] = useState()
+  const [save , setsave] = useState(false)
 
   const getCuratedTimeline = async () => {
     const data = {
@@ -84,7 +86,22 @@ export const Home = (props) => {
     console.log(rawData, "share bookmark response")
   }
 
+  const deletebookmark = async (post_id, group_id) => {
+    const data = {
+      token: props?.token,
+      query: {
+        post_id: post_id,
+        group_id: group_id,
+      },
+      body: {}
+    }
+    const resp = await dispatch(bookmarkdelete(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData, "share bookmark response")
+  }
+
   const sharepost = async (post_id, group_id) => {
+    console.log(post_id, group_id , "post and group")
     const data = {
       token: props?.token,
       query: {
@@ -95,7 +112,7 @@ export const Home = (props) => {
     }
     const resp = await dispatch(externalshareslice(data))
     const rawData = await unwrapResult(resp)
-    console.log(rawData, "share post response")
+    console.log(rawData?.data?.message, "share post response")
   }
 
   const onShare = async () => {
@@ -138,7 +155,7 @@ export const Home = (props) => {
               <EvilIcons name="user" size={25} color="black" />
               <View>
                 <Text style={{ color: "black", fontSize: 12, fontWeight: '600' }}>{title?.user_alias}</Text>
-                <Text style={{ color: "black", fontSize: 10, fontWeight: '400' }}>/junglecats</Text>
+                <Text style={{ color: "black", fontSize: 10, fontWeight: '400' }}>/junglecats </Text>
               </View>
             </View>
             <View>

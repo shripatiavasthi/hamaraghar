@@ -21,4 +21,5 @@ module.exports = {
   GET_GROUP_LIST : '/group/get_group_list',
   EXTERNAL_SHARE : '/post/share_externally',
   BOOKMARK_SAVE : '/post/bookmark',
+  BOOKMARK_DELETE : '/post/delete_bookmark'
 };
