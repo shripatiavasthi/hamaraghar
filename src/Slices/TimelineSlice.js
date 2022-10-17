@@ -31,5 +31,13 @@ export const get_post_replies = createAsyncThunk(
       return await doGet(thunkAPI,location.POST_SEARCH_TIMELINE, data?.query,data?.token);
     }
   );
+
+  export const post_comment_reply = createAsyncThunk(
+    "post_comment_reply",
+    async (data, thunkAPI) => {
+      return await doPost(thunkAPI,location.POST_CREATE_REPLY, {},data?.body,data?.token);
+    }
+  );
+  
   
   
