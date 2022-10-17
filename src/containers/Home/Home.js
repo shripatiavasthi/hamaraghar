@@ -185,7 +185,7 @@ export const Home = (props) => {
             <View style={{ flexDirection: "row", justifyContent: "space-between", width: width / 4 }}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.push(Screens.Conversation)
+                  navigation.push(Screens.Conversation, {id : title?.post_id})
                 }}
               >
                 <FontAwesome name="comment" size={25} color="black" />
