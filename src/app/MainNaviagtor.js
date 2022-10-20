@@ -32,6 +32,9 @@ import ConversationGroups from '../containers/Groupbelong/Groupbelong'
 import SingleGroup from '../containers/SingleGroup/SingleGroup'
 import Post from '../containers/Post/Post'
 import Real from '../containers/Reals/Real'
+import Octicons from 'react-native-vector-icons/Octicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather';
 
 let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
@@ -59,20 +62,20 @@ const Tabs = props => {
         component={Home}
         options={({ navigation }) => {
           return {
-            // tabBarIcon: ({ focused }) => (
-            // <View>
-            //   {focused ? (
-            //     <View>
-            //       <BlueHome />
-            //     </View>
-            //   ) : (
-            //     <View>
-            //       <GrayHome />
-            //     </View>
-            //   )}
-            // </View>
-            // ),
-            // tabBarLabel: 'Home',
+            tabBarIcon: ({ focused }) => (
+            <View>
+              {focused ? (
+                <View>
+                  <Octicons name="home" size={28} color="black"  />
+                </View>
+              ) : (
+                <View>
+                  <Octicons name="home" size={28} color="black" />
+                </View>
+              )}
+            </View>
+            ),
+            tabBarLabel: '',
             headerShown: false,
           };
         }}
@@ -92,20 +95,21 @@ const Tabs = props => {
         }}
         options={({ navigation }) => {
           return {
-            // tabBarIcon: ({ focused }) => (
-              // <View>
-              //   {focused ? (
-              //     <View>
-              //       <BlueHeart />
-              //     </View>
-              //   ) : (
-              //     <View>
-              //       <GrayHeart />
-              //     </View>
-              //   )}
-              // </View>
-            // ),
-            tabBarLabel: 'Post',
+           
+            tabBarIcon: ({ focused }) => (
+              <View>
+                {focused ? (
+                  <View>
+                    <AntDesign name="pluscircleo" size={28} color="black" />
+                  </View>
+                ) : (
+                  <View>
+                    <AntDesign name="pluscircleo" size={28} color="black" />
+                  </View>
+                )}
+              </View>
+            ),
+            tabBarLabel: '',
             headerShown: false,
           };
         }}
@@ -116,20 +120,20 @@ const Tabs = props => {
         component={ConversationGroups}
         options={({ navigation }) => {
           return {
-            // tabBarIcon: ({ focused }) => (
-            //   <View>
-            //     {focused ? (
-            //       <View>
-            //         <BlueUser />
-            //       </View>
-            //     ) : (
-            //       <View>
-            //         <GreyUser />
-            //       </View>
-            //     )}
-            //   </View>
-            // ),
-            tabBarLabel: 'Conversation',
+            tabBarIcon: ({ focused }) => (
+              <View>
+                {focused ? (
+                  <View>
+                     <Feather name="message-square" size={28} color="black" />
+                  </View>
+                ) : (
+                  <View>
+                     <Feather name="message-square" size={28} color="black" />
+                  </View>
+                )}
+              </View>
+            ),
+            tabBarLabel: '',
             headerShown: false,
           };
         }}
@@ -140,11 +144,12 @@ const Tabs = props => {
 
 
 export const MainNaviagtor = (props) => {
+  console.log(props.token , "in the main navigator")
   return (
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <Stack.Navigator  
-        initialRouteName={props.token ? Screens.Home : Screens.Gender}
+        initialRouteName={props.token ? Screens.Tabs : Screens.Gender}
         > 
           <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />
@@ -175,6 +180,8 @@ export const MainNaviagtor = (props) => {
     </PersistGate>
   )
 }
+
+
 
 const mapStateToProps = (state) => ({
   token: state?.loginSliceNew?.token

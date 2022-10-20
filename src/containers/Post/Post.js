@@ -22,6 +22,8 @@ import {
 } from 'react-native-image-picker';
 import DeviceInfo from 'react-native-device-info';
 import { navigate, Screens } from '../../helpers/Screens';
+import axios from 'axios'
+import DocumentPicker from 'react-native-document-picker'
 
 const { height, width } = Dimensions.get('screen')
 const Newpage = (props) => {
@@ -31,32 +33,60 @@ const Newpage = (props) => {
   const [Deviceid, setdeviceid] = useState()
   const [content, setcontent] = useState("")
   const [groupsList, setGroupsList] = useState([])
-  const [GroupId, setgroupId] = useState()
+  const [GroupId, setgroupId] = useState([])
 
   const dispatch = useDispatch()
 
   const Invitepeople = async () => {
-    const data = {
-      token: props?.token,
-      query: {
-        post_text: content,
-        location: "Delhi",
-        device_id: Deviceid,
-        group_id: GroupId
-      },
-      body: {}
-    }
-    const resp = await dispatch(createpostslice(data))
-    const rawData = await unwrapResult(resp)
-    console.log(rawData?.data?.message, "create post response data")
-    if(rawData?.data?.message === 'success'){
-      alert(rawData?.data?.result  )
-      navigation.push(Screens.Tabs)
-    }
+    // const data = {
+    //   token: props?.token,
+    //   query: {
+    //     post_text: content,
+    //     location: "location",
+    //     device_id: Deviceid,
+    //     group_id: GroupId
+    //   },
+    //   body: {}
+    // }
+    // const resp = await dispatch(createpostslice(data))
+    // const rawData = await unwrapResult(resp)
+    // console.log(rawData?.data?.message, "create post response data")
+    // if (rawData?.data?.message === 'success') {
+    //   alert(rawData?.data?.result)
+    //   navigation.push(Screens.Tabs)
+    // }
 
     // setData(rawData?.data?.result ?? [])
     // console.log(rawData?.data?.result,"MMMM")
+
+    var bodyFormData = new FormData();
+    bodyFormData.append('post_text', content);
+    bodyFormData.append('location', "Delhi");
+    bodyFormData.append('device_id', Deviceid);
+    bodyFormData.append('group_id', GroupId);
+    bodyFormData.append('media', images);
+    console.log(bodyFormData, "bodyform data")
+    axios({
+      method: "post",
+      url: "http://54.214.196.237:3000/post/create",
+      data: bodyFormData,
+      headers: {
+        Authorization: `${props.token}`,
+        "Content-Type": "multipart/form-data"
+      },
+    })
+      .then(function (response) {
+        //handle success
+        console.log(response, "post direct method work");
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response, "postdirect method is not working");
+      });
+
   }
+
+
   const getGroupList = async () => {
     const data = {
       query: {},
@@ -82,6 +112,7 @@ const Newpage = (props) => {
   }
 
   const [filePath, setFilePath] = useState({});
+  const [images, setimages] = useState([])
 
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
@@ -194,7 +225,44 @@ const Newpage = (props) => {
       console.log('type -> ', response.type);
       console.log('fileName -> ', response.fileName);
       setFilePath(response);
+      images.push(response.uri)
     });
+  };
+
+  const [singleFile, setSingleFile] = useState('');
+
+  const selectOneFile = async () => {
+    //Opening Document Picker for selection of one file
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+        //There can me more options as well
+        // DocumentPicker.types.allFiles
+        // DocumentPicker.types.images
+        // DocumentPicker.types.plainText
+        // DocumentPicker.types.audio
+        // DocumentPicker.types.pdf
+      });
+      //Printing the log realted to the file
+      console.log('res : ' + JSON.stringify(res));
+      console.log('URI : ' + res.uri);
+      console.log('Type : ' + res.type);
+      console.log('File Name : ' + res.name);
+      console.log('File Size : ' + res.size);
+      //Setting the state to show single file attributes
+      setSingleFile(res);
+      images.push(res.uri)
+    } catch (err) {
+      //Handling any exception (If any)
+      if (DocumentPicker.isCancel(err)) {
+        //If user canceled the document selection
+        alert('Canceled from single doc picker');
+      } else {
+        //For Unknown Error
+        alert('Unknown Error: ' + JSON.stringify(err));
+        throw err;
+      }
+    }
   };
 
 
@@ -216,32 +284,38 @@ const Newpage = (props) => {
             <Text style={styles.bookTxt}>Write Post</Text>
           </View>
         </View>
-        <TextInput placeholder='Name' onChangeText={(txt) => {
-          setcontent(txt)
-        }} />
+        <View style={{ flex: 1 }}>
+          <TextInput placeholder='Name' multiline={true} onChangeText={(txt) => {
+            setcontent(txt)
+          }} />
+        </View>
         <View>
           <KeyboardAwareScrollView extraScrollHeight={10} enableOnAndroid={true}
             keyboardShouldPersistTaps='handled'>
-            <ScrollView>
+            <ScrollView nestedScrollEnabled={true}>
               <View style={styles.downCon}>
                 {/* <ScrollView> */}
-
-                {groupsList?.map((item) => {
-                  return (
-                    <TouchableOpacity
-                    onPress={() => {
-                      setgroupId(item.id)
-                    }}>
-                      <View style={{ flexDirection: 'row' }}>
-                        <View style={styles.txtCon}>
-                          <Text style={styles.lstTxt}>{item?.name}</Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>)
-                })}
-
+                <ScrollView nestedScrollEnabled={true}>
+                  <View style={{ width: '70%', flexDirection: 'row' }}>
+                    {groupsList?.map((item) => {
+                      return (
+                        <TouchableOpacity
+                          onPress={() => {
+                            // setgroupId(item.id)
+                            GroupId.push(item.id)
+                          }}>
+                          <View style={{ flexDirection: 'row' }}>
+                            <View style={styles.txtCon}>
+                              <Text style={styles.lstTxt}>{item?.name}</Text>
+                            </View>
+                          </View>
+                        </TouchableOpacity>)
+                    })}
+                  </View>
+                </ScrollView>
                 {/* </ScrollView> */}
                 <TouchableOpacity style={styles.serchCon}>
+                  <Feather name="search" size={35} color="black" />
                   {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                 </TouchableOpacity>
               </View>
@@ -251,7 +325,10 @@ const Newpage = (props) => {
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                     <Feather name="camera" size={35} color="black" />
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.imgCon} onPress={() => chooseFile('photo')}>
+                  <TouchableOpacity style={styles.imgCon} onPress={() =>  
+                    selectOneFile()
+                    // chooseFile('photo')
+                     }>
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                     <Entypo name="images" size={35} color="black" />
                   </TouchableOpacity>
@@ -285,7 +362,7 @@ const styles = StyleSheet.create({
     height: height / 1,
     width: width / 1,
     backgroundColor: '#FFFFFF',
-    
+
   },
   hederTxt: {
     height: height / 16,
@@ -351,7 +428,7 @@ const styles = StyleSheet.create({
   },
   txtCon: {
     height: height / 20,
-    width: width / 5.1,
+    width: width / 7.1,
     // backgroundColor: 'cyan',
     justifyContent: 'center',
     alignItems: 'center',
@@ -414,4 +491,5 @@ const styles = StyleSheet.create({
   keyBd: {
 
   }
+
 })

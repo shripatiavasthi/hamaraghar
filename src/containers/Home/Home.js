@@ -5,12 +5,15 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
-import { get_curated_timeline,get_post_replies } from '../../Slices/TimelineSlice';
+import { get_curated_timeline, get_post_replies } from '../../Slices/TimelineSlice';
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { externalshareslice } from '../../Slices/ExternalshareSlice';
 import { bookmarksave } from '../../Slices/BookmarkSaveSlice';
 import { bookmarkdelete } from '../../Slices/DeleteBookmarkSlice';
+import { SwiperFlatList } from 'react-native-swiper-flatlist';
+import Video from 'react-native-video';
+import VideoPlayer from 'react-native-video-player';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -52,7 +55,9 @@ export const Home = (props) => {
   const dispatch = useDispatch()
 
   const [DATA, setDATA] = useState()
-  const [save , setsave] = useState(false)
+  const [save, setsave] = useState(false)
+  const [inviteemail , setinviteemail] = useState()
+  const [bookmarksaved , setbookmarksaved] = useState(false)
 
   const getCuratedTimeline = async () => {
     const data = {
@@ -68,8 +73,8 @@ export const Home = (props) => {
 
   const get_post_reply = async () => {
     const data = {
-      query : {
-        post_id : 27
+      query: {
+        post_id: 27
       },
       token: props?.token,
     }
@@ -92,11 +97,11 @@ export const Home = (props) => {
   const bookmark = async (post_id, group_id) => {
     const data = {
       token: props?.token,
-      query: {
+      query: {},
+      body: {
         post_id: post_id,
         group_id: group_id,
-      },
-      body: {}
+      }
     }
     const resp = await dispatch(bookmarksave(data))
     const rawData = await unwrapResult(resp)
@@ -118,25 +123,28 @@ export const Home = (props) => {
   }
 
   const sharepost = async (post_id, group_id) => {
-    console.log(post_id, group_id , "post and group")
+    console.log(post_id, group_id, "post and group")
     const data = {
       token: props?.token,
-      query: {
+      query: {},
+      body: {
         post_id: post_id,
         group_id: group_id,
-      },
-      body: {}
+      }
     }
     const resp = await dispatch(externalshareslice(data))
     const rawData = await unwrapResult(resp)
-    console.log(rawData?.data?.message, "share post response")
+    console.log(rawData?.data, "share post response")
+    if(rawData?.data?.message == "success"){
+      onShare(rawData?.data?.result)
+    }
   }
 
-  const onShare = async () => {
+  const onShare = async (link) => {
     try {
       const result = await Share.share({
         message:
-          'React Native | A framework for building native apps using React',
+          `${link}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -152,17 +160,58 @@ export const Home = (props) => {
     }
   };
 
+  const colors = ['tomato', 'thistle', 'skyblue', 'teal'];
+
+  console.log(DATA, "all timelines")
 
 
   const Item = ({ title }) =>
   (
     <View style={styles.Post}>
       <View>
-        <Image
+        {/* <Image
           style={styles.postimage}
           source={{
             uri: 'https://reactnative.dev/img/tiny_logo.png',
           }}
+        /> */}
+        <SwiperFlatList
+          // autoplay
+          // autoplayDelay={2}
+          // autoplayLoop
+          // index={2}
+          showPagination
+          data={title?.post_media}
+          renderItem={({ item }) => (
+            <View style={[styles.postimage, { backgroundColor: item }]}>
+              {item.media_type == "image" ?
+                <Image
+                  style={styles.postimage}
+                  source={{
+                    uri: `${item.url}`,
+                  }}
+                />
+                :
+                // <Video source={{ uri: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4` }}   // Can be a URL or a local file.
+                // ref={(ref) => {
+                //   this.player = ref
+                // }}                                      // Store reference
+                // onBuffer={this.onBuffer}                // Callback when remote video is buffering
+                // onError={this.videoError}               // Callback when video cannot be loaded
+                //  style={styles.backgroundVideo}
+                //  />
+                <VideoPlayer
+                  video={{ uri: 
+                    // `${item.url}`
+                    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+                   }}
+                  videoWidth={1600}
+                  videoHeight={900}
+                  thumbnail={{ uri: 'https://i.picsum.photos/id/866/1600/900.jpg' }}
+                />
+              }
+            </View>
+          )}
         />
       </View>
       <View style={styles.PostContent}>
@@ -185,16 +234,24 @@ export const Home = (props) => {
             <View style={{ flexDirection: "row", justifyContent: "space-between", width: width / 4 }}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.push(Screens.Conversation, {id : title?.post_id})
+                  navigation.push(Screens.Conversation, { id: title?.post_id })
                 }}
               >
                 <FontAwesome name="comment" size={25} color="black" />
               </TouchableOpacity>
+              {bookmarksaved ? 
+                <TouchableOpacity onPress={() => {
+                  deletebookmark(title?.post_id, title?.group_id)
+                }}>
+                  <FontAwesome name="bookmark" size={25} color="black" />
+                </TouchableOpacity>
+              :
               <TouchableOpacity onPress={() => {
                 bookmark(title?.post_id, title?.group_id)
               }}>
-                <FontAwesome name="bookmark" size={25} color="black" />
+                <FontAwesome name="bookmark-o" size={25} color="black" />
               </TouchableOpacity>
+             }
               <TouchableOpacity onPress={() => {
                 sharepost(title?.post_id, title?.group_id)
               }}>
@@ -206,7 +263,7 @@ export const Home = (props) => {
             </View>
           </View>
           <View style={styles.Description}>
-            <Text style={{ color: "black", fontSize: 13, fontWeight: '600' }}>{title?.post_media}</Text>
+            <Text style={{ color: "black", fontSize: 13, fontWeight: '600' }}>{title?.post_text}</Text>
           </View>
           <View style={styles.noofdays}>
             <Text style={{ fontSize: 10 }}>1 day ago</Text>
@@ -247,7 +304,11 @@ export const Home = (props) => {
           </View>
           <View style={styles.brandlogo}>
             <EvilIcons name="search" size={35} color="black" />
-            <EvilIcons name="user" size={35} color="black" />
+            <TouchableOpacity onPress={() => {
+              navigation.push(Screens.Login)
+            }}>
+              <EvilIcons name="user" size={35} color="black" />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.Posts} >
@@ -357,7 +418,14 @@ const styles = StyleSheet.create({
     width: width / 1.5,
     flexDirection: 'row',
     alignItems: 'center',
-  }
+  },
+  backgroundVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
 })
 
 const mapStateToProps = (state) => ({
