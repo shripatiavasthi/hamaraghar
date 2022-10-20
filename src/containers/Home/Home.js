@@ -5,7 +5,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
-import { get_curated_timeline, get_post_replies } from '../../Slices/TimelineSlice';
+import { get_curated_timeline, get_post_replies, post_comment_reply } from '../../Slices/TimelineSlice';
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { externalshareslice } from '../../Slices/ExternalshareSlice';
@@ -55,9 +55,10 @@ export const Home = (props) => {
   const dispatch = useDispatch()
 
   const [DATA, setDATA] = useState()
-  const [save, setsave] = useState(false)
   const [inviteemail , setinviteemail] = useState()
   const [bookmarksaved , setbookmarksaved] = useState(false)
+  const [commentReply, setCommentReply] = useState('')
+  const [save, setsave] = useState(false)
 
   const getCuratedTimeline = async () => {
     const data = {
@@ -68,8 +69,6 @@ export const Home = (props) => {
     console.log(rawData?.data?.result, "kkkkk")
     setDATA(rawData?.data?.result)
   }
-
-  // get_post_replies 
 
   const get_post_reply = async () => {
     const data = {
@@ -276,10 +275,33 @@ export const Home = (props) => {
             <ScrollView>
               <View style={styles.CommentInput}>
                 <KeyboardAvoidingView behavior='position'>
-                  <TextInput placeholder='Add your comment here'></TextInput>
+                  <TextInput
+                    value={commentReply}
+                    onChangeText={(value) => {
+                      setCommentReply(value)
+                    }}
+                    placeholder='Add your comment here'></TextInput>
+                 
                 </KeyboardAvoidingView>
               </View>
             </ScrollView>
+            <TouchableOpacity onPress={async () => {
+                    const data = {
+                      body : {
+                        post_id: title?.post_id,
+                        reply_text: commentReply,
+                        group_id: title?.group_id,
+                        replying_to_user_id : title?.user_id
+                      },
+                      query : {},
+                      token : props?.token
+                    }
+                    const resp = await dispatch(post_comment_reply(data))
+                    const rawData = await unwrapResult(resp)
+                    console.log(rawData,"kkkll")
+                  }}>
+                    <Feather name="send" size={25} color="black" />
+                  </TouchableOpacity>
           </View>
         </View>
       </View>
