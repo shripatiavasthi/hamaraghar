@@ -143,7 +143,7 @@ export const Home = (props) => {
     try {
       const result = await Share.share({
         message:
-          `${link}`,
+          `http://${link}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -179,7 +179,7 @@ export const Home = (props) => {
           // autoplayDelay={2}
           // autoplayLoop
           // index={2}
-          showPagination
+          // showPagination
           data={title?.post_media}
           renderItem={({ item }) => (
             <View style={[styles.postimage, { backgroundColor: item }]}>
@@ -258,7 +258,7 @@ export const Home = (props) => {
               </TouchableOpacity>
             </View>
             <View>
-              <Text style={{ color: "black", fontSize: 12, fontWeight: '600' }}>100+ Comments</Text>
+              <Text style={{ color: "black", fontSize: 12, fontWeight: '600' }}>{title?.total_reply} Comments</Text>
             </View>
           </View>
           <View style={styles.Description}>
