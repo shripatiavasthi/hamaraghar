@@ -6,7 +6,7 @@ import { navigate, Screens } from '../../helpers/Screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../css/Maincss'
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import axios from 'axios';
+
 
 const { height, width } = Dimensions.get('screen')
 
@@ -28,17 +28,7 @@ const Gender = ({ props, navigation }) => {
         }
     }
 
-    useEffect(()=>{
-        testing()
-    },[])
-
-    const testing = () => {
-        axios.get("https://redcliffelabs.com/_next/static/chunks/6488-3a4c0823ff8aeeb1.js").then((response)=>{
-            console.log(response , "red testing response")
-        }).catch((error)=>{
-            console.log(error , "testing error")
-        })
-    }
+   
 
     return (
         <SafeAreaView >
