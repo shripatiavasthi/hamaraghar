@@ -154,6 +154,7 @@ const LoginScreen = (props) => {
                                 }
                                 const resp = await props.doLogin(data)
                                 const rawData = await unwrapResult(resp)
+                                console.log(rawData,"kkklll")
                                 if (rawData?.message == 'Success') {
                                     navigation.push(Screens.Belongone)
                                 } else {

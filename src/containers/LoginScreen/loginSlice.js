@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { doPost, doGet, doDel ,doPut } from "../../Slices/api";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import location from "../../helpers/locations";
 
 
@@ -18,6 +19,14 @@ export const postUserLogin = createAsyncThunk(
   }
 );
 
+export const storeToken = async (value) => {
+  try {
+    const jsonValue = JSON.stringify(value)
+    await AsyncStorage.setItem('token', jsonValue)
+  } catch (e) {
+    // saving error
+  }
+}
 
 const loginSlice = createSlice({
   name: "StoreAddress",
@@ -29,6 +38,9 @@ const loginSlice = createSlice({
     setAddressStateSlider(state, action) {
      
     },
+    setToken(state,action){
+      state.token = action.payload;
+    }
   },
 
   extraReducers: (builder) => {
@@ -40,7 +52,7 @@ const loginSlice = createSlice({
         state.pending = false;
         state.token = action.payload.result;
         state.otpResp = action.payload
-        console.log( action.payload)
+        storeToken(action.payload.result)
       })
       .addCase(postUserLogin.rejected, (state) => {
         state.pending = false;
@@ -53,6 +65,6 @@ const loginSlice = createSlice({
 
 export const {
   rehydrate,
-  setAddressStateSlider,
+  setToken
 } = loginSlice.actions;
 export default loginSlice.reducer;
