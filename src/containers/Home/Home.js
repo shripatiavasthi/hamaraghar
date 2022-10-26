@@ -14,6 +14,7 @@ import { bookmarkdelete } from '../../Slices/DeleteBookmarkSlice';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-player';
+import axios from 'axios';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -55,8 +56,8 @@ export const Home = (props) => {
   const dispatch = useDispatch()
 
   const [DATA, setDATA] = useState()
-  const [inviteemail , setinviteemail] = useState()
-  const [bookmarksaved , setbookmarksaved] = useState(false)
+  const [inviteemail, setinviteemail] = useState()
+  const [bookmarksaved, setbookmarksaved] = useState(false)
   const [commentReply, setCommentReply] = useState('')
   const [save, setsave] = useState(false)
 
@@ -134,7 +135,7 @@ export const Home = (props) => {
     const resp = await dispatch(externalshareslice(data))
     const rawData = await unwrapResult(resp)
     console.log(rawData?.data, "share post response")
-    if(rawData?.data?.message == "success"){
+    if (rawData?.data?.message == "success") {
       onShare(rawData?.data?.result)
     }
   }
@@ -143,7 +144,7 @@ export const Home = (props) => {
     try {
       const result = await Share.share({
         message:
-          `${link}`,
+          `http://${link}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -163,6 +164,21 @@ export const Home = (props) => {
 
   console.log(DATA, "all timelines")
 
+  useEffect(() => {
+    testing()
+  }, [])
+
+  const testing = () => {
+    axios.get("https://apidev.redcliffelabs.com/api/v1/package/redo-package-list/").then((response) => {
+      console.log(response.data[0].name, "red testing response")
+      if(response.data){
+        alert(`${response.data[0].name}`)
+      }
+    }).catch((error) => {
+      console.log(error, "testing error")
+      alert("not working")
+    })
+  }
 
   const Item = ({ title }) =>
   (
@@ -179,7 +195,7 @@ export const Home = (props) => {
           // autoplayDelay={2}
           // autoplayLoop
           // index={2}
-          showPagination
+          // showPagination
           data={title?.post_media}
           renderItem={({ item }) => (
             <View style={[styles.postimage, { backgroundColor: item }]}>
@@ -200,10 +216,11 @@ export const Home = (props) => {
                 //  style={styles.backgroundVideo}
                 //  />
                 <VideoPlayer
-                  video={{ uri: 
-                    // `${item.url}`
-                    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
-                   }}
+                  video={{
+                    uri:
+                      // `${item.url}`
+                      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+                  }}
                   videoWidth={1600}
                   videoHeight={900}
                   thumbnail={{ uri: 'https://i.picsum.photos/id/866/1600/900.jpg' }}
@@ -238,19 +255,19 @@ export const Home = (props) => {
               >
                 <FontAwesome name="comment" size={25} color="black" />
               </TouchableOpacity>
-              {bookmarksaved ? 
+              {bookmarksaved ?
                 <TouchableOpacity onPress={() => {
                   deletebookmark(title?.post_id, title?.group_id)
                 }}>
                   <FontAwesome name="bookmark" size={25} color="black" />
                 </TouchableOpacity>
-              :
-              <TouchableOpacity onPress={() => {
-                bookmark(title?.post_id, title?.group_id)
-              }}>
-                <FontAwesome name="bookmark-o" size={25} color="black" />
-              </TouchableOpacity>
-             }
+                :
+                <TouchableOpacity onPress={() => {
+                  bookmark(title?.post_id, title?.group_id)
+                }}>
+                  <FontAwesome name="bookmark-o" size={25} color="black" />
+                </TouchableOpacity>
+              }
               <TouchableOpacity onPress={() => {
                 sharepost(title?.post_id, title?.group_id)
               }}>
@@ -258,7 +275,7 @@ export const Home = (props) => {
               </TouchableOpacity>
             </View>
             <View>
-              <Text style={{ color: "black", fontSize: 12, fontWeight: '600' }}>100+ Comments</Text>
+              <Text style={{ color: "black", fontSize: 12, fontWeight: '600' }}>{title?.total_reply} Comments</Text>
             </View>
           </View>
           <View style={styles.Description}>
@@ -281,27 +298,27 @@ export const Home = (props) => {
                       setCommentReply(value)
                     }}
                     placeholder='Add your comment here'></TextInput>
-                 
+
                 </KeyboardAvoidingView>
               </View>
             </ScrollView>
             <TouchableOpacity onPress={async () => {
-                    const data = {
-                      body : {
-                        post_id: title?.post_id,
-                        reply_text: commentReply,
-                        group_id: title?.group_id,
-                        replying_to_user_id : title?.user_id
-                      },
-                      query : {},
-                      token : props?.token
-                    }
-                    const resp = await dispatch(post_comment_reply(data))
-                    const rawData = await unwrapResult(resp)
-                    console.log(rawData,"kkkll")
-                  }}>
-                    <Feather name="send" size={25} color="black" />
-                  </TouchableOpacity>
+              const data = {
+                body: {
+                  post_id: title?.post_id,
+                  reply_text: commentReply,
+                  group_id: title?.group_id,
+                  replying_to_user_id: title?.user_id
+                },
+                query: {},
+                token: props?.token
+              }
+              const resp = await dispatch(post_comment_reply(data))
+              const rawData = await unwrapResult(resp)
+              console.log(rawData, "kkkll")
+            }}>
+              <Feather name="send" size={25} color="black" />
+            </TouchableOpacity>
           </View>
         </View>
       </View>

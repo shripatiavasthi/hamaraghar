@@ -64,7 +64,10 @@ const Newpage = (props) => {
     bodyFormData.append('location', "Delhi");
     bodyFormData.append('device_id', Deviceid);
     bodyFormData.append('group_id', GroupId);
-    bodyFormData.append('media', images);
+    {images.map((item)=>{
+      bodyFormData.append('media', item);
+    })}
+    console.log(images , "images")
     console.log(bodyFormData, "bodyform data")
     axios({
       method: "post",
@@ -251,7 +254,7 @@ const Newpage = (props) => {
       console.log('File Size : ' + res.size);
       //Setting the state to show single file attributes
       setSingleFile(res);
-      images.push(res.uri)
+      images.push(res)
     } catch (err) {
       //Handling any exception (If any)
       if (DocumentPicker.isCancel(err)) {
@@ -479,7 +482,8 @@ const styles = StyleSheet.create({
   btnContainer: {
     height: height / 28,
     width: width / 3,
-    backgroundColor: '#FFA500',
+    // backgroundColor: '#FFA500',
+    backgroundColor: '#FF4500',
     justifyContent: 'center',
     alignItems: 'center'
   },

@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../../css/Maincss'
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 
+
 const { height, width } = Dimensions.get('screen')
 
 const image = { image: require("../../staticdata/images/BackgroundImage.png") }
@@ -26,6 +27,8 @@ const Gender = ({ props, navigation }) => {
             console.log(e, "error in gender storage")
         }
     }
+
+   
 
     return (
         <SafeAreaView >
