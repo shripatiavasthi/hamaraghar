@@ -27,7 +27,7 @@ export const Birthday = ({ props, navigation }) => {
     // console.log(date.toLocaleDateString("en-US",options), "selected date")
 
     const BirthdayData = async (value) => {
-        navigation.navigate(Screens.SignUp)
+        navigation.navigate(Screens.Login)
         try {
             await AsyncStorage.setItem('Dob', value)
         } catch (e) {
