@@ -51,21 +51,7 @@ const LoginScreen = (props) => {
         })
     }
 
-    useEffect(() => {
-        testing()
-      }, [])
     
-      const testing = () => {
-        axios.get("https://apidev.redcliffelabs.com/api/v1/package/redo-package-list/").then((response) => {
-          console.log(response.data[0].name, "red testing response")
-          if(response.data){
-            alert(`${response.data[0].name}`)
-          }
-        }).catch((error) => {
-          console.log(error, "testing error")
-          alert("not working")
-        })
-      }
 
     return (
         <View style={styles.mainContinter}>
@@ -181,8 +167,10 @@ const LoginScreen = (props) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.forCon}>
-                        <TouchableOpacity >
-                            {/* <Text style={styles.anTxt}>Have an account, log in!</Text> */}
+                        <TouchableOpacity onPress={()=>{
+                            navigation.push(Screens.SignUp)
+                        }}>
+                            <Text style={styles.anTxt}>SignUp!</Text>
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>
