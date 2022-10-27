@@ -19,14 +19,6 @@ export const postUserLogin = createAsyncThunk(
   }
 );
 
-export const storeToken = async (value) => {
-  try {
-    const jsonValue = JSON.stringify(value)
-    await AsyncStorage.setItem('token', jsonValue)
-  } catch (e) {
-    // saving error
-  }
-}
 
 const loginSlice = createSlice({
   name: "StoreAddress",

@@ -148,32 +148,12 @@ const Tabs = props => {
 
 export const MainNaviagtor = (props) => {
 
-  const [token, settoken] = useState(null)
-  const getTokenData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('token')
-      if (value !== null) {
-        return value
-      }
-    } catch (e) {
-      // error reading value
-      return e
-    }
-  }
-
-  useEffect(() => {
-    getTokenData().then((resp) => {
-      settoken(resp)
-      setToken(resp)
-    })
-  }, [])
-
   return (
-    <PersistGate loading={null} persistor={persistor}>
+    <PersistGate loading={<View><Text>Loading....</Text></View>} persistor={persistor}>
       <NavigationContainer
         ref={navigationRef}>
         <Stack.Navigator
-          initialRouteName={token ? Screens.Gender : Screens.Login}
+          initialRouteName={props?.token ? Screens.Tabs : Screens.Login}
         >
           <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />
