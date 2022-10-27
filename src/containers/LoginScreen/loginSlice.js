@@ -9,7 +9,7 @@ const initialState = {
   loading: false,
   error: false,
   otpResp : {},
-  token : ''
+  token : null
 };
 
 export const postUserLogin = createAsyncThunk(

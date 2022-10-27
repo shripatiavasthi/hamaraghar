@@ -2,6 +2,7 @@ import links from "../helpers/links";
 import ObjectHelper from "../helpers/objectHelpers";
 import NetInfo from "@react-native-community/netinfo";
 import { resetScreen, Screens } from "../helpers/Screens";
+import { setToken } from "../containers/LoginScreen/loginSlice"
 
 const getLocation = (location) => {
   return links?.baseApi + location;
@@ -15,6 +16,7 @@ async function status(response) {
   }
   if (response.status >= 401 && response.status <= 403) {
     alert(`Token expired please login again\nError code : ${response?.status}`)
+    setToken(null)
     resetScreen(Screens?.Login)
   }
   if (response.status == 400 || (response.status >= 404 && response.status < 500)) {
