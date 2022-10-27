@@ -44,7 +44,6 @@ const loginSlice = createSlice({
         state.pending = false;
         state.token = action.payload.result;
         state.otpResp = action.payload
-        storeToken(action.payload.result)
       })
       .addCase(postUserLogin.rejected, (state) => {
         state.pending = false;
