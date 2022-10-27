@@ -63,11 +63,17 @@ const Newpage = (props) => {
     bodyFormData.append('post_text', content);
     bodyFormData.append('location', "Delhi");
     bodyFormData.append('device_id', Deviceid);
-    bodyFormData.append('group_id', GroupId);
-    {images.map((item)=>{
-      bodyFormData.append('media', item);
-    })}
-    console.log(images , "images")
+    // bodyFormData.append('group_id', GroupId);
+    {GroupId.map((item)=>{
+      bodyFormData.append('group_id', item);
+    })
+    }
+    {
+      images.map((item) => {
+        bodyFormData.append('media', item);
+      })
+    }
+    console.log(images, "images")
     console.log(bodyFormData, "bodyform data")
     axios({
       method: "post",
@@ -80,7 +86,11 @@ const Newpage = (props) => {
     })
       .then(function (response) {
         //handle success
-        console.log(response, "post direct method work");
+        console.log(response?.data?.data?.message
+          , "post direct method work");
+        if (response?.data?.data?.message == 'success') {
+          navigation.push(Screens.Tabs)
+        }
       })
       .catch(function (response) {
         //handle error
@@ -328,10 +338,10 @@ const Newpage = (props) => {
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                     <Feather name="camera" size={35} color="black" />
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.imgCon} onPress={() =>  
+                  <TouchableOpacity style={styles.imgCon} onPress={() =>
                     selectOneFile()
                     // chooseFile('photo')
-                     }>
+                  }>
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                     <Entypo name="images" size={35} color="black" />
                   </TouchableOpacity>
