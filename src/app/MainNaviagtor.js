@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -36,7 +36,8 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {setToken} from '../containers/LoginScreen/loginSlice';
+import { setToken } from '../containers/LoginScreen/loginSlice';
+import { navigationRef } from '../helpers/Screens'
 
 let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
@@ -169,7 +170,8 @@ export const MainNaviagtor = (props) => {
 
   return (
     <PersistGate loading={null} persistor={persistor}>
-      <NavigationContainer>
+      <NavigationContainer
+        ref={navigationRef}>
         <Stack.Navigator
           initialRouteName={token ? Screens.Gender : Screens.Tabs}
         >

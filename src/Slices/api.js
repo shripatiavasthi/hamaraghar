@@ -14,7 +14,7 @@ async function status(response) {
   }
   if (response.status >= 401 && response.status <= 403) {
     alert(`Token expired please login again\nError code : ${response?.status}`)
-    // resetScreen(Screens?.LOGINOTP_SCREEN)
+    resetScreen(Screens?.Login)
   }
   if (response.status == 400 || (response.status >= 404 && response.status < 500)) {
     alert(`Something went wrong, please try again later\nError code : ${response?.status} `)
