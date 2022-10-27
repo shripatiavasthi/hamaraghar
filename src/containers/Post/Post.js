@@ -63,6 +63,7 @@ const Newpage = (props) => {
     bodyFormData.append('post_text', content);
     bodyFormData.append('location', "Delhi");
     bodyFormData.append('device_id', Deviceid);
+    // bodyFormData.append('group_id', GroupId);
     {GroupId.map((item)=>{
       bodyFormData.append('group_id', item);
     })

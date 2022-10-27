@@ -171,7 +171,7 @@ export const MainNaviagtor = (props) => {
     <PersistGate loading={null} persistor={persistor}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName={token ? Screens.Gender : Screens.Tabs}
+          initialRouteName={token ? Screens.Gender : Screens.Login}
         >
           <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />
