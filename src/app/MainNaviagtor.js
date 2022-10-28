@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -36,7 +36,8 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {setToken} from '../containers/LoginScreen/loginSlice';
+import { setToken } from '../containers/LoginScreen/loginSlice';
+import { navigationRef } from '../helpers/Screens'
 
 let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
@@ -147,31 +148,12 @@ const Tabs = props => {
 
 export const MainNaviagtor = (props) => {
 
-  const [token, settoken] = useState(null)
-  const getTokenData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('token')
-      if (value !== null) {
-        return value
-      }
-    } catch (e) {
-      // error reading value
-      return e
-    }
-  }
-
-  useEffect(() => {
-    getTokenData().then((resp) => {
-      settoken(resp)
-      setToken(resp)
-    })
-  })
-
   return (
-    <PersistGate loading={null} persistor={persistor}>
-      <NavigationContainer>
+    <PersistGate loading={<View><Text>Loading....</Text></View>} persistor={persistor}>
+      <NavigationContainer
+        ref={navigationRef}>
         <Stack.Navigator
-          initialRouteName={token ? Screens.Gender : Screens.Login}
+          initialRouteName={props?.token ? Screens.Tabs : Screens.Login}
         >
           <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />
