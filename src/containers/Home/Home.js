@@ -71,24 +71,24 @@ export const Home = (props) => {
     setDATA(rawData?.data?.result)
   }
 
-  const get_post_reply = async () => {
-    const data = {
-      query: {
-        post_id: 27
-      },
-      token: props?.token,
-    }
-    const resp = await dispatch(get_post_replies(data))
-    const rawData = await unwrapResult(resp)
-    console.log(rawData, "kkkkk")
+  // const get_post_reply = async () => {
+  //   const data = {
+  //     query: {
+  //       post_id: 27
+  //     },
+  //     token: props?.token,
+  //   }
+  //   const resp = await dispatch(get_post_replies(data))
+  //   const rawData = await unwrapResult(resp)
+  //   console.log(rawData, "kkkkk")
 
-  }
+  // }
 
 
   useEffect(() => {
 
     getCuratedTimeline()
-    get_post_reply()
+    // get_post_reply()
 
   }, [])
 
@@ -105,21 +105,27 @@ export const Home = (props) => {
     }
     const resp = await dispatch(bookmarksave(data))
     const rawData = await unwrapResult(resp)
-    console.log(rawData, "share bookmark response")
+    console.log(rawData?.data?.message, "share bookmark response")
+    if(rawData?.data?.message == "success"){
+      setbookmarksaved(true)
+    }
   }
 
   const deletebookmark = async (post_id, group_id) => {
     const data = {
       token: props?.token,
-      query: {
+      query: {},
+      body: {
         post_id: post_id,
         group_id: group_id,
-      },
-      body: {}
+      }
     }
     const resp = await dispatch(bookmarkdelete(data))
     const rawData = await unwrapResult(resp)
     console.log(rawData, "share bookmark response")
+    if(rawData?.data?.message == "success"){
+      setbookmarksaved(false)
+    }
   }
 
   const sharepost = async (post_id, group_id) => {
@@ -289,19 +295,22 @@ export const Home = (props) => {
               </View>
             </ScrollView>
             <TouchableOpacity onPress={async () => {
+              if(commentReply){
               const data = {
                 body: {
                   post_id: title?.post_id,
                   reply_text: commentReply,
-                  group_id: title?.group_id,
+                  group_id: title?.group_ids,
                   replying_to_user_id: title?.user_id
                 },
                 query: {},
                 token: props?.token
               }
+              console.log(data , "create reply post data")
               const resp = await dispatch(post_comment_reply(data))
               const rawData = await unwrapResult(resp)
               console.log(rawData, "kkkll")
+             }
             }}>
               <Feather name="send" size={25} color="black" />
             </TouchableOpacity>

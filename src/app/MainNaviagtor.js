@@ -165,7 +165,7 @@ export const MainNaviagtor = (props) => {
       settoken(resp)
       setToken(resp)
     })
-  }, [])
+  })
 
   return (
     <PersistGate loading={null} persistor={persistor}>
