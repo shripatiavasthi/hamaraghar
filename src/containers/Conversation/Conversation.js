@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect,useDispatch } from 'react-redux'
 import { View, Text, StyleSheet, Dimensions, FlatList, SafeAreaView, StatusBar, TextInput, TouchableOpacity } from 'react-native'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -9,20 +9,20 @@ import { unwrapResult } from '@reduxjs/toolkit';
 
 const { height, width } = Dimensions.get('screen')
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: ' Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-  },
-];
+// const DATA = [
+//   {
+//     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+//     title: ' Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+//   },
+//   {
+//     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+//     title: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+//   },
+//   {
+//     id: '58694a0f-3da1-471f-bd96-145571e29d72',
+//     title: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+//   },
+// ];
 
 
 
@@ -34,7 +34,7 @@ const Item = ({ title }) => (
         <EvilIcons name="user" size={25} color="black" />
       </View>
       <View style={styles.commenttextbox}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title}>{title?.reply_text}</Text>
       </View>
       <View>
       </View>
@@ -54,6 +54,8 @@ const Item = ({ title }) => (
 
 export const Conversation = (props) => {
 
+  const [DATA , setDATA ] = useState()
+
   const dispatch = useDispatch()
 
   const get_post_reply = async (id) => {
@@ -65,8 +67,10 @@ export const Conversation = (props) => {
     }
     const resp = await dispatch(get_post_replies(data))
     const rawData = await unwrapResult(resp)
-    console.log(rawData, "here")
-
+    console.log(rawData?.data?.result  , "here")
+    if(rawData?.data?.result){
+      setDATA(rawData?.data?.result)
+    }
   }
 
   useEffect(() => {
@@ -74,7 +78,7 @@ export const Conversation = (props) => {
   }, [])
 
   const renderItem = ({ item }) => (
-    <Item title={item.title} />
+    <Item title={item} />
   );
 
   return (

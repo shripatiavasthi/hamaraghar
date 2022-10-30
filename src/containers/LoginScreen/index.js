@@ -169,7 +169,7 @@ const LoginScreen = (props) => {
                     </View>
                     <View style={styles.forCon}>
                         <TouchableOpacity onPress={()=>{
-                            navigation.push(Screens.SignUp)
+                            navigation.push(Screens.Gender)
                         }}>
                             <Text style={styles.anTxt}>SignUp!</Text>
                         </TouchableOpacity>

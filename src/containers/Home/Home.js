@@ -187,7 +187,7 @@ export const Home = (props) => {
           // autoplayDelay={2}
           // autoplayLoop
           // index={2}
-          // showPagination
+          showPagination
           data={title?.post_media}
           renderItem={({ item }) => (
             <View style={[styles.postimage, { backgroundColor: item }]}>
@@ -285,11 +285,15 @@ export const Home = (props) => {
               <View style={styles.CommentInput}>
                 <KeyboardAvoidingView behavior='position'>
                   <TextInput
-                    value={commentReply}
-                    onChangeText={(value) => {
-                      setCommentReply(value)
-                    }}
-                    placeholder='Add your comment here'></TextInput>
+                    // value={commentReply}
+                    // onChangeText={(value) => {
+                    //   setCommentReply(value)
+                    // }}
+                    placeholder='Add your comment here'
+                    onChangeText={txt => {
+                      setCommentReply(txt)
+                  }}
+                    ></TextInput>
 
                 </KeyboardAvoidingView>
               </View>
@@ -321,9 +325,7 @@ export const Home = (props) => {
   );
 
   const renderItem = ({ item }) => (
-
     <Item title={item} />
-
   );
 
   return (

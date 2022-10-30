@@ -4,7 +4,9 @@ import {
   Image,
   Platform,
   TouchableOpacity,
-  PermissionsAndroid
+  PermissionsAndroid,
+  Modal,
+  Pressable
 } from 'react-native'
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -24,8 +26,10 @@ import DeviceInfo from 'react-native-device-info';
 import { navigate, Screens } from '../../helpers/Screens';
 import axios from 'axios'
 import DocumentPicker from 'react-native-document-picker'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const { height, width } = Dimensions.get('screen')
+
 const Newpage = (props) => {
 
   const { navigation } = props
@@ -34,40 +38,21 @@ const Newpage = (props) => {
   const [content, setcontent] = useState("")
   const [groupsList, setGroupsList] = useState([])
   const [GroupId, setgroupId] = useState([])
+  const [modalVisible, setModalVisible] = useState(false);
 
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    deviceid()
+    getGroupList()
+  }, [])
+
   const Invitepeople = async () => {
-    // const data = {
-    //   token: props?.token,
-    //   query: {
-    //     post_text: content,
-    //     location: "location",
-    //     device_id: Deviceid,
-    //     group_id: GroupId
-    //   },
-    //   body: {}
-    // }
-    // const resp = await dispatch(createpostslice(data))
-    // const rawData = await unwrapResult(resp)
-    // console.log(rawData?.data?.message, "create post response data")
-    // if (rawData?.data?.message === 'success') {
-    //   alert(rawData?.data?.result)
-    //   navigation.push(Screens.Tabs)
-    // }
-
-    // setData(rawData?.data?.result ?? [])
-    // console.log(rawData?.data?.result,"MMMM")
-
     var bodyFormData = new FormData();
     bodyFormData.append('post_text', content);
     bodyFormData.append('location', "Delhi");
     bodyFormData.append('device_id', Deviceid);
     bodyFormData.append('group_ids', GroupId);
-    // {GroupId.map((item)=>{
-    //   bodyFormData.append('group_id', item);
-    // })
-    // }
     {
       images.map((item) => {
         bodyFormData.append('media', item);
@@ -110,11 +95,6 @@ const Newpage = (props) => {
     console.log(rawData?.data?.result)
     setGroupsList(rawData?.data?.result)
   }
-
-  useEffect(() => {
-    deviceid()
-    getGroupList()
-  }, [])
 
   const deviceid = () => {
     DeviceInfo.getAndroidId().then((androidId) => {
@@ -181,7 +161,6 @@ const Newpage = (props) => {
     if (isCameraPermitted && isStoragePermitted) {
       launchCamera(options, (response) => {
         console.log('Response = ', response);
-
         if (response.didCancel) {
           alert('User cancelled camera picker');
           return;
@@ -205,41 +184,6 @@ const Newpage = (props) => {
         setFilePath(response);
       });
     }
-  };
-
-  const chooseFile = (type) => {
-    let options = {
-      mediaType: type,
-      maxWidth: 300,
-      maxHeight: 550,
-      quality: 1,
-    };
-    launchImageLibrary(options, (response) => {
-      console.log('Response = ', response);
-
-      if (response.didCancel) {
-        alert('User cancelled camera picker');
-        return;
-      } else if (response.errorCode == 'camera_unavailable') {
-        alert('Camera not available on device');
-        return;
-      } else if (response.errorCode == 'permission') {
-        alert('Permission not satisfied');
-        return;
-      } else if (response.errorCode == 'others') {
-        alert(response.errorMessage);
-        return;
-      }
-      console.log('base64 -> ', response.base64);
-      console.log('uri -> ', response.uri);
-      console.log('width -> ', response.width);
-      console.log('height -> ', response.height);
-      console.log('fileSize -> ', response.fileSize);
-      console.log('type -> ', response.type);
-      console.log('fileName -> ', response.fileName);
-      setFilePath(response);
-      images.push(response.uri)
-    });
   };
 
   const [singleFile, setSingleFile] = useState('');
@@ -279,14 +223,14 @@ const Newpage = (props) => {
   };
 
 
-
   return (
     <View style={styles.mainContainer}>
       <SafeAreaView style={styles.safeCon}>
 
         <View style={styles.hederTxt}>
           <TouchableOpacity style={styles.backCon}>
-            <Text style={styles.arrTxt}>←</Text>
+            {/* <Text style={styles.arrTxt}>←</Text> */}
+            <AntDesign name="left" size={35} color="black" />
           </TouchableOpacity>
           <View style={styles.backCons}>
             <Text style={{ fontSize: 30 }}>😍</Text>
@@ -327,8 +271,8 @@ const Newpage = (props) => {
                   </View>
                 </ScrollView>
                 {/* </ScrollView> */}
-                <TouchableOpacity style={styles.serchCon}>
-                  <Feather name="search" size={35} color="black" />
+                <TouchableOpacity style={styles.serchCon} onPress={() => setModalVisible(true)}>
+                  <Feather name="search" size={25} color="black" />
                   {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                 </TouchableOpacity>
               </View>
@@ -355,6 +299,54 @@ const Newpage = (props) => {
             </ScrollView>
           </KeyboardAwareScrollView>
         </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View>
+                <View>
+                  <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                  <AntDesign name="close" size={35} color="red" />
+                  </TouchableOpacity>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    
+                  >
+                    <Text style={styles.textStyle}>Hide Modal</Text>
+                  </Pressable>
+                </View>
+                <View>
+                  <TextInput placeholder='Search group' />
+                </View>
+                <ScrollView nestedScrollEnabled={true}>
+                  <View style={{ width: '70%', flexDirection: 'row' }}>
+                    {groupsList?.map((item) => {
+                      return (
+                        <TouchableOpacity
+                          onPress={() => {
+                            // setgroupId(item.id)
+                            GroupId.push(item.id)
+                          }}>
+                          <View style={{ flexDirection: 'row' }}>
+                            <View style={styles.txtCon}>
+                              <Text style={styles.lstTxt}>{item?.name}</Text>
+                            </View>
+                          </View>
+                        </TouchableOpacity>)
+                    })}
+                  </View>
+                </ScrollView>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     </View>
   )
@@ -490,8 +482,8 @@ const styles = StyleSheet.create({
 
   },
   btnContainer: {
-    height: height / 28,
-    width: width / 3,
+    height: height / 20,
+    width: width / 2.5,
     // backgroundColor: '#FFA500',
     backgroundColor: '#FF4500',
     justifyContent: 'center',
@@ -504,6 +496,53 @@ const styles = StyleSheet.create({
   },
   keyBd: {
 
+  },
+
+  // modal
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    width: "100%",
+    height: "100%",
+    margin: 20,
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
   }
 
 })

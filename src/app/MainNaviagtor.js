@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet  } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux'
@@ -87,15 +87,6 @@ const Tabs = props => {
       <BottomTabs.Screen
         name={Screens.Post}
         component={Post}
-        listeners={{
-          tabPress: e => {
-            navigate(Screens.ALLPACKAGE, {
-              search: '',
-              from: 'notmainpage',
-              best: false,
-            });
-          },
-        }}
         options={({ navigation }) => {
           return {
 
