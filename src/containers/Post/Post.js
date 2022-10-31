@@ -27,6 +27,7 @@ import { navigate, Screens } from '../../helpers/Screens';
 import axios from 'axios'
 import DocumentPicker from 'react-native-document-picker'
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -37,10 +38,11 @@ const Newpage = (props) => {
   const [Deviceid, setdeviceid] = useState()
   const [content, setcontent] = useState("")
   const [groupsList, setGroupsList] = useState([])
-  const [GroupId, setgroupId] = useState([])
+  const [GroupId, setGroupId] = useState([])
+  const [groupid, setgroupid] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
 
-  console.log(GroupId , "group ids")
+  console.log(GroupId, "group ids")
 
   const dispatch = useDispatch()
 
@@ -54,7 +56,7 @@ const Newpage = (props) => {
     bodyFormData.append('post_text', content);
     bodyFormData.append('location', "Delhi");
     bodyFormData.append('device_id', Deviceid);
-    bodyFormData.append('group_ids', GroupId);
+    bodyFormData.append('group_ids', groupid);
     {
       images.map((item) => {
         bodyFormData.append('media', item);
@@ -192,37 +194,74 @@ const Newpage = (props) => {
 
   const selectOneFile = async () => {
     //Opening Document Picker for selection of one file
+    // try {
+    //   const res = await DocumentPicker.pick({
+    //     type: [DocumentPicker.types.allFiles],
+    //     allowMultiSelection: true,
+    //     //There can me more options as well
+    //     // DocumentPicker.types.allFiles
+    //     // DocumentPicker.types.images
+    //     // DocumentPicker.types.plainText
+    //     // DocumentPicker.types.audio
+    //     // DocumentPicker.types.pdf
+    //   });
+    //   //Printing the log realted to the file
+    //   console.log('res : ' + JSON.stringify(res));
+    //   console.log('URI : ' + res.uri);
+    //   console.log('Type : ' + res.type);
+    //   console.log('File Name : ' + res.name);
+    //   console.log('File Size : ' + res.size);
+    //   //Setting the state to show single file attributes
+    //   setSingleFile(res);
+    //   images.push(res)
+    // } catch (err) {
+    //   //Handling any exception (If any)
+    //   if (DocumentPicker.isCancel(err)) {
+    //     //If user canceled the document selection
+    //     alert('Canceled from single doc picker');
+    //   } else {
+    //     //For Unknown Error
+    //     alert('Unknown Error: ' + JSON.stringify(err));
+    //     throw err;
+    //   }
+    // }
     try {
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-        //There can me more options as well
-        // DocumentPicker.types.allFiles
-        // DocumentPicker.types.images
-        // DocumentPicker.types.plainText
-        // DocumentPicker.types.audio
-        // DocumentPicker.types.pdf
+      const results = await DocumentPicker.pickMultiple({
+        type: [DocumentPicker.types.images],
+        //There can me more options as well find above
       });
-      //Printing the log realted to the file
-      console.log('res : ' + JSON.stringify(res));
-      console.log('URI : ' + res.uri);
-      console.log('Type : ' + res.type);
-      console.log('File Name : ' + res.name);
-      console.log('File Size : ' + res.size);
-      //Setting the state to show single file attributes
-      setSingleFile(res);
-      images.push(res)
+      for (const res of results) {
+        //Printing the log realted to the file
+        console.log('res : ' + JSON.stringify(res));
+        console.log('URI : ' + res.uri);
+        console.log('Type : ' + res.type);
+        console.log('File Name : ' + res.name);
+        console.log('File Size : ' + res.size);
+        images.push(res)
+      }
+      //Setting the state to show multiple file attributes
+      // this.setState({ multipleFile: results });
     } catch (err) {
       //Handling any exception (If any)
       if (DocumentPicker.isCancel(err)) {
         //If user canceled the document selection
-        alert('Canceled from single doc picker');
+        alert('Canceled from multiple doc picker');
       } else {
         //For Unknown Error
-        alert('Unknown Error: ' + JSON.stringify(err));
+        // alert('Unknown Error: ' + JSON.stringify(err));
         throw err;
       }
     }
   };
+
+  const done = () => {
+    setModalVisible(!modalVisible)
+    {
+      GroupId.map((item) => {
+        groupid.push(item.id)
+      })
+    }
+  }
 
 
   return (
@@ -264,7 +303,7 @@ const Newpage = (props) => {
                           }}>
                           <View style={{ flexDirection: 'row' }}>
                             <View style={styles.txtCon}>
-                              <Text style={styles.lstTxt}>{item}</Text>
+                              <Text style={styles.lstTxt}>{item.name}</Text>
                             </View>
                           </View>
                         </TouchableOpacity>)
@@ -313,18 +352,27 @@ const Newpage = (props) => {
             <View style={styles.modalView}>
               <View style={{ width: '100%' }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                  <TouchableOpacity onPress={() => {
+                    setModalVisible(!modalVisible)
+                    setGroupId([])
+                    setgroupid([])
+                  }
+                  }>
                     <AntDesign name="close" size={35} color="red" />
                   </TouchableOpacity>
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
-
+                    onPress={() => {
+                      done()
+                    }}
                   >
                     <Text style={styles.textStyle}>   Done   </Text>
                   </Pressable>
                 </View>
-                <View>
-                  <TextInput placeholder='Search group' />
+                <View style={{marginTop:10 , marginBottom:10 }}>
+                  <TextInput style={{borderColor:'black' , borderWidth:0.5 , padding:5}} placeholder='Search group' onChangeText={(txt) => {
+                    groupsList.includes(txt)
+                  }} />
                 </View>
                 <ScrollView nestedScrollEnabled={true}>
                   <View style={{ width: '100%' }}>
@@ -335,15 +383,15 @@ const Newpage = (props) => {
                             // setgroupId(item.id)
                             GroupId.push(item)
                           }}
-                          style={{flexDirection:'row' , justifyContent:'space-between' , alignItems:'center' , marginTop: 15 , marginBottom: 15 , height:height/25}}
-                          >
+                          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15, marginBottom: 15, height: height / 25 }}
+                        >
                           {/* <View style={{}}> */}
-                            {/* <TouchableOpacity style={{ flexDirection: 'row' }}> */}
-                              <Text style={styles.lstTxt}>{item?.name}</Text>
-                              <View style={{ borderColor: 'black', borderWidth: 1 , width:'10%' , height:'100%'}}>
-
-                              </View>
-                            {/* </TouchableOpacity> */}
+                          {/* <TouchableOpacity style={{ flexDirection: 'row' }}> */}
+                          <Text style={styles.lstTxt}>{item?.name}</Text>
+                          <View style={{ borderColor: 'black', borderWidth: 1, width: '10%', height: '100%' }}>
+                          <IconAntDesign name="check" size={30} color="#900" />
+                          </View>
+                          {/* </TouchableOpacity> */}
                           {/* </View> */}
                         </TouchableOpacity>)
                     })}
