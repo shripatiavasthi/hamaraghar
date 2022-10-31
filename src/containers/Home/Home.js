@@ -5,7 +5,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
-import { get_curated_timeline, get_post_replies, post_comment_reply } from '../../Slices/TimelineSlice';
+import { get_curated_timeline, get_post_replies, post_comment_reply , get_search_timeline } from '../../Slices/TimelineSlice';
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { externalshareslice } from '../../Slices/ExternalshareSlice';
@@ -59,7 +59,9 @@ export const Home = (props) => {
   const [inviteemail, setinviteemail] = useState()
   const [bookmarksaved, setbookmarksaved] = useState(false)
   const [commentReply, setCommentReply] = useState('')
-  const [save, setsave] = useState(false)
+  const [timelinesearch, setTimelinesearch] = useState(false)
+  const [testing , settesting] = useState('')
+  const [search, setSearch] = useState()
 
   const getCuratedTimeline = async () => {
     const data = {
@@ -68,6 +70,19 @@ export const Home = (props) => {
     const resp = await dispatch(get_curated_timeline(data))
     const rawData = await unwrapResult(resp)
     console.log(rawData?.data?.result, "kkkkk")
+    setDATA(rawData?.data?.result)
+  }
+
+  const getSearchTimeline = async (txt) => {
+    const data = {
+      token: props?.token,
+      query: {
+        search : txt
+      },
+    }
+    const resp = await dispatch(get_search_timeline(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData?.data?.result, "Search timelie api working ")
     setDATA(rawData?.data?.result)
   }
 
@@ -81,13 +96,13 @@ export const Home = (props) => {
   //   const resp = await dispatch(get_post_replies(data))
   //   const rawData = await unwrapResult(resp)
   //   console.log(rawData, "kkkkk")
-
   // }
 
 
   useEffect(() => {
 
     getCuratedTimeline()
+    // getSearchTimeline()
     // get_post_reply()
 
   }, [])
@@ -106,7 +121,7 @@ export const Home = (props) => {
     const resp = await dispatch(bookmarksave(data))
     const rawData = await unwrapResult(resp)
     console.log(rawData?.data?.message, "share bookmark response")
-    if(rawData?.data?.message == "success"){
+    if (rawData?.data?.message == "success") {
       setbookmarksaved(true)
     }
   }
@@ -123,7 +138,7 @@ export const Home = (props) => {
     const resp = await dispatch(bookmarkdelete(data))
     const rawData = await unwrapResult(resp)
     console.log(rawData, "share bookmark response")
-    if(rawData?.data?.message == "success"){
+    if (rawData?.data?.message == "success") {
       setbookmarksaved(false)
     }
   }
@@ -170,7 +185,9 @@ export const Home = (props) => {
 
   console.log(DATA, "all timelines")
 
-  
+
+
+
 
   const Item = ({ title }) =>
   (
@@ -284,7 +301,7 @@ export const Home = (props) => {
             <ScrollView>
               <View style={styles.CommentInput}>
                 <KeyboardAvoidingView behavior='position'>
-                  <TextInput
+                  {/* <TextInput
                     // value={commentReply}
                     // onChangeText={(value) => {
                     //   setCommentReply(value)
@@ -293,28 +310,30 @@ export const Home = (props) => {
                     onChangeText={txt => {
                       setCommentReply(txt)
                   }}
-                    ></TextInput>
-
+                    ></TextInput> */}
+                    <TextInput placeholder='Add your comment here' onChangeText={txt => {
+                      settesting(txt)
+                    }}></TextInput>
                 </KeyboardAvoidingView>
               </View>
             </ScrollView>
             <TouchableOpacity onPress={async () => {
-              if(commentReply){
-              const data = {
-                body: {
-                  post_id: title?.post_id,
-                  reply_text: commentReply,
-                  group_id: title?.group_ids,
-                  replying_to_user_id: title?.user_id
-                },
-                query: {},
-                token: props?.token
+              if (commentReply) {
+                const data = {
+                  body: {
+                    post_id: title?.post_id,
+                    reply_text: commentReply,
+                    group_id: title?.group_ids,
+                    replying_to_user_id: title?.user_id
+                  },
+                  query: {},
+                  token: props?.token
+                }
+                console.log(data, "create reply post data")
+                const resp = await dispatch(post_comment_reply(data))
+                const rawData = await unwrapResult(resp)
+                console.log(rawData, "kkkll")
               }
-              console.log(data , "create reply post data")
-              const resp = await dispatch(post_comment_reply(data))
-              const rawData = await unwrapResult(resp)
-              console.log(rawData, "kkkll")
-             }
             }}>
               <Feather name="send" size={25} color="black" />
             </TouchableOpacity>
@@ -339,7 +358,15 @@ export const Home = (props) => {
             />
           </View>
           <View style={styles.brandlogo}>
-            <EvilIcons name="search" size={35} color="black" />
+            {timelinesearch ? <TextInput placeholder='Search here' style={{backgroundColor:'pink' , width:'60%' , padding:5}} onChangeText={txt => {
+              // setSearch(txt)
+              getSearchTimeline(txt)
+            }}></TextInput> :
+              <TouchableOpacity onPress={() => {
+                setTimelinesearch(true)
+              }}>
+                <EvilIcons name="search" size={35} color="black" />
+              </TouchableOpacity>}
             <TouchableOpacity onPress={() => {
               navigation.push(Screens.Login)
             }}>

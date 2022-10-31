@@ -40,6 +40,8 @@ const Newpage = (props) => {
   const [GroupId, setgroupId] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
 
+  console.log(GroupId , "group ids")
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -254,16 +256,15 @@ const Newpage = (props) => {
                 {/* <ScrollView> */}
                 <ScrollView nestedScrollEnabled={true}>
                   <View style={{ width: '70%', flexDirection: 'row' }}>
-                    {groupsList?.map((item) => {
+                    {GroupId?.map((item) => {
                       return (
                         <TouchableOpacity
                           onPress={() => {
                             // setgroupId(item.id)
-                            GroupId.push(item.id)
                           }}>
                           <View style={{ flexDirection: 'row' }}>
                             <View style={styles.txtCon}>
-                              <Text style={styles.lstTxt}>{item?.name}</Text>
+                              <Text style={styles.lstTxt}>{item}</Text>
                             </View>
                           </View>
                         </TouchableOpacity>)
@@ -310,35 +311,40 @@ const Newpage = (props) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <View>
-                <View>
+              <View style={{ width: '100%' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
-                  <AntDesign name="close" size={35} color="red" />
+                    <AntDesign name="close" size={35} color="red" />
                   </TouchableOpacity>
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
-                    
+
                   >
-                    <Text style={styles.textStyle}>Hide Modal</Text>
+                    <Text style={styles.textStyle}>   Done   </Text>
                   </Pressable>
                 </View>
                 <View>
                   <TextInput placeholder='Search group' />
                 </View>
                 <ScrollView nestedScrollEnabled={true}>
-                  <View style={{ width: '70%', flexDirection: 'row' }}>
+                  <View style={{ width: '100%' }}>
                     {groupsList?.map((item) => {
                       return (
                         <TouchableOpacity
                           onPress={() => {
                             // setgroupId(item.id)
-                            GroupId.push(item.id)
-                          }}>
-                          <View style={{ flexDirection: 'row' }}>
-                            <View style={styles.txtCon}>
+                            GroupId.push(item)
+                          }}
+                          style={{flexDirection:'row' , justifyContent:'space-between' , alignItems:'center' , marginTop: 15 , marginBottom: 15 , height:height/25}}
+                          >
+                          {/* <View style={{}}> */}
+                            {/* <TouchableOpacity style={{ flexDirection: 'row' }}> */}
                               <Text style={styles.lstTxt}>{item?.name}</Text>
-                            </View>
-                          </View>
+                              <View style={{ borderColor: 'black', borderWidth: 1 , width:'10%' , height:'100%'}}>
+
+                              </View>
+                            {/* </TouchableOpacity> */}
+                          {/* </View> */}
                         </TouchableOpacity>)
                     })}
                   </View>
