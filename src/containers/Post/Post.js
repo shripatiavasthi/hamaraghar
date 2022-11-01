@@ -28,6 +28,7 @@ import axios from 'axios'
 import DocumentPicker from 'react-native-document-picker'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -340,8 +341,7 @@ const Newpage = (props) => {
             <AntDesign name="left" size={35} color="black" />
           </TouchableOpacity>
           <View style={styles.backCons}>
-            <Text style={{ fontSize: 30 }}>😍</Text>
-            {/* <Image style={styles.imgStyle} source={require('../../Image/Profile.png')} /> */}
+            <EvilIcons name="user" size={35} color="black" />
           </View>
           <View style={styles.headCon}>
             <Text style={styles.bookTxt}>lopamudra</Text>
