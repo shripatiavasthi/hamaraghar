@@ -5,7 +5,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
-import { get_curated_timeline, get_post_replies, post_comment_reply , get_search_timeline } from '../../Slices/TimelineSlice';
+import { get_curated_timeline, get_post_replies, post_comment_reply, get_search_timeline } from '../../Slices/TimelineSlice';
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { externalshareslice } from '../../Slices/ExternalshareSlice';
@@ -60,7 +60,7 @@ export const Home = (props) => {
   const [bookmarksaved, setbookmarksaved] = useState(false)
   const [commentReply, setCommentReply] = useState('')
   const [timelinesearch, setTimelinesearch] = useState(false)
-  const [testing , settesting] = useState('')
+  const [testing, settesting] = useState('')
   const [search, setSearch] = useState()
 
   const getCuratedTimeline = async () => {
@@ -77,7 +77,7 @@ export const Home = (props) => {
     const data = {
       token: props?.token,
       query: {
-        search : txt
+        search: txt
       },
     }
     const resp = await dispatch(get_search_timeline(data))
@@ -205,7 +205,7 @@ export const Home = (props) => {
           // autoplayLoop
           // index={2}
           showPagination
-          data={title?.post_media}
+          data={title?.post_media ?? ['https://reactnative.dev/img/tiny_logo.png']}
           renderItem={({ item }) => (
             <View style={[styles.postimage, { backgroundColor: item }]}>
               {item.media_type == "image" ?
@@ -311,9 +311,12 @@ export const Home = (props) => {
                       setCommentReply(txt)
                   }}
                     ></TextInput> */}
-                    <TextInput placeholder='Add your comment here' onChangeText={txt => {
-                      settesting(txt)
-                    }}></TextInput>
+                  <TextInput
+                    value={testing}
+                    onChangeText={(value) => {
+                      settesting(value)
+                    }}
+                    placeholder='Add your comment here' />
                 </KeyboardAvoidingView>
               </View>
             </ScrollView>
@@ -358,7 +361,7 @@ export const Home = (props) => {
             />
           </View>
           <View style={styles.brandlogo}>
-            {timelinesearch ? <TextInput placeholder='Search here' style={{backgroundColor:'pink' , width:'60%' , padding:5}} onChangeText={txt => {
+            {timelinesearch ? <TextInput placeholder='Search here' style={{ backgroundColor: 'pink', width: '60%', padding: 5 }} onChangeText={txt => {
               // setSearch(txt)
               getSearchTimeline(txt)
             }}></TextInput> :
