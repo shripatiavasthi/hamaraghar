@@ -31,6 +31,8 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign';
 
 const { height, width } = Dimensions.get('screen')
 
+
+
 const Newpage = (props) => {
 
   const { navigation } = props
@@ -38,7 +40,7 @@ const Newpage = (props) => {
   const [Deviceid, setdeviceid] = useState()
   const [content, setcontent] = useState("")
   const [groupsList, setGroupsList] = useState([])
-  const [GroupId, setGroupId] = useState([])
+  const [GroupId, setGroupId] = useState([{id : 10},{id : 12}])
   const [groupid, setgroupid] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -190,6 +192,70 @@ const Newpage = (props) => {
     }
   };
 
+  const SingleCheckboxView = ({item}) => {
+
+    const [checked, setChecked] = useState(false)
+
+    useEffect(() => {
+      GroupId.forEach((x) => {
+        if(x.id == item.id){
+          setChecked(true)
+        }
+      })
+    }, [GroupId])
+    
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          if(checked){
+            setGroupId(GroupId.filter((x) => {return x.id != item.id}))
+          }else{
+            setGroupId([...GroupId,item])
+          }
+        }}
+        style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15, marginBottom: 15, height: height / 25 }}
+      >
+        {/* <View style={{}}> */}
+        {/* <TouchableOpacity style={{ flexDirection: 'row' }}> */}
+        <Text style={styles.lstTxt}>{item.name}</Text>
+        <View style={{ borderColor: 'black', borderWidth: 1, width: '10%', height: '100%' }}>
+        {checked ? <IconAntDesign name="check" size={30} color="#900" /> : null }
+        </View>
+        {/* </TouchableOpacity> */}
+        {/* </View> */}
+      </TouchableOpacity>
+    )
+  }
+
+  const GrpSingleItem = ({item}) => {
+
+    const [checked, setChecked] = useState(false)
+
+    useEffect(() => {
+      GroupId.forEach((x) => {
+        if(x.id == item.id){
+          setChecked(true)
+        }
+      })
+    }, [GroupId])
+
+    return(
+      <TouchableOpacity
+      onPress={() => {
+        if(checked){
+          setGroupId(GroupId.filter((x) => {return x.id != item.id}))
+        }else{
+          setGroupId([...GroupId,item])
+        }
+      }}>
+      <View style={{ flexDirection: 'row' }}>
+        <View style={styles.txtCon}>
+          <Text style={checked ?styles.activelstTxt : styles.lstTxt }>{item.name}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+    )
+  }
   const [singleFile, setSingleFile] = useState('');
 
   const selectOneFile = async () => {
@@ -295,18 +361,10 @@ const Newpage = (props) => {
                 {/* <ScrollView> */}
                 <ScrollView nestedScrollEnabled={true}>
                   <View style={{ width: '70%', flexDirection: 'row' }}>
-                    {GroupId?.map((item) => {
+                    {groupsList?.map((item) => {
                       return (
-                        <TouchableOpacity
-                          onPress={() => {
-                            // setgroupId(item.id)
-                          }}>
-                          <View style={{ flexDirection: 'row' }}>
-                            <View style={styles.txtCon}>
-                              <Text style={styles.lstTxt}>{item.name}</Text>
-                            </View>
-                          </View>
-                        </TouchableOpacity>)
+                        <GrpSingleItem item={item}/>
+                       )
                     })}
                   </View>
                 </ScrollView>
@@ -369,8 +427,8 @@ const Newpage = (props) => {
                     <Text style={styles.textStyle}>   Done   </Text>
                   </Pressable>
                 </View>
-                <View style={{marginTop:10 , marginBottom:10 }}>
-                  <TextInput style={{borderColor:'black' , borderWidth:0.5 , padding:5}} placeholder='Search group' onChangeText={(txt) => {
+                <View style={{ marginTop: 10, marginBottom: 10 }}>
+                  <TextInput style={{ borderColor: 'black', borderWidth: 0.5, padding: 5 }} placeholder='Search group' onChangeText={(txt) => {
                     groupsList.includes(txt)
                   }} />
                 </View>
@@ -378,22 +436,8 @@ const Newpage = (props) => {
                   <View style={{ width: '100%' }}>
                     {groupsList?.map((item) => {
                       return (
-                        <TouchableOpacity
-                          onPress={() => {
-                            // setgroupId(item.id)
-                            GroupId.push(item)
-                          }}
-                          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15, marginBottom: 15, height: height / 25 }}
-                        >
-                          {/* <View style={{}}> */}
-                          {/* <TouchableOpacity style={{ flexDirection: 'row' }}> */}
-                          <Text style={styles.lstTxt}>{item?.name}</Text>
-                          <View style={{ borderColor: 'black', borderWidth: 1, width: '10%', height: '100%' }}>
-                          <IconAntDesign name="check" size={30} color="#900" />
-                          </View>
-                          {/* </TouchableOpacity> */}
-                          {/* </View> */}
-                        </TouchableOpacity>)
+                        <SingleCheckboxView item={item}/>
+                      )
                     })}
                   </View>
                 </ScrollView>
@@ -495,6 +539,11 @@ const styles = StyleSheet.create({
   },
   lstTxt: {
     color: '#000',
+    fontWeight: '500',
+    fontSize: 12
+  },
+  activelstTxt: {
+    color: 'red',
     fontWeight: '500',
     fontSize: 12
   },
