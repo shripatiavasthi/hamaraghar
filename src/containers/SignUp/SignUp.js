@@ -191,7 +191,7 @@ const SignUp = (props) => {
                                         // navigation.push(Screens.AddName)
                                     } else if (rawData?.data?.message === 'Failed' && rawData?.data?.Error === "user does not exist." ) {
                                         alies(Name)
-                                        alert(`${rawData?.data?.result}`)
+                                        // alert(`${rawData?.data?.result}`)
                                         navigation.push(Screens.AddName)
                                     }
                                 }

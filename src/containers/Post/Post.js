@@ -28,6 +28,7 @@ import axios from 'axios'
 import DocumentPicker from 'react-native-document-picker'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -274,8 +275,7 @@ const Newpage = (props) => {
             <AntDesign name="left" size={35} color="black" />
           </TouchableOpacity>
           <View style={styles.backCons}>
-            <Text style={{ fontSize: 30 }}>😍</Text>
-            {/* <Image style={styles.imgStyle} source={require('../../Image/Profile.png')} /> */}
+            <EvilIcons name="user" size={35} color="black" />
           </View>
           <View style={styles.headCon}>
             <Text style={styles.bookTxt}>lopamudra</Text>
@@ -369,8 +369,8 @@ const Newpage = (props) => {
                     <Text style={styles.textStyle}>   Done   </Text>
                   </Pressable>
                 </View>
-                <View style={{marginTop:10 , marginBottom:10 }}>
-                  <TextInput style={{borderColor:'black' , borderWidth:0.5 , padding:5}} placeholder='Search group' onChangeText={(txt) => {
+                <View style={{ marginTop: 10, marginBottom: 10 }}>
+                  <TextInput style={{ borderColor: 'black', borderWidth: 0.5, padding: 5 }} placeholder='Search group' onChangeText={(txt) => {
                     groupsList.includes(txt)
                   }} />
                 </View>
@@ -389,7 +389,7 @@ const Newpage = (props) => {
                           {/* <TouchableOpacity style={{ flexDirection: 'row' }}> */}
                           <Text style={styles.lstTxt}>{item?.name}</Text>
                           <View style={{ borderColor: 'black', borderWidth: 1, width: '10%', height: '100%' }}>
-                          <IconAntDesign name="check" size={30} color="#900" />
+                            <IconAntDesign name="check" size={30} color="#900" />
                           </View>
                           {/* </TouchableOpacity> */}
                           {/* </View> */}

@@ -172,7 +172,7 @@ const Avatar = (props) => {
                 "country": 5,
             }
           }).then((response) => {
-            navigation.push(Screens.Login)
+            navigation.push(Screens.Belongone)
             console.log(response.data , "create user response");
           }).catch((e)=>{
             // alert(`${e.response.data.data.error}`)
