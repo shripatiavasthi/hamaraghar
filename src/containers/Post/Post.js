@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   activelstTxt: {
-    color: 'red',
+    color: 'lightgray',
     fontWeight: '500',
     fontSize: 12
   },

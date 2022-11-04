@@ -252,7 +252,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         paddingHorizontal: 20,
         fontSize: height / 55,
-        borderWidth: 0.5
+        borderWidth: 0.5,
+        borderRadius : 10
     },
     forgotCon: {
         height: height / 30,

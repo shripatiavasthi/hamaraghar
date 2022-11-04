@@ -219,7 +219,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         paddingHorizontal: 20,
         fontSize: height / 55,
-        borderWidth: 0.5
+        borderWidth: 0.5,
+        borderRadius: 10
     },
     forgotCon: {
         height: height / 30,
@@ -263,7 +264,9 @@ const styles = StyleSheet.create({
     },
     anTxt: {
         color: '#707070',
-        fontSize: 14
+        fontSize: 18,
+        fontWeight:'bold',
+
     },
     redCon: {
         height: height * 0.02,

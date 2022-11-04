@@ -106,7 +106,7 @@ export default StyleSheet.create({
     options:{
      marginTop: 5,
      padding: 4,
-   //   backgroundColor:'green',
+    //  backgroundColor:'green',
     },
     option:{
       marginTop: 5,
@@ -121,6 +121,7 @@ export default StyleSheet.create({
       borderColor:'black',
       borderWidth: 1,
       backgroundColor: 'white',
+      borderRadius:5
     },
     tinyLogo:{
       height: 30,
@@ -176,5 +177,6 @@ export default StyleSheet.create({
       height: 50,
       backgroundColor: 'lightgray',
       justifyContent: 'center',
+      borderRadius:10
     }
 })

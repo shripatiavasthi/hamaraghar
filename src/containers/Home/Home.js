@@ -361,7 +361,7 @@ export const Home = (props) => {
             />
           </View>
           <View style={styles.brandlogo}>
-            {timelinesearch ? <TextInput placeholder='Search here' style={{ backgroundColor: 'pink', width: '60%', padding: 5 }} onChangeText={txt => {
+            {timelinesearch ? <TextInput placeholder='Search here' style={{  width: '60%', padding: 5 }} onChangeText={txt => {
               // setSearch(txt)
               getSearchTimeline(txt)
             }}></TextInput> :
@@ -456,7 +456,9 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
   },
   Description: {
-    height: height / 10,
+    // height: height / 10,
+    marginTop:5,
+    marginBottom:5,
     backgroundColor: 'white',
   },
   noofdays: {

@@ -68,7 +68,7 @@ export const Birthday = ({ props, navigation }) => {
                             </View>
                             <View style={styles.Birthday}>
                                 <TouchableOpacity onPress={() => setOpen(true)} style={styles.datebutton}>
-                                    <Text style={{ margin: 10, fontSize: 16, fontWeight: 'bold' }}> {date ? moment(date).format('MMMM Do YYYY') : "September 29 , 1997"}  </Text>
+                                    <Text style={{ margin: 10, fontSize: 16, fontWeight: 'bold'  }}> {date ? moment(date).format('MMMM Do YYYY') : "September 29 , 1997"}  </Text>
                                 </TouchableOpacity>
                                 <DatePicker
                                     modal

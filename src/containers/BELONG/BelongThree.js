@@ -77,12 +77,15 @@ export const BelongThree = (props) => {
     // );
 
 
-
     const Item = ({ title, item }) => (
         <View style={belongstyles.card}>
             <Text style={belongstyles.subheadingtext}>hello</Text>
             <View >
+                <TouchableOpacity onPress={()=>{
+                     navigation.push(Screens.BelongDetails )
+                }}>
                 <Text style={{ color: 'black' }}>{title}</Text>
+                </TouchableOpacity>
             </View>
 
             {/* {title && title.map((item, index) => {
