@@ -189,8 +189,11 @@ export const Home = (props) => {
 
 
 
-  const Item = ({ title }) =>
-  (
+  const Item = ({ title }) =>{
+
+  const [textComment, setTextComment] = useState()
+
+  return(
     <View style={styles.Post}>
       <View>
         {/* <Image
@@ -206,7 +209,9 @@ export const Home = (props) => {
           // index={2}
           showPagination
           data={title?.post_media ?? ['https://reactnative.dev/img/tiny_logo.png']}
-          renderItem={({ item }) => (
+          renderItem={({ item }) => 
+      
+          (
             <View style={[styles.postimage, { backgroundColor: item }]}>
               {item.media_type == "image" ?
                 <Image
@@ -312,9 +317,9 @@ export const Home = (props) => {
                   }}
                     ></TextInput> */}
                   <TextInput
-                    value={testing}
+                    value={textComment}
                     onChangeText={(value) => {
-                      settesting(value)
+                      setTextComment(value)
                     }}
                     placeholder='Add your comment here' />
                 </KeyboardAvoidingView>
@@ -344,11 +349,13 @@ export const Home = (props) => {
         </View>
       </View>
     </View>
-  );
+  )};
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }) => {
+    return(
     <Item title={item} />
-  );
+    )
+  }
 
   return (
     <SafeAreaView>
