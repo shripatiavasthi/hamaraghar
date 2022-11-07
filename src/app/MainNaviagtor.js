@@ -38,6 +38,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setToken } from '../containers/LoginScreen/loginSlice';
 import { navigationRef } from '../helpers/Screens'
+import Profile from '../containers/Profile/Profile'
 
 let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
@@ -139,6 +140,8 @@ const Tabs = props => {
 
 export const MainNaviagtor = (props) => {
 
+  console.log(props?.token , 'token in navigator')
+
   return (
     <PersistGate loading={<View><Text>Loading....</Text></View>} persistor={persistor}>
       <NavigationContainer
@@ -170,6 +173,7 @@ export const MainNaviagtor = (props) => {
           <Stack.Screen name={Screens.VerifyOtp} component={VerifyEmailorPhone} options={{ headerShown: false }} />
           <Stack.Screen name="CreateUser" component={CreateUser} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Sucess} component={Sucess} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.Profile} component={Profile} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </PersistGate>

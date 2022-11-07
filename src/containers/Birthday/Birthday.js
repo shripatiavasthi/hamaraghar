@@ -75,6 +75,7 @@ export const Birthday = ({ props, navigation }) => {
                                     open={open}
                                     date={date}
                                     mode="date"
+                                    color="black"
                                     onConfirm={(date) => {
                                         setOpen(false)
                                         calculate_age(date)
@@ -91,7 +92,7 @@ export const Birthday = ({ props, navigation }) => {
 
                                 </View>
                                 <View style={styles.agebox}>
-                                    <TouchableOpacity
+                                    {/* <TouchableOpacity
                                         onPress={() => {
                                             setcheck(true)
                                             if (eighteenage === true) {
@@ -107,7 +108,7 @@ export const Birthday = ({ props, navigation }) => {
                                                 : null}
                                         </View>
                                     </TouchableOpacity>
-                                    <Text style={styles.content}>I am 18 or older</Text>
+                                    <Text style={styles.content}>I am 18 or older</Text> */}
                                 </View>
                             </View>
                             <View style={styles.SubmitButton}>

@@ -15,6 +15,7 @@ import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-player';
 import axios from 'axios';
+import moment from 'moment';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -57,7 +58,7 @@ export const Home = (props) => {
 
   const [DATA, setDATA] = useState()
   const [inviteemail, setinviteemail] = useState()
-  const [bookmarksaved, setbookmarksaved] = useState(false)
+  
   const [commentReply, setCommentReply] = useState('')
   const [timelinesearch, setTimelinesearch] = useState(false)
   const [testing, settesting] = useState('')
@@ -109,39 +110,7 @@ export const Home = (props) => {
 
   const image = { image: require("../../staticdata/images/logo.jpeg") }
 
-  const bookmark = async (post_id, group_id) => {
-    const data = {
-      token: props?.token,
-      query: {},
-      body: {
-        post_id: post_id,
-        group_id: group_id,
-      }
-    }
-    const resp = await dispatch(bookmarksave(data))
-    const rawData = await unwrapResult(resp)
-    console.log(rawData?.data?.message, "share bookmark response")
-    if (rawData?.data?.message == "success") {
-      setbookmarksaved(true)
-    }
-  }
-
-  const deletebookmark = async (post_id, group_id) => {
-    const data = {
-      token: props?.token,
-      query: {},
-      body: {
-        post_id: post_id,
-        group_id: group_id,
-      }
-    }
-    const resp = await dispatch(bookmarkdelete(data))
-    const rawData = await unwrapResult(resp)
-    console.log(rawData, "share bookmark response")
-    if (rawData?.data?.message == "success") {
-      setbookmarksaved(false)
-    }
-  }
+  
 
   const sharepost = async (post_id, group_id) => {
     console.log(post_id, group_id, "post and group")
@@ -192,6 +161,42 @@ export const Home = (props) => {
   const Item = ({ title }) =>{
 
   const [textComment, setTextComment] = useState()
+
+  const [bookmarksaved, setbookmarksaved] = useState(false)
+
+  const bookmark = async (post_id, group_id) => {
+    const data = {
+      token: props?.token,
+      query: {},
+      body: {
+        post_id: post_id,
+        group_id: group_id,
+      }
+    }
+    const resp = await dispatch(bookmarksave(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData?.data?.message, "share bookmark response")
+    if (rawData?.data?.message == "success") {
+      setbookmarksaved(true)
+    }
+  }
+
+  const deletebookmark = async (post_id, group_id) => {
+    const data = {
+      token: props?.token,
+      query: {},
+      body: {
+        post_id: post_id,
+        group_id: group_id,
+      }
+    }
+    const resp = await dispatch(bookmarkdelete(data))
+    const rawData = await unwrapResult(resp)
+    console.log(rawData, "share bookmark response")
+    if (rawData?.data?.message == "success") {
+      setbookmarksaved(false)
+    }
+  }
 
   return(
     <View style={styles.Post}>
@@ -296,7 +301,7 @@ export const Home = (props) => {
             <Text style={{ color: "black", fontSize: 13, fontWeight: '600' }}>{title?.post_text}</Text>
           </View>
           <View style={styles.noofdays}>
-            <Text style={{ fontSize: 10 }}>1 day ago</Text>
+            <Text style={{ fontSize: 10 }}>{moment(title?.posted_at).format('MMMM Do YYYY')}</Text>
           </View>
           <View style={styles.CommentSection}>
             <View style={styles.ComenterDetails}>
@@ -326,11 +331,11 @@ export const Home = (props) => {
               </View>
             </ScrollView>
             <TouchableOpacity onPress={async () => {
-              if (commentReply) {
+              if (textComment) {
                 const data = {
                   body: {
                     post_id: title?.post_id,
-                    reply_text: commentReply,
+                    reply_text: textComment,
                     group_id: title?.group_ids,
                     replying_to_user_id: title?.user_id
                   },
@@ -378,7 +383,7 @@ export const Home = (props) => {
                 <EvilIcons name="search" size={35} color="black" />
               </TouchableOpacity>}
             <TouchableOpacity onPress={() => {
-              navigation.push(Screens.Login)
+              navigation.push(Screens.Profile)
             }}>
               <EvilIcons name="user" size={35} color="black" />
             </TouchableOpacity>

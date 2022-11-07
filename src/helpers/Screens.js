@@ -38,4 +38,5 @@ export const Screens = {
  SingleGroup : 'SingleGroup',
  Post : 'Post',
  Real : 'Real',
+ Profile : 'Profile'
 };

@@ -55,6 +55,7 @@ const Newpage = (props) => {
   }, [])
 
   const Invitepeople = async () => {
+    if(content && Deviceid && groupid && images ) {
     var bodyFormData = new FormData();
     bodyFormData.append('post_text', content);
     bodyFormData.append('location', "Delhi");
@@ -88,7 +89,13 @@ const Newpage = (props) => {
         //handle error
         console.log(response, "postdirect method is not working");
       });
-
+    }else if (content && Deviceid && groupid && images.length < 0 ) {
+      alert("Please select image")
+    }else if (content && Deviceid  && images){
+      alert("Please select group")
+    }else if ( Deviceid && groupid && images){
+      alert("Please write your post")
+    }
   }
 
 

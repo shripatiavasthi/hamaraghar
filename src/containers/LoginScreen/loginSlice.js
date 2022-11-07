@@ -9,7 +9,7 @@ const initialState = {
   loading: false,
   error: false,
   otpResp : {},
-  token : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGlhcyI6IlNodWJoYW0xMjM0IiwiaWF0IjoxNjY3MzI3NzM1LCJleHAiOjE2Njk5NTU3MzV9.De1o29F6PumeAllCYtiCaYFDKhVrudX5RK__3jk9qb0'
+  token : null
 };
 
 export const postUserLogin = createAsyncThunk(
