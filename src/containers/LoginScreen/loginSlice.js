@@ -3,7 +3,6 @@ import { doPost, doGet, doDel ,doPut } from "../../Slices/api";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import location from "../../helpers/locations";
 
-
 const initialState = {
   pending: false,
   loading: false,
