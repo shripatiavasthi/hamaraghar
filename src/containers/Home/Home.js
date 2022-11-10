@@ -5,7 +5,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
-import { get_curated_timeline, get_post_replies, post_comment_reply, get_search_timeline } from '../../Slices/TimelineSlice';
+import { get_curated_timeline, get_post_replies, post_comment_reply, get_search_timeline,get_profile_details } from '../../Slices/TimelineSlice';
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { externalshareslice } from '../../Slices/ExternalshareSlice';
@@ -61,6 +61,7 @@ export const Home = (props) => {
   
   const [commentReply, setCommentReply] = useState('')
   const [timelinesearch, setTimelinesearch] = useState(false)
+  const [name, setName] = useState()
   const [testing, settesting] = useState('')
   const [search, setSearch] = useState()
 
@@ -100,9 +101,19 @@ export const Home = (props) => {
   // }
 
 
-  useEffect(() => {
+  const getuserDetailprofile = async (data) => {
+    const resp = await dispatch(get_profile_details(data))
+    const respRaw = await unwrapResult(resp)
+    setName(`${respRaw?.data?.result?.first_name} ${respRaw?.data?.result?.last_name}`)
+    console.log(respRaw?.data?.result,"kkkkllll")
+  }
 
+  useEffect(() => {
+    const data ={
+      token: props?.token,
+    }
     getCuratedTimeline()
+    getuserDetailprofile(data)
     // getSearchTimeline()
     // get_post_reply()
 
@@ -306,7 +317,7 @@ export const Home = (props) => {
           <View style={styles.CommentSection}>
             <View style={styles.ComenterDetails}>
               <EvilIcons name="user" size={25} color="black" />
-              <Text style={{ color: "black", fontSize: 12 }}>Kali_bili</Text>
+              <Text style={{ color: "black", fontSize: 12 }}>{name}</Text>
             </View>
             <ScrollView>
               <View style={styles.CommentInput}>

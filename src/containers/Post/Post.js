@@ -41,7 +41,8 @@ const Newpage = (props) => {
   const [Deviceid, setdeviceid] = useState()
   const [content, setcontent] = useState("")
   const [groupsList, setGroupsList] = useState([])
-  const [GroupId, setGroupId] = useState([{id : 10},{id : 12}])
+  const [filteredGroupsList, setfilteredGroupsList] = useState([])
+  const [GroupId, setGroupId] = useState([{ id: 10 }, { id: 12 }])
   const [groupid, setgroupid] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -55,47 +56,46 @@ const Newpage = (props) => {
   }, [])
 
   const Invitepeople = async () => {
-    if(content && Deviceid && groupid && images ) {
-    var bodyFormData = new FormData();
-    bodyFormData.append('post_text', content);
-    bodyFormData.append('location', "Delhi");
-    bodyFormData.append('device_id', Deviceid);
-    bodyFormData.append('group_ids', groupid);
-    {
-      images.map((item) => {
-        bodyFormData.append('media', item);
-      })
-    }
-    console.log(images, "images")
-    console.log(bodyFormData, "bodyform data")
-    axios({
-      method: "post",
-      url: "http://54.214.196.237:3000/post/create",
-      data: bodyFormData,
-      headers: {
-        Authorization: `${props.token}`,
-        "Content-Type": "multipart/form-data"
-      },
-    })
-      .then(function (response) {
-        //handle success
-        console.log(response?.data?.data?.message
-          , "post direct method work");
-        if (response?.data?.data?.message == 'success') {
-          navigation.push(Screens.Tabs)
+  
+    if(content.trim() == ""){
+      alert("Please input some content to be posted")
+    }else if(images.length == 0){
+      alert("Select any image to be updated")
+    }else {
+        var bodyFormData = new FormData();
+        bodyFormData.append('post_text', content);
+        bodyFormData.append('location', "Delhi");
+        bodyFormData.append('device_id', Deviceid);
+        bodyFormData.append('group_ids', groupid);
+        {
+          images.map((item) => {
+            bodyFormData.append('media', item);
+          })
         }
-      })
-      .catch(function (response) {
-        //handle error
-        console.log(response, "postdirect method is not working");
-      });
-    }else if (content && Deviceid && groupid && images.length < 0 ) {
-      alert("Please select image")
-    }else if (content && Deviceid  && images){
-      alert("Please select group")
-    }else if ( Deviceid && groupid && images){
-      alert("Please write your post")
-    }
+        console.log(images, "images")
+        console.log(bodyFormData, "bodyform data")
+        axios({
+          method: "post",
+          url: "http://54.214.196.237:3000/post/create",
+          data: bodyFormData,
+          headers: {
+            Authorization: `${props.token}`,
+            "Content-Type": "multipart/form-data"
+          },
+        })
+          .then(function (response) {
+            //handle success
+            console.log(response?.data?.data?.message
+              , "post direct method work");
+            if (response?.data?.data?.message == 'success') {
+              navigation.push(Screens.Tabs)
+            }
+          })
+          .catch(function (response) {
+            //handle error
+            console.log(response, "postdirect method is not working");
+          });
+      }
   }
 
 
@@ -108,6 +108,7 @@ const Newpage = (props) => {
     const rawData = await unwrapResult(resp)
     console.log(rawData?.data?.result)
     setGroupsList(rawData?.data?.result)
+    setfilteredGroupsList(rawData?.data?.result)
   }
 
   const deviceid = () => {
@@ -200,25 +201,25 @@ const Newpage = (props) => {
     }
   };
 
-  const SingleCheckboxView = ({item}) => {
+  const SingleCheckboxView = ({ item }) => {
 
     const [checked, setChecked] = useState(false)
 
     useEffect(() => {
       GroupId.forEach((x) => {
-        if(x.id == item.id){
+        if (x.id == item.id) {
           setChecked(true)
         }
       })
     }, [GroupId])
-    
+
     return (
       <TouchableOpacity
         onPress={() => {
-          if(checked){
-            setGroupId(GroupId.filter((x) => {return x.id != item.id}))
-          }else{
-            setGroupId([...GroupId,item])
+          if (checked) {
+            setGroupId(GroupId.filter((x) => { return x.id != item.id }))
+          } else {
+            setGroupId([...GroupId, item])
           }
         }}
         style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15, marginBottom: 15, height: height / 25 }}
@@ -227,7 +228,7 @@ const Newpage = (props) => {
         {/* <TouchableOpacity style={{ flexDirection: 'row' }}> */}
         <Text style={styles.lstTxt}>{item.name}</Text>
         <View style={{ borderColor: 'black', borderWidth: 1, width: '10%', height: '100%' }}>
-        {checked ? <IconAntDesign name="check" size={30} color="#900" /> : null }
+          {checked ? <IconAntDesign name="check" size={30} color="#900" /> : null}
         </View>
         {/* </TouchableOpacity> */}
         {/* </View> */}
@@ -235,33 +236,33 @@ const Newpage = (props) => {
     )
   }
 
-  const GrpSingleItem = ({item}) => {
+  const GrpSingleItem = ({ item }) => {
 
     const [checked, setChecked] = useState(false)
 
     useEffect(() => {
       GroupId.forEach((x) => {
-        if(x.id == item.id){
+        if (x.id == item.id) {
           setChecked(true)
         }
       })
     }, [GroupId])
 
-    return(
+    return (
       <TouchableOpacity
-      onPress={() => {
-        if(checked){
-          setGroupId(GroupId.filter((x) => {return x.id != item.id}))
-        }else{
-          setGroupId([...GroupId,item])
-        }
-      }}>
-      <View style={{ flexDirection: 'row' }}>
-        <View style={styles.txtCon}>
-          <Text style={checked ?styles.activelstTxt : styles.lstTxt }>{item.name}</Text>
+        onPress={() => {
+          if (checked) {
+            setGroupId(GroupId.filter((x) => { return x.id != item.id }))
+          } else {
+            setGroupId([...GroupId, item])
+          }
+        }}>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={styles.txtCon}>
+            <Text style={checked ? styles.activelstTxt : styles.lstTxt}>{item.name}</Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
     )
   }
   const [singleFile, setSingleFile] = useState('');
@@ -328,6 +329,7 @@ const Newpage = (props) => {
     }
   };
 
+
   const done = () => {
     setModalVisible(!modalVisible)
     {
@@ -335,6 +337,14 @@ const Newpage = (props) => {
         groupid.push(item.id)
       })
     }
+  }
+
+  const searchFromLocal = (text) => {
+    let res = groupsList.filter(el => new RegExp(text, "ig").test(el.name)).sort((a, b) => {
+      let re = new RegExp("^" + text, "i")
+      return re.test(a.name) ? re.test(b.name) ? a.name.localeCompare(b.name) : -1 : 1
+    })
+    return res
   }
 
 
@@ -370,8 +380,8 @@ const Newpage = (props) => {
                   <View style={{ width: '70%', flexDirection: 'row' }}>
                     {groupsList?.map((item) => {
                       return (
-                        <GrpSingleItem item={item}/>
-                       )
+                        <GrpSingleItem item={item} />
+                      )
                     })}
                   </View>
                 </ScrollView>
@@ -436,14 +446,14 @@ const Newpage = (props) => {
                 </View>
                 <View style={{ marginTop: 10, marginBottom: 10 }}>
                   <TextInput style={{ borderColor: 'black', borderWidth: 0.5, padding: 5 }} placeholder='Search group' onChangeText={(txt) => {
-                    groupsList.includes(txt)
+                    setfilteredGroupsList(searchFromLocal(txt))
                   }} />
                 </View>
                 <ScrollView nestedScrollEnabled={true}>
                   <View style={{ width: '100%' }}>
-                    {groupsList?.map((item) => {
+                    {filteredGroupsList?.map((item) => {
                       return (
-                        <SingleCheckboxView item={item}/>
+                        <SingleCheckboxView item={item} />
                       )
                     })}
                   </View>
