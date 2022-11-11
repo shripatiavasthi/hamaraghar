@@ -226,7 +226,7 @@ const Newpage = (props) => {
         {/* <View style={{}}> */}
         {/* <TouchableOpacity style={{ flexDirection: 'row' }}> */}
         <Text style={styles.lstTxt}>{item.name}</Text>
-        <View style={{ borderColor: 'black', borderWidth: 1, width: '10%', height: '100%' }}>
+        <View style={{ borderColor: 'black', borderWidth: 1, width: '7%', height: '80%' , borderRadius:5 }}>
         {checked ? <IconAntDesign name="check" size={30} color="#900" /> : null }
         </View>
         {/* </TouchableOpacity> */}
@@ -423,7 +423,7 @@ const Newpage = (props) => {
                     setgroupid([])
                   }
                   }>
-                    <AntDesign name="close" size={35} color="red" />
+                    <AntDesign name="close" size={25} color="red" />
                   </TouchableOpacity>
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
@@ -435,7 +435,7 @@ const Newpage = (props) => {
                   </Pressable>
                 </View>
                 <View style={{ marginTop: 10, marginBottom: 10 }}>
-                  <TextInput style={{ borderColor: 'black', borderWidth: 0.5, padding: 5 }} placeholder='Search group' onChangeText={(txt) => {
+                  <TextInput style={{ borderColor: 'black', borderWidth: 0.5, padding: 10 , marginTop:10 , borderRadius:10 }} placeholder='Search group' onChangeText={(txt) => {
                     groupsList.includes(txt)
                   }} />
                 </View>

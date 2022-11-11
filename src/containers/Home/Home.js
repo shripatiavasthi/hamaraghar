@@ -387,6 +387,7 @@ export const Home = (props) => {
             }}>
               <EvilIcons name="user" size={35} color="black" />
             </TouchableOpacity>
+
           </View>
         </View>
         <View style={styles.Posts} >
