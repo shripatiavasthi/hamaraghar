@@ -38,6 +38,14 @@ export const get_post_replies = createAsyncThunk(
       return await doPost(thunkAPI,location.POST_CREATE_REPLY, {},data?.body,data?.token);
     }
   );
+
+  export const get_profile_details = createAsyncThunk(
+    "get_profile_details",
+    async (data, thunkAPI) => {
+      return await doGet(thunkAPI,location.GET_CURRENT_USER_NAME, {},data?.token);
+    }
+  );
+  
   
   
   

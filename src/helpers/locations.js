@@ -24,6 +24,7 @@ module.exports = {
   BOOKMARK_DELETE : '/post/delete_bookmark',
   POST_ALL_REPLIES : '/post/all_replies',
   POST_SEARCH_TIMELINE : '/post/search_timeline',
-  POST_CREATE_REPLY : '/post/create_reply'
+  POST_CREATE_REPLY : '/post/create_reply',
+  GET_CURRENT_USER_NAME : '/user/'
 
 };
