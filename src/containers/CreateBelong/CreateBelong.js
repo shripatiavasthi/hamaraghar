@@ -1,10 +1,10 @@
-import React, { useState , useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect, useDispatch } from 'react-redux'
 import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity, Alert, Switch, Button } from 'react-native'
 import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
 import { navigate, Screens } from '../../helpers/Screens';
-import { generate_group }from '../../Slices/GenerateGroupSlice'
+import { generate_group } from '../../Slices/GenerateGroupSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -12,7 +12,7 @@ export const CreateBelong = (props) => {
 
     const { navigation } = props
 
-    console.log(props?.route?.params?.categoryid?.category_id        , "props in create belong")
+    console.log(props?.route?.params?.categoryid?.category_id, "props in create belong")
 
     const dispatch = useDispatch()
     const [isEnabled, setIsEnabled] = useState(false);
@@ -21,9 +21,9 @@ export const CreateBelong = (props) => {
     const [isEnabledtwo, setIsEnabledtwo] = useState(false);
     const toggleSwitchtwo = () => setIsEnabledtwo(previousState => !previousState);
 
-    const [aliesname , setaliesname] = useState();
-    const [communityname , setcommunityname] = useState();
-    const [description , setdescription] = useState();
+    const [aliesname, setaliesname] = useState();
+    const [communityname, setcommunityname] = useState();
+    const [description, setdescription] = useState();
 
     useEffect(() => {
         gettingaliesname()
@@ -59,21 +59,23 @@ export const CreateBelong = (props) => {
                         <View style={belongstyles.form}>
                             <View style={belongstyles.nameview}>
                                 <Text style={belongstyles.Subheading}>Alies Name </Text>
-                                <TextInput placeholder="" value={description} style={belongstyles.forminput} onChangeText={txt => {
-                                        setaliesname(txt)
-                                    }}></TextInput>
+                                <TextInput placeholder="" style={belongstyles.forminput} onChangeText={txt => {
+                                    setaliesname(txt)
+                                }}></TextInput>
                             </View>
                             <View style={belongstyles.nameview}>
                                 <Text style={belongstyles.Subheading}>Name your community</Text>
                                 <TextInput placeholder="" style={belongstyles.forminput} onChangeText={txt => {
-                                        setcommunityname(txt)
-                                    }}></TextInput>
+                                    setcommunityname(txt)
+                                }}></TextInput>
                             </View>
                             <View style={belongstyles.DescribeView}>
                                 <Text style={belongstyles.Subheading}>Describe it</Text>
-                                <TextInput placeholder="" multiline={true} style={belongstyles.descibeforminput} onChangeText={txt => {
+                                <View style={belongstyles.desvribeouterview}>
+                                    <TextInput placeholder="" multiline={true} style={belongstyles.descibeforminput} onChangeText={txt => {
                                         setdescription(txt)
                                     }}></TextInput>
+                                </View>
                             </View>
                             <View style={belongstyles.Suggestiontag}>
                                 <Text style={belongstyles.Subheading}>Suggested tags</Text>
@@ -90,19 +92,9 @@ export const CreateBelong = (props) => {
                                     value={isEnabled}
                                 />
                             </View>
-                            {/* <View style={belongstyles.Suggestiontag}>
-                                <Text style={belongstyles.Subheading}>Anyone can post</Text>
-                                <Switch
-                                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                                    thumbColor={isEnabledtwo ? "#f5dd4b" : "#f4f3f4"}
-                                    ios_backgroundColor="#3e3e3e"
-                                    onValueChange={toggleSwitchtwo}
-                                    value={isEnabledtwo}
-                                />
-                            </View> */}
                         </View>
                         <View style={belongstyles.browseAll}>
-                            <TouchableOpacity style={belongstyles.SubmitButton} onPress={ async () => {
+                            <TouchableOpacity style={belongstyles.SubmitButton} onPress={async () => {
                                 const data = {
                                     query: {},
                                     body: {
@@ -113,13 +105,13 @@ export const CreateBelong = (props) => {
                                         "group_access_type": 'public',
                                         "group_profile_picture": "",
                                     },
-                                    token : props?.token
+                                    token: props?.token
                                 }
                                 const resp = await dispatch(generate_group(data))
                                 const rawData = await unwrapResult(resp)
-                                console.log(rawData?.data?.message  , "create group data")
-                                if(rawData?.data?.message === 'Success'){
-                                    navigation.push(Screens.InvitePeople , {rawData } )
+                                console.log(rawData?.data?.message, "create group data")
+                                if (rawData?.data?.message === 'Success') {
+                                    navigation.push(Screens.InvitePeople, { rawData })
                                 }
                             }}>
                                 <Text style={belongstyles.SubmitButtonText}>Create your own community </Text>
@@ -133,7 +125,7 @@ export const CreateBelong = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    token : state?.loginSliceNew?.token
+    token: state?.loginSliceNew?.token
 })
 
 const mapDispatchToProps = (dispatch) => {

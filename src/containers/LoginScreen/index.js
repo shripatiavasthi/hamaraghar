@@ -55,40 +55,13 @@ const LoginScreen = (props) => {
 
     return (
         <View style={styles.mainContinter}>
-            <ScrollView>
+            {/* <ScrollView> */}
                 <ImageBackground source={image.image} style={styles.MainDiv}>
                     <View style={styles.titleCon}>
                         <Text style={styles.titTxt}>Log In</Text>
                     </View>
                     <KeyboardAvoidingView behavior='position'>
                         <View style={styles.usercon}>
-                            {/* <TextInput
-                                style={styles.useText}
-                                placeholder='email '
-                                placeholderTextColor={'#000000'}
-                                onChangeText={async txt => {
-                                    setName(txt),
-                                        setErrorName(_nameValidate(txt))
-                                    const data = {
-                                        query: {},
-                                        body: {
-                                            "alias": txt,
-                                        }
-                                    }
-                                    const resp = await props?.aliesexist(data)
-                                    const rawData = await unwrapResult(resp)
-                                    console.log(rawData, "alies response")
-                                }}
-                            />
-                            {errorName != null ? (
-                                <View
-                                    style={styles.redCon}>
-                                    <Text
-                                        style={styles.redTxt}>
-                                        {errorName}
-                                    </Text>
-                                </View>
-                            ) : null} */}
                             <TextInput
                                 style={styles.useText}
                                 placeholder='user name'
@@ -175,7 +148,7 @@ const LoginScreen = (props) => {
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>
-            </ScrollView>
+            {/* </ScrollView> */}
         </View>
     )
 }
@@ -209,13 +182,14 @@ const styles = StyleSheet.create({
         height: height / 1.8,
         width: width / 1.4,
         // backgroundColor: 'cyan',
-        justifyContent: 'flex-end',
-        // alignItems: 'center',    
+        justifyContent: 'center',
+        alignItems: 'center',    
         alignSelf: 'center',
     },
     useText: {
         height: height / 16,
         width: width / 1.4,
+        marginBottom : 30,
         backgroundColor: '#FFFFFF',
         paddingHorizontal: 20,
         fontSize: height / 55,
@@ -247,7 +221,7 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     titleCons: {
-        height: height / 10,
+        height: height / 15,
         width: width / 1.4,
         // backgroundColor: 'cyan',
         justifyContent: 'flex-end',
