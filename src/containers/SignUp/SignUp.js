@@ -28,6 +28,8 @@ const SignUp = (props) => {
     const [errorName, setErrorName] = useState(null);
     const [alies_exist_state, setalies_exist] = useState(false);
 
+    const dispatch = useDispatch()
+
     console.log(alies_exist_state, "alies true or false")
 
     const _passwordvalidate = pass => {
@@ -189,7 +191,7 @@ const SignUp = (props) => {
                                     console.log(rawData, "here is data")
                                     if (rawData?.message == 'Success') {
                                         alies(Name)
-                                        setToken(rawData?.result)
+                                        dispatch(setToken(rawData?.result))
                                         navigation.push(Screens.AddName)
                                         // navigation.push(Screens.AddName)
                                     } else if (rawData?.message === 'Failed' && rawData?.Error === "user does not exist.") {

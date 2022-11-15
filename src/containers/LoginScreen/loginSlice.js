@@ -29,6 +29,7 @@ const loginSlice = createSlice({
      
     },
     setToken(state,action){
+      console.log(action.payload,"kkkkk")
       state.token = action.payload;
     }
   },
