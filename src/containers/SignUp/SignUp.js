@@ -11,6 +11,7 @@ import { validateName } from '../../helpers/CommonValidator'
 import axios from 'axios'
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setToken } from '../../containers/LoginScreen/loginSlice'
 
 const { height, width } = Dimensions.get('screen')
 
@@ -25,9 +26,9 @@ const SignUp = (props) => {
     const [errorPassword, setErrorPassword] = useState(null);
     const [Name, setName] = useState('');
     const [errorName, setErrorName] = useState(null);
-    const [alies_exist_state , setalies_exist] = useState(false);
+    const [alies_exist_state, setalies_exist] = useState(false);
 
-    console.log(alies_exist_state , "alies true or false")
+    console.log(alies_exist_state, "alies true or false")
 
     const _passwordvalidate = pass => {
         var passwordRegex =
@@ -79,7 +80,7 @@ const SignUp = (props) => {
             if (rawData.data.is_exist == true) {
                 setalies_exist(true)
                 alert("this alies alreay exist")
-            }else if (rawData.data.is_exist == false) {
+            } else if (rawData.data.is_exist == false) {
                 setalies_exist(false)
             }
         }
@@ -171,9 +172,9 @@ const SignUp = (props) => {
                     <View style={styles.titleCons}>
                         <TouchableOpacity
                             style={styles.btnCon}
-                            disabled={ alies_exist_state ? true : false}
+                            disabled={alies_exist_state ? true : false}
                             onPress={async () => {
-                                if (errorName && errorPassword ) {
+                                if (errorName && errorPassword) {
                                     alert('Please Enter correct User id and password')
                                 } else {
                                     const data = {
@@ -185,12 +186,13 @@ const SignUp = (props) => {
                                     }
                                     const resp = await props?.doLogin(data)
                                     const rawData = await unwrapResult(resp)
-                                    console.log(rawData?.data, "here is data")
-                                    if (rawData?.data?.message === 'success') {
+                                    console.log(rawData, "here is data")
+                                    if (rawData?.message == 'Success') {
                                         alies(Name)
+                                        setToken(rawData?.result)
                                         navigation.push(Screens.AddName)
                                         // navigation.push(Screens.AddName)
-                                    } else if (rawData?.data?.message === 'Failed' && rawData?.data?.Error === "user does not exist." ) {
+                                    } else if (rawData?.message === 'Failed' && rawData?.Error === "user does not exist.") {
                                         alies(Name)
                                         // alert(`${rawData?.data?.result}`)
                                     }
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         fontSize: height / 55,
         borderWidth: 0.5,
-        borderRadius : 10
+        borderRadius: 10
     },
     forgotCon: {
         height: height / 30,
