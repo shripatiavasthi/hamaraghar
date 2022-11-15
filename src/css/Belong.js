@@ -227,7 +227,7 @@ export default StyleSheet.create({
     },
     descibeforminput: {
         backgroundColor: 'white',
-        minHeight: height / 6,
+        // minHeight: height / 6,
     },
     Subheading: {
         fontSize: 22,
@@ -297,6 +297,10 @@ export default StyleSheet.create({
     ImageView:{
         backgroundColor: 'green',
         borderRadius: 50,
+    },
+    desvribeouterview:{
+        backgroundColor: 'white',
+        minHeight: height / 6,
     }
 })
 

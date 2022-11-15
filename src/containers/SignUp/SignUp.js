@@ -186,13 +186,13 @@ const SignUp = (props) => {
                                     const resp = await props?.doLogin(data)
                                     const rawData = await unwrapResult(resp)
                                     console.log(rawData?.data, "here is data")
-                                    if (rawData?.data?.message === 'Success') {
+                                    if (rawData?.data?.message === 'success') {
                                         alies(Name)
+                                        navigation.push(Screens.AddName)
                                         // navigation.push(Screens.AddName)
                                     } else if (rawData?.data?.message === 'Failed' && rawData?.data?.Error === "user does not exist." ) {
                                         alies(Name)
                                         // alert(`${rawData?.data?.result}`)
-                                        navigation.push(Screens.AddName)
                                     }
                                 }
                             }}

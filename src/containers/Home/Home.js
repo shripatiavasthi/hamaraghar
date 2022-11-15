@@ -19,37 +19,6 @@ import moment from 'moment';
 
 const { height, width } = Dimensions.get('screen')
 
-// const DATA = [
-//   {
-//     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-//     title: 'First Item',
-//   },
-//   {
-//     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-//     title: 'Second Item',
-//   },
-//   {
-//     id: '58694a0f-3da1-471f-bd96-145571e29d72',
-//     title: 'Third Item',
-//   },
-//   {
-//     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-//     title: 'Second Item',
-//   },
-//   {
-//     id: '58694a0f-3da1-471f-bd96-145571e29d72',
-//     title: 'Third Item',
-//   },
-//   {
-//     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-//     title: 'Second Item',
-//   },
-//   {
-//     id: '58694a0f-3da1-471f-bd96-145571e29d72',
-//     title: 'Third Item',
-//   },
-// ];
-
 export const Home = (props) => {
 
   const { navigation } = props
@@ -317,21 +286,11 @@ export const Home = (props) => {
           <View style={styles.CommentSection}>
             <View style={styles.ComenterDetails}>
               <EvilIcons name="user" size={25} color="black" />
-              <Text style={{ color: "black", fontSize: 12 }}>{name}</Text>
+              <Text style={{ color: "black", fontSize: 12  }}>{name}</Text>
             </View>
             <ScrollView>
               <View style={styles.CommentInput}>
                 <KeyboardAvoidingView behavior='position'>
-                  {/* <TextInput
-                    // value={commentReply}
-                    // onChangeText={(value) => {
-                    //   setCommentReply(value)
-                    // }}
-                    placeholder='Add your comment here'
-                    onChangeText={txt => {
-                      setCommentReply(txt)
-                  }}
-                    ></TextInput> */}
                   <TextInput
                     value={textComment}
                     onChangeText={(value) => {
@@ -356,7 +315,10 @@ export const Home = (props) => {
                 console.log(data, "create reply post data")
                 const resp = await dispatch(post_comment_reply(data))
                 const rawData = await unwrapResult(resp)
-                console.log(rawData, "kkkll")
+                console.log(rawData?.data?.message, "kkkll")
+                if(rawData?.data?.message === 'success'){
+                  navigation.push(Screens.Conversation, { id: title?.post_id })
+                }
               }
             }}>
               <Feather name="send" size={25} color="black" />
@@ -398,6 +360,7 @@ export const Home = (props) => {
             }}>
               <EvilIcons name="user" size={35} color="black" />
             </TouchableOpacity>
+
           </View>
         </View>
         <View style={styles.Posts} >
@@ -506,9 +469,12 @@ const styles = StyleSheet.create({
     height: height / 22,
     borderColor: 'black',
     // borderWidth: 1,
-    width: width / 1.5,
+    marginLeft:30,
+    width: width / 2,
     flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'center',
+    // backgroundColor:"pink",
+    paddingHorizontal:15
   },
   backgroundVideo: {
     position: 'absolute',

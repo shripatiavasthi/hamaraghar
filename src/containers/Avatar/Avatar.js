@@ -176,35 +176,10 @@ const Avatar = (props) => {
             console.log(response.data , "create user response");
           }).catch((e)=>{
             // alert(`${e.response.data.data.error}`)
-            console.log(e.response.data.data.error
+            console.log(e.response
                 , "create user response error" )
           })
     }
-
-    // const createuser = async () => {
-    //     const data = {
-    //         query: {},
-    //         body: {
-    //             "user_alias": "Shubham4455",
-    //             "first_name": name,
-    //             "last_name": lastname,
-    //             "gender": gender,
-    //             "date_of_birth": "2005-12-17",
-    //             "email": email,
-    //             "phone": phone,
-    //             "bio": "asdfghjkl",
-    //             "country": 5,
-    //         }
-    //     }
-    //     const resp = await props?.Usercreate(data)
-    //     const rawData = await unwrapResult(resp)
-    //     console.log(rawData , "avatar message")
-    //     if (rawData?.data?.message === 'Success') {
-    //         navigation.push(Screens.Belongone)
-    //     }else if (rawData?.data?.message === 'Failed'){
-    //         alert(`${rawData?.data?.Error}`)
-    //     }
-    // }
 
     return (
         <SafeAreaView >

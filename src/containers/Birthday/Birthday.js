@@ -75,7 +75,6 @@ export const Birthday = ({ props, navigation }) => {
                                     open={open}
                                     date={date}
                                     mode="date"
-                                    color="black"
                                     onConfirm={(date) => {
                                         setOpen(false)
                                         calculate_age(date)

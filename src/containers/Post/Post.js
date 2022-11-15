@@ -29,6 +29,7 @@ import DocumentPicker from 'react-native-document-picker'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import { get_curated_timeline, get_post_replies, post_comment_reply, get_search_timeline,get_profile_details } from '../../Slices/TimelineSlice';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -45,6 +46,7 @@ const Newpage = (props) => {
   const [GroupId, setGroupId] = useState([{ id: 10 }, { id: 12 }])
   const [groupid, setgroupid] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
+  const [name, setName] = useState()
 
   console.log(GroupId, "group ids")
 
@@ -57,11 +59,12 @@ const Newpage = (props) => {
 
   const Invitepeople = async () => {
   
-    if(content.trim() == ""){
-      alert("Please input some content to be posted")
-    }else if(images.length == 0){
-      alert("Select any image to be updated")
-    }else {
+    // if(content.trim() == ""){
+    //   alert("Please input some content to be posted")
+    // }else if(images.length == 0){
+    //   alert("Select any image to be updated")
+    // }else 
+    if(content.trim() !== "" || images.length !== 0){
         var bodyFormData = new FormData();
         bodyFormData.append('post_text', content);
         bodyFormData.append('location', "Delhi");
@@ -93,8 +96,13 @@ const Newpage = (props) => {
           })
           .catch(function (response) {
             //handle error
-            console.log(response, "postdirect method is not working");
+            console.log(response?.response?.status 
+
+              , "postdirect method is not working");
+              
           });
+      }else{
+        alert("Please write post or select image")
       }
   }
 
@@ -227,8 +235,8 @@ const Newpage = (props) => {
         {/* <View style={{}}> */}
         {/* <TouchableOpacity style={{ flexDirection: 'row' }}> */}
         <Text style={styles.lstTxt}>{item.name}</Text>
-        <View style={{ borderColor: 'black', borderWidth: 1, width: '10%', height: '100%' }}>
-          {checked ? <IconAntDesign name="check" size={30} color="#900" /> : null}
+        <View style={{ borderColor: 'black', borderWidth: 1, width: '7%', height: '80%' , borderRadius:5 }}>
+        {checked ? <IconAntDesign name="check" size={30} color="#900" /> : null }
         </View>
         {/* </TouchableOpacity> */}
         {/* </View> */}
@@ -347,6 +355,22 @@ const Newpage = (props) => {
     return res
   }
 
+  useEffect(() => {
+    const data ={
+      token: props?.token,
+    }
+    getuserDetailprofile(data)
+    // getSearchTimeline()
+    // get_post_reply()
+
+  }, [])
+
+  const getuserDetailprofile = async (data) => {
+    const resp = await dispatch(get_profile_details(data))
+    const respRaw = await unwrapResult(resp)
+    setName(`${respRaw?.data?.result?.first_name} ${respRaw?.data?.result?.last_name}`)
+    console.log(respRaw?.data?.result,"kkkkllll")
+  }
 
   return (
     <View style={styles.mainContainer}>
@@ -361,7 +385,7 @@ const Newpage = (props) => {
             <EvilIcons name="user" size={35} color="black" />
           </View>
           <View style={styles.headCon}>
-            <Text style={styles.bookTxt}>lopamudra</Text>
+            <Text style={styles.bookTxt}>{name}</Text>
             <Text style={styles.bookTxt}>Write Post</Text>
           </View>
         </View>
@@ -433,7 +457,7 @@ const Newpage = (props) => {
                     setgroupid([])
                   }
                   }>
-                    <AntDesign name="close" size={35} color="red" />
+                    <AntDesign name="close" size={25} color="red" />
                   </TouchableOpacity>
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
@@ -653,7 +677,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: '#FF4500',
   },
   textStyle: {
     color: "white",

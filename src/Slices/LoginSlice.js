@@ -29,6 +29,9 @@ const addressSlice = createSlice({
     setAddressStateSlider(state, action) {
      
     },
+    setToken(state,action){
+      state.token = action.payload;
+    }
   },
 
   extraReducers: (builder) => {
@@ -53,5 +56,6 @@ const addressSlice = createSlice({
 export const {
   rehydrate,
   setAddressStateSlider,
+  setToken
 } = addressSlice.actions;
 export default addressSlice.reducer;
