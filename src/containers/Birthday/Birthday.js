@@ -27,7 +27,8 @@ export const Birthday = ({ props, navigation }) => {
     // console.log(date.toLocaleDateString("en-US",options), "selected date")
 
     const BirthdayData = async (value) => {
-        navigation.navigate(Screens.SignUp)
+        setlessthen(false)
+        navigation.navigate(Screens.SignUp)        
         try {
             await AsyncStorage.setItem('Dob', value)
         } catch (e) {
@@ -50,6 +51,7 @@ export const Birthday = ({ props, navigation }) => {
             setage((age_dt.getUTCFullYear() - 1970))
         }else if(Math.abs(age_dt.getUTCFullYear() - 1970) < 13){
             alert(" You are Less then 13 years ")
+            setlessthen(false)
         }
     }
     

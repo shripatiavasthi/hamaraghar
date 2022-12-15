@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect, useDispatch } from 'react-redux'
-import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity, Alert } from 'react-native'
+import { SafeAreaView, View, Text, TextInput, ScrollView, ImageBackground, FlatList, TouchableOpacity, Alert , BackHandler, } from 'react-native'
 import styles from '../../css/Maincss'
 import belongstyles from '../../css/Belong'
 import { navigate, Screens } from '../../helpers/Screens';
@@ -43,6 +43,34 @@ const DATA = [
 
 
 export const Belongone = (props) => {
+
+    // useEffect(() => {
+    //     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+    //     return () => backHandler.remove()
+    //   }, [])
+    useEffect(() => {
+        const backAction = () => {
+            if (props.navigation.isFocused()) {
+                // alert("", [
+                //     {
+                //         text: "Cancel",
+                //         onPress: () => null,
+                //         style: "cancel"
+                //     },
+                //     { text: "YES", onPress: () => BackHandler.exitApp() }
+                // ]);
+                return true;
+            };
+        }
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        return () => backHandler.remove();
+    }, []);
+
+
     const dispatch = useDispatch()
     const [data, setData] = useState([])
     const getCat = async () => {

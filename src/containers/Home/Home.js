@@ -13,9 +13,10 @@ import { bookmarksave } from '../../Slices/BookmarkSaveSlice';
 import { bookmarkdelete } from '../../Slices/DeleteBookmarkSlice';
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import Video from 'react-native-video';
-import VideoPlayer from 'react-native-video-player';
+import VideoPlayer from 'react-native-video-player'; 
 import axios from 'axios';
 import moment from 'moment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -83,10 +84,27 @@ export const Home = (props) => {
     }
     getCuratedTimeline()
     getuserDetailprofile(data)
+    Getimagedata()
     // getSearchTimeline()
     // get_post_reply()
 
   }, [])
+
+  const [chousenimage , setchousenimage] = useState()
+
+  const Getimagedata = async () => {
+    try {
+        const value = await AsyncStorage.getItem('Image')
+        // if (value !== null) {
+            // value previously stored
+            // setphone(value)
+            console.log(value, "image fetching data")
+            setchousenimage(value)
+        // }
+    } catch (e) {
+        console.log("its not working")
+    }
+}
 
   const image = { image: require("../../staticdata/images/logo.jpeg") }
 
@@ -134,10 +152,6 @@ export const Home = (props) => {
 
   console.log(DATA, "all timelines")
 
-
-
-
-
   const Item = ({ title }) =>{
 
   const [textComment, setTextComment] = useState()
@@ -178,20 +192,12 @@ export const Home = (props) => {
     }
   }
 
+  
+
   return(
     <View style={styles.Post}>
       <View>
-        {/* <Image
-          style={styles.postimage}
-          source={{
-            uri: 'https://reactnative.dev/img/tiny_logo.png',
-          }}
-        /> */}
         <SwiperFlatList
-          // autoplay
-          // autoplayDelay={2}
-          // autoplayLoop
-          // index={2}
           showPagination
           data={title?.post_media ?? ['https://reactnative.dev/img/tiny_logo.png']}
           renderItem={({ item }) => 
@@ -206,14 +212,6 @@ export const Home = (props) => {
                   }}
                 />
                 :
-                // <Video source={{ uri: `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4` }}   // Can be a URL or a local file.
-                // ref={(ref) => {
-                //   this.player = ref
-                // }}                                      // Store reference
-                // onBuffer={this.onBuffer}                // Callback when remote video is buffering
-                // onError={this.videoError}               // Callback when video cannot be loaded
-                //  style={styles.backgroundVideo}
-                //  />
                 <VideoPlayer
                   video={{
                     uri:
@@ -231,12 +229,23 @@ export const Home = (props) => {
       </View>
       <View style={styles.PostContent}>
         <View style={styles.content}>
+         
           <View style={styles.Userdetails}>
             <View style={{ flexDirection: "row", alignItems: 'center' }}>
-              <EvilIcons name="user" size={25} color="black" />
+            <Image
+                  // source={require(`${chousenimage}`)}
+                  style={{
+                    height: 25,
+                    width: 25,
+                    borderRadius: 50
+                  }}
+                  source={{
+                    uri: `${title?.user_profile_picture}`,
+                  }}
+                />
               <View>
-                <Text style={{ color: "black", fontSize: 12, fontWeight: '600' }}>{title?.user_alias}</Text>
-                <Text style={{ color: "black", fontSize: 10, fontWeight: '400' }}>/junglecats </Text>
+                <Text style={{ color: "black", fontSize: 12, fontWeight: '600' , marginLeft: 10 , marginTop :10 }}>{title?.user_alias}</Text>
+                <Text style={{ color: "black", fontSize: 10, fontWeight: '400' }}>{title?.group_alias} </Text>
               </View>
             </View>
             <View>
@@ -278,10 +287,13 @@ export const Home = (props) => {
             </View>
           </View>
           <View style={styles.Description}>
-            <Text style={{ color: "black", fontSize: 13, fontWeight: '600' }}>{title?.post_text}</Text>
+            <Text style={{ color: "black", fontSize: 13,  }}><Text style={{fontWeight : "bold"}}>{title?.user_alias}</Text>  {title?.post_text}</Text>
           </View>
           <View style={styles.noofdays}>
-            <Text style={{ fontSize: 10 }}>{moment(title?.posted_at).format('MMMM Do YYYY')}</Text>
+            <Text style={{ fontSize: 10 }}>
+              {/* {moment(title?.posted_at).format('MMMM Do YYYY')} */}
+              {moment(`${title?.posted_at}`, "YYYYMMDD").fromNow()}
+            </Text>
           </View>
           <View style={styles.CommentSection}>
             <View style={styles.ComenterDetails}>
@@ -306,7 +318,7 @@ export const Home = (props) => {
                   body: {
                     post_id: title?.post_id,
                     reply_text: textComment,
-                    group_id: title?.group_ids,
+                    group_id: title?.group_id,
                     replying_to_user_id: title?.user_id
                   },
                   query: {},
@@ -356,9 +368,21 @@ export const Home = (props) => {
                 <EvilIcons name="search" size={35} color="black" />
               </TouchableOpacity>}
             <TouchableOpacity onPress={() => {
-              navigation.push(Screens.Profile)
+              navigation.push(Screens.Belongone)
             }}>
-              <EvilIcons name="user" size={35} color="black" />
+              {/* <EvilIcons name="user" size={35} color="black" /> */}
+              <Image 
+              
+              // source={require(`${chousenimage}`)}
+              style={{
+                height: 30,
+                width : 30,
+                borderRadius: 50
+              }}
+              source={{
+                uri: `${chousenimage}`,
+              }}
+              />
             </TouchableOpacity>
 
           </View>
@@ -405,17 +429,17 @@ const styles = StyleSheet.create({
     // backgroundColor: 'pink',
   },
   Post: {
-    marginBottom: 10,
-    height: height / 1.5,
+    // marginBottom: 5,
+    // height: height / 1.5,
     width: width / 1,
-    // backgroundColor: 'white'
+    // backgroundColor: 'green'
   },
   postimage: {
-    height: height / 3,
+    minHeight: height / 3,
     width: width,
   },
   PostContent: {
-    height: height / 3,
+    // height: height / 3,
     padding: 10,
     // backgroundColor: 'yellow',
     borderColor: 'black',
@@ -489,6 +513,8 @@ const mapStateToProps = (state) => ({
   token: state?.loginSliceNew?.token
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

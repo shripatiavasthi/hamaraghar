@@ -6,6 +6,7 @@ import belongstyles from '../../css/Belong'
 import { getSubCategoriesCommunity } from "../../Slices/Belongslice"
 import { navigate, Screens } from '../../helpers/Screens';
 import { unwrapResult } from '@reduxjs/toolkit'
+import CreateBelong from '../CreateBelong/CreateBelong'
 
 const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
@@ -51,18 +52,28 @@ export const BelongThree = (props) => {
 
     const [data, setData] = useState([])
     const dispatch = useDispatch()
+
     const getData = async () => {
 
         const data = {
-            token: props?.token
+            token: props?.token,
+            // query: {
+            //     category_id : categoryid?.category_id, 
+            //     sub_category_id : categoryid?.id
+            // },
+            query : {
+                category_id : props?.route?.params?.item?.category_id,
+                sub_category_id : props?.route?.params?.item?.id
+            }
         }
+        console.log(data , ">>>>>>>>>>>>>")
         const resp = await dispatch(getSubCategoriesCommunity(data))
         const rawData = await unwrapResult(resp)
         setData(rawData?.data?.result ?? [])
     }
     useEffect(() => {
         getData()
-    }, [])
+    }, [categoryid?.id])
 
     console.log(data, "data in belong three")
 

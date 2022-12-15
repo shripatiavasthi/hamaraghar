@@ -7,6 +7,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { get_post_replies } from '../../Slices/TimelineSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import moment from 'moment';
+import { navigate, Screens } from '../../helpers/Screens';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -77,7 +78,7 @@ export const Conversation = (props) => {
         <View style={styles.profileimage}>
           <TouchableOpacity 
            onPress={() => {
-            navigation.push(Screens.Conversation, { id: title?.post_id })
+            navigation.push(Screens.Tabs)
           }}
           >
             <AntDesign name="left" size={35} color="black" />

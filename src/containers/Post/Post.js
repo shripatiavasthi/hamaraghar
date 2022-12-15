@@ -43,12 +43,13 @@ const Newpage = (props) => {
   const [content, setcontent] = useState("")
   const [groupsList, setGroupsList] = useState([])
   const [filteredGroupsList, setfilteredGroupsList] = useState([])
-  const [GroupId, setGroupId] = useState([{ id: 10 }, { id: 12 }])
+  const [GroupId, setGroupId] = useState([])
   const [groupid, setgroupid] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState()
+  const [oneclick, setOneclick] = useState(false)
 
-  console.log(GroupId, "group ids")
+  console.log(GroupId,  "group ids" , groupid )
 
   const dispatch = useDispatch()
 
@@ -58,7 +59,7 @@ const Newpage = (props) => {
   }, [])
 
   const Invitepeople = async () => {
-  
+   
     // if(content.trim() == ""){
     //   alert("Please input some content to be posted")
     // }else if(images.length == 0){
@@ -69,7 +70,11 @@ const Newpage = (props) => {
         bodyFormData.append('post_text', content);
         bodyFormData.append('location', "Delhi");
         bodyFormData.append('device_id', Deviceid);
-        bodyFormData.append('group_ids', groupid);
+        bodyFormData.append('group_ids', GroupId.join());
+        GroupId.map(items=>{
+          return items.id
+        })
+        GroupId.join()
         {
           images.map((item) => {
             bodyFormData.append('media', item);
@@ -92,6 +97,7 @@ const Newpage = (props) => {
               , "post direct method work");
             if (response?.data?.data?.message == 'success') {
               navigation.push(Screens.Tabs)
+              setOneclick(false)
             }
           })
           .catch(function (response) {
@@ -99,10 +105,12 @@ const Newpage = (props) => {
             console.log(response?.response?.status 
 
               , "postdirect method is not working");
+              setOneclick(false)
               
           });
       }else{
         alert("Please write post or select image")
+        setOneclick(false)
       }
   }
 
@@ -276,6 +284,7 @@ const Newpage = (props) => {
   const [singleFile, setSingleFile] = useState('');
 
   const selectOneFile = async () => {
+    // setimages([])
     //Opening Document Picker for selection of one file
     // try {
     //   const res = await DocumentPicker.pick({
@@ -422,16 +431,27 @@ const Newpage = (props) => {
                     <Feather name="camera" size={35} color="black" />
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.imgCon} onPress={() =>
+                  {
+                  // if(images.length > 0){
+                  //   setimages([])
                     selectOneFile()
+                  // }else {
+                  //   selectOneFile()
+                  // }
+                }
                     // chooseFile('photo')
                   }>
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                     <Entypo name="images" size={35} color="black" />
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity 
+                disabled={oneclick}
+                onPress={() => {
                   Invitepeople()
-                }} style={styles.btnContainer} >
+                }}
+                style={styles.btnContainer} 
+                >
                   <Text style={styles.btnTxt}>Next</Text>
                 </TouchableOpacity>
               </View>

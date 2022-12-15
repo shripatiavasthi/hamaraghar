@@ -1,167 +1,3 @@
-// import React , {useState , useEffect} from 'react'
-// import { connect } from 'react-redux'
-// import { View, Text, SafeAreaView, StyleSheet, Dimensions, TextInput, TouchableOpacity , ImageBackground } from 'react-native'
-// import styles from '../../css/Maincss'
-// import { navigate, Screens } from '../../helpers/Screens';
-// import { unwrapResult } from '@reduxjs/toolkit'
-// import {verify_otp_email} from '../../Slices/VerifyEmailOtpSlice'
-// import {verify_otp_phone } from '../../Slices/VerifyPhoneOtpSlice'
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// const { height, width } = Dimensions.get('screen')
-
-// export const VerifyEmailorPhone = (props) => {
-
-//     const { navigation } = props
-
-//     const image = { image: require("../../staticdata/images/BackgroundImage.png") }
-
-//     const [emailotp , setemailotp] = useState()
-//     const [smsotp , setsmsotp] = useState()
-    // const [email, setemail] = useState()
-    // const [phone , setphone] = useState()
-
-    // useEffect(() => {
-    //     Email()
-    //     Phone()
-    // }, [])
-
-
-    // const Email = async () => {
-    //     try {
-    //         const value = await AsyncStorage.getItem('Email')
-    //         if (value !== null) {
-    //             // value previously stored
-    //             setemail(value)
-    //             console.log(value, "fetching data")
-    //         }
-    //     } catch (e) {
-    //         // error reading value
-    //     }
-    // }
-
-    // const Phone = async () => {
-    //     try {
-    //         const value = await AsyncStorage.getItem('phone')
-    //         if (value !== null) {
-    //             // value previously stored
-    //             setphone(value)
-    //             console.log(value, "fetching data")
-    //         }
-    //     } catch (e) {
-    //         // error reading value
-    //     }
-    // }
-
-    // console.log(emailotp , smsotp , "<<<<<<")
-
-    // const OTPemail = async () => {
-    //     const data = {
-    //         query: {},
-    //         body: {
-    //             email: email,
-    //             otp : emailotp
-    //         }
-    //     }
-    //     const resp = await props?.verifyOtpEmail(data)
-    //     const rawData = await unwrapResult(resp)
-    //     console.log(rawData.data.message, "verify Email Otp Response")
-    //     if(rawData?.data?.message === 'Success'){
-    //         navigation.push(Screens.Avatar)
-    //     }
-    // }
-
-    // const OTPphone = async () => {
-    //     const data = {
-    //         query: {},
-    //         body: {
-    //             phone: phone,
-    //             otp : smsotp
-    //         }
-    //     }
-    //     const resp = await props?.verifyOtpPhone(data)
-    //     const rawData = await unwrapResult(resp)
-    //     console.log(rawData, "verify phone Otp Response")
-    // }
-
-
-
-//   return (
-//     <SafeAreaView >
-//             <ImageBackground source={image.image} style={styles.maindiv}>
-//                 <View style={styles.FirstView}>
-//                     <View style={styles.PageView}>
-//                         <View style={styles.Headingdiv}>
-//                             <View style={styles.headingcontainer}>
-//                                 <Text style={styles.headingtext}>Verify your e-mail or phone</Text>
-//                             </View>
-//                             <View style={styles.headingcontainer}>
-//                                 <Text style={styles.subheadingtext}> We have sent you an OTP please check your email / phone and verify</Text>
-//                             </View>
-//                         </View>
-//                         <View style={styles.Contentbox}>
-//                             <View style={styles.Input}>
-//                                 <View style={styles.inputfeild}>
-//                                     <TextInput placeholder='enter email OTP' style={styles.input}
-//                                         onChangeText={(value) => {
-//                                             setemailotp(value)
-//                                         }}
-//                                     >
-//                                     </TextInput>
-//                                     <TextInput placeholder='enter phone OTP' style={styles.input}
-//                                         onChangeText={(value) => {
-//                                             setsmsotp(value)
-//                                         }}
-//                                     >
-//                                     </TextInput>
-//                                 </View>
-//                                 <View style={styles.subInput}>
-
-//                                 </View>
-//                             </View>
-//                             <View style={styles.SubmitButton}>
-//                                 <TouchableOpacity
-//                                     disabled={emailotp && smsotp ? false : true}
-//                                     style={emailotp && smsotp ? styles.button : styles.buttondisable}
-                                    // onPress={() => {
-                                    //     OTPemail()
-                                    //     OTPphone()
-                                    // }}
-//                                 >
-//                                     <Text style={styles.buttonText}>Verify</Text>
-//                                 </TouchableOpacity>
-//                                 <TouchableOpacity style={styles.skipbutton}
-//                                     onPress={() => {
-//                                         navigation.push(Screens.Avatar)
-//                                     }}
-//                                 >
-//                                     <Text style={styles.content}>Skip</Text>
-//                                 </TouchableOpacity>
-//                             </View>
-//                         </View>
-//                     </View>
-//                 </View>
-//             </ImageBackground>
-//         </SafeAreaView>
-//   )
-// }
-
-
-// const mapStateToProps = (state) => ({})
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         verifyOtpEmail: (data) => {
-//             return  dispatch(verify_otp_email(data));
-//         },
-//         verifyOtpPhone: (data) => {
-//             return  dispatch(verify_otp_phone(data));
-//         },
-//     }
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(VerifyEmailorPhone)
-
 import React, { useState , useEffect } from 'react'
 import { Dimensions, StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity, ImageBackground } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -177,7 +13,7 @@ const { height, width } = Dimensions.get('screen')
 
 const VerifyEmailorPhone = (props) => {
 
-    const { navigation } = props
+  const { navigation } = props
 
   const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
@@ -266,7 +102,7 @@ const VerifyEmailorPhone = (props) => {
       if(rawData?.data?.message === 'Success'){
           navigation.push(Screens.Avatar)
       }else{
-        alert(`${rawData?.data?.result}`)
+        alert(`${rawData?.data?.error}`)
       }
   }
 
@@ -286,7 +122,7 @@ const VerifyEmailorPhone = (props) => {
 
   return (
     <View style={styles.mainContinter}>
-      <ScrollView>
+      {/* <ScrollView> */}
         <ImageBackground source={image.image} style={styles.MainDiv}>
           <View style={styles.titleCon}>
             <Text style={styles.titTxt}>Verify your e-mail or phone</Text>
@@ -356,7 +192,7 @@ const VerifyEmailorPhone = (props) => {
             </TouchableOpacity>
           </View>
         </ImageBackground>
-      </ScrollView>
+      {/* </ScrollView> */}
     </View>
   )
 }
@@ -401,9 +237,10 @@ const styles = StyleSheet.create({
     height: height / 2.11,
     width: width / 1.35,
     // backgroundColor: 'cyan',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     // alignItems: 'center',    
     alignSelf: 'center',
+
   },
   useText: {
     height: height / 16,
@@ -411,7 +248,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     fontSize: height / 55,
-    borderWidth: 0.5
+    borderWidth: 0.5,
+    marginBottom : 30
   },
   forgotCon: {
     height: height / 30,

@@ -79,7 +79,7 @@ const LoginScreen = (props) => {
                                     // const rawData = await unwrapResult(resp)
                                 }}
                             />
-                            {errorName != null ? (
+                            {/* {errorName != null ? (
                                 <View
                                     style={styles.redCon}>
                                     <Text
@@ -87,7 +87,7 @@ const LoginScreen = (props) => {
                                         {errorName}
                                     </Text>
                                 </View>
-                            ) : null}
+                            ) : null} */}
                             <View style={styles.passcon}>
                                 <TextInput
                                     style={styles.useText}
@@ -98,7 +98,7 @@ const LoginScreen = (props) => {
                                             setErrorPassword(_passwordvalidate(txt))
                                     }}
                                 />
-                                {errorPassword != null ? (
+                                {/* {errorPassword != null ? (
                                     <View
                                         style={styles.redCon}>
                                         <Text
@@ -106,7 +106,7 @@ const LoginScreen = (props) => {
                                             {errorPassword}
                                         </Text>
                                     </View>
-                                ) : null}
+                                ) : null} */}
                             </View>
                         </View>
                     </KeyboardAvoidingView>
@@ -118,7 +118,7 @@ const LoginScreen = (props) => {
                     <View style={styles.titleCons}>
                         <TouchableOpacity
                             style={styles.btnCon}
-                            disabled={errorName && errorPassword ? true : false}
+                            // disabled={errorName && errorPassword ? true : false} 
                             onPress={async () => {
                                 const data = {
                                     query: {},

@@ -15,11 +15,6 @@ export const CreateBelong = (props) => {
     console.log(props?.route?.params?.categoryid?.category_id, "props in create belong")
 
     const dispatch = useDispatch()
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
-    const [isEnabledtwo, setIsEnabledtwo] = useState(false);
-    const toggleSwitchtwo = () => setIsEnabledtwo(previousState => !previousState);
 
     const [aliesname, setaliesname] = useState();
     const [communityname, setcommunityname] = useState();
@@ -41,6 +36,11 @@ export const CreateBelong = (props) => {
             // error reading value
         }
     }
+
+    // test 
+
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
     return (
         <SafeAreaView>
@@ -82,8 +82,13 @@ export const CreateBelong = (props) => {
                                 <Text style={belongstyles.detTxt}>Sports</Text>
                                 <Text style={belongstyles.detTxt}>Football</Text>
                             </View>
-                            <View style={belongstyles.Suggestiontag}>
+
+                            {/* <View style={belongstyles.Suggestiontag}>
                                 <Text style={belongstyles.Subheading}>Anyone can join</Text>
+                             
+                            </View> */}
+                           
+                            <View >
                                 <Switch
                                     trackColor={{ false: "#767577", true: "#81b0ff" }}
                                     thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -92,6 +97,7 @@ export const CreateBelong = (props) => {
                                     value={isEnabled}
                                 />
                             </View>
+                          
                         </View>
                         <View style={belongstyles.browseAll}>
                             <TouchableOpacity style={belongstyles.SubmitButton} onPress={async () => {
@@ -99,6 +105,7 @@ export const CreateBelong = (props) => {
                                     query: {},
                                     body: {
                                         "category_id": props?.route?.params?.categoryid?.category_id,
+                                        "sub_category_id" : props?.route?.params?.categoryid?.id, 
                                         "group_alias": aliesname,
                                         "group_name": communityname,
                                         "is_active": true,
@@ -111,7 +118,7 @@ export const CreateBelong = (props) => {
                                 const rawData = await unwrapResult(resp)
                                 console.log(rawData?.data?.message, "create group data")
                                 if (rawData?.data?.message === 'Success') {
-                                    navigation.push(Screens.InvitePeople, { rawData })
+                                    navigation.push(Screens.Tabs, { rawData })
                                 }
                             }}>
                                 <Text style={belongstyles.SubmitButtonText}>Create your own community </Text>
@@ -137,3 +144,34 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateBelong)
+
+
+// import React, { useState } from "react";
+// import { View, Switch, StyleSheet } from "react-native";
+
+// const App = () => {
+//   const [isEnabled, setIsEnabled] = useState(false);
+//   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+//   return (
+    // <View style={styles.container}>
+    //   <Switch
+    //     trackColor={{ false: "#767577", true: "#81b0ff" }}
+    //     thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+    //     ios_backgroundColor="#3e3e3e"
+    //     onValueChange={toggleSwitch}
+    //     value={isEnabled}
+    //   />
+    // </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     alignItems: "center",
+//     justifyContent: "center"
+//   }
+// });
+
+// export default App;

@@ -27,7 +27,7 @@ export const getSubCategories = createAsyncThunk(
 export const getSubCategoriesCommunity = createAsyncThunk(
   "getSubCategoriesCommunity",
   async (data, thunkAPI) => {
-    return await doGet(thunkAPI,location.GET_COMMUNITY, {},data?.token);
+    return await doGet(thunkAPI,location.GET_COMMUNITY, data?.query,data?.token);
   }
 );
 

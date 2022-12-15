@@ -74,7 +74,7 @@ const AddEmailorPhone = (props) => {
 
   return (
     <View style={styles.mainContinter}>
-      <ScrollView>
+      {/* <ScrollView> */}
         <ImageBackground source={image.image} style={styles.MainDiv}>
           <View style={styles.titleCon}>
             <Text style={styles.titTxt}>Add your e-mail
@@ -154,7 +154,7 @@ const AddEmailorPhone = (props) => {
             </TouchableOpacity>
           </View>
         </ImageBackground>
-      </ScrollView>
+      {/* </ScrollView> */}
     </View>
   )
 }
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     height: height / 2.66,
     width: width / 1.35,
     // backgroundColor: 'cyan',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     // alignItems: 'center',    
     alignSelf: 'center',
   },
@@ -210,7 +210,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     fontSize: height / 55,
     borderWidth: 0.5,
-    borderRadius:10
+    borderRadius:10,
+    marginBottom: 30
   },
   forgotCon: {
     height: height / 30,

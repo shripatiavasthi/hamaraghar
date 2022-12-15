@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Dimensions, StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity, ImageBackground } from 'react-native'
+import { Dimensions, StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity, ImageBackground , BackHandler, } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import { connect, useDispatch } from "react-redux";
 import { unwrapResult } from '@reduxjs/toolkit'
@@ -19,6 +19,7 @@ const { height, width } = Dimensions.get('screen')
 const image = { image: require("../../staticdata/images/BackgroundImage.png") }
 
 const SignUp = (props) => {
+
 
     const { navigation } = props
 
@@ -119,7 +120,7 @@ const SignUp = (props) => {
 
     return (
         <View style={styles.mainContinter}>
-            <ScrollView>
+            {/* <ScrollView> */}
                 <ImageBackground source={image.image} style={styles.MainDiv}>
                     <View style={styles.titleCon}>
                         <Text style={styles.titTxt}>Sign up</Text>
@@ -136,7 +137,7 @@ const SignUp = (props) => {
 
                                 }}
                             />
-                            {errorName != null ? (
+                            {/* {errorName != null ? (
                                 <View
                                     style={styles.redCon}>
                                     <Text
@@ -144,7 +145,7 @@ const SignUp = (props) => {
                                         {errorName}
                                     </Text>
                                 </View>
-                            ) : null}
+                            ) : null} */}
                             <View style={styles.passcon}>
                                 <TextInput
                                     style={styles.useText}
@@ -154,7 +155,7 @@ const SignUp = (props) => {
                                         setPassword(txt), _passwordvalidate(txt);
                                     }}
                                 />
-                                {errorPassword != null ? (
+                                {/* {errorPassword != null ? (
                                     <View
                                         style={styles.redCon}>
                                         <Text
@@ -162,23 +163,23 @@ const SignUp = (props) => {
                                             {errorPassword}
                                         </Text>
                                     </View>
-                                ) : null}
+                                ) : null} */}
                             </View>
                         </View>
                     </KeyboardAvoidingView>
                     <View style={styles.forgotCon}>
-                        <TouchableOpacity onPress={() => { alert('Hello') }}>
+                        {/* <TouchableOpacity onPress={() => { alert('Hello') }}>
                             <Text style={styles.frgTxt}>Forgot your password?</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     <View style={styles.titleCons}>
                         <TouchableOpacity
                             style={styles.btnCon}
                             disabled={alies_exist_state ? true : false}
                             onPress={async () => {
-                                if (errorName && errorPassword) {
-                                    alert('Please Enter correct User id and password')
-                                } else {
+                                // if (errorName && errorPassword) {
+                                //     alert('Please Enter correct User id and password')
+                                // } else {
                                     const data = {
                                         query: {},
                                         body: {
@@ -188,17 +189,20 @@ const SignUp = (props) => {
                                     }
                                     const resp = await props?.doLogin(data)
                                     const rawData = await unwrapResult(resp)
-                                    console.log(rawData, "here is data")
-                                    if (rawData?.message == 'Success') {
+                                    console.log(rawData?.data
+                                        , "sign up api data")
+                                    if (rawData?.message == 'Success' || rawData?.message == 'success') {
                                         alies(Name)
                                         dispatch(setToken(rawData?.result))
-                                        navigation.push(Screens.AddName)
                                         // navigation.push(Screens.AddName)
-                                    } else if (rawData?.message === 'Failed' && rawData?.Error === "user does not exist.") {
-                                        alies(Name)
-                                        // alert(`${rawData?.data?.result}`)
+                                        navigation.navigate(Screens.AddName)
+                                    } else if (rawData?.data?.message == 'failed' || rawData?.data?.message == 'Failed'  ) {
+                                        console.log(rawData?.data?.error , "checking ")
+                                        // alies(rawData?.data?.Error[0] )
+                                        alert(`${rawData?.data?.error
+                                        }`)
                                     }
-                                }
+                                // }
                             }}
                         >
                             <Text style={styles.btnTxt}>Sign up</Text>
@@ -212,7 +216,7 @@ const SignUp = (props) => {
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>
-            </ScrollView>
+            {/* </ScrollView> */}
         </View>
     )
 }
@@ -246,7 +250,7 @@ const styles = StyleSheet.create({
         height: height / 1.8,
         width: width / 1.4,
         // backgroundColor: 'cyan',
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         // alignItems: 'center',    
         alignSelf: 'center',
     },
@@ -257,7 +261,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         fontSize: height / 55,
         borderWidth: 0.5,
-        borderRadius: 10
+        borderRadius: 10,
+        marginBottom: 30
     },
     forgotCon: {
         height: height / 30,

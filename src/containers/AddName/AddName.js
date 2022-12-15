@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Dimensions, StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity, ImageBackground } from 'react-native'
+import React, { useState , useEffect } from 'react'
+import { Dimensions, StyleSheet, Text, TextInput, View, KeyboardAvoidingView, TouchableOpacity, ImageBackground , BackHandler, } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import { navigate, Screens } from '../../helpers/Screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,6 +11,28 @@ const { height, width } = Dimensions.get('screen')
 
 
 const AddName = (props) => {
+
+    useEffect(() => {
+        const backAction = () => {
+            if (props.navigation.isFocused()) {
+                // alert("", [
+                //     {
+                //         text: "Cancel",
+                //         onPress: () => null,
+                //         style: "cancel"
+                //     },
+                //     { text: "YES", onPress: () => BackHandler.exitApp() }
+                // ]);
+                return true;
+            };
+        }
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+
+        return () => backHandler.remove();
+    }, []);
 
     const { navigation } = props
 
@@ -43,7 +65,7 @@ const AddName = (props) => {
 
     return (
         <View style={styles.mainContinter}>
-            <ScrollView>
+            {/* <ScrollView> */}
                 <ImageBackground source={image.image} style={styles.MainDiv}>
                     <View style={styles.titleCon}>
                         <Text style={styles.titTxt}>Add name</Text>
@@ -115,7 +137,7 @@ const AddName = (props) => {
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>
-            </ScrollView>
+            {/* </ScrollView> */}
         </View>
     )
 }
@@ -163,7 +185,7 @@ const styles = StyleSheet.create({
         height: height / 2,
         width: width / 1.35,
         // backgroundColor: 'cyan',
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         // alignItems: 'center',    
         alignSelf: 'center',
     },
@@ -174,7 +196,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         fontSize: height / 55,
         borderWidth: 0.5,
-        borderRadius:10
+        borderRadius:10,
+        marginBottom: 30
+
     },
     forgotCon: {
         height: height / 30,
