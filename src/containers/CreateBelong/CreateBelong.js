@@ -83,21 +83,21 @@ export const CreateBelong = (props) => {
                                 <Text style={belongstyles.detTxt}>Football</Text>
                             </View>
 
-                            {/* <View style={belongstyles.Suggestiontag}>
-                                <Text style={belongstyles.Subheading}>Anyone can join</Text>
-                             
-                            </View> */}
-                           
-                            <View >
-                                <Switch
-                                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                                    thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                                    ios_backgroundColor="#3e3e3e"
-                                    onValueChange={toggleSwitch}
-                                    value={isEnabled}
-                                />
+                            <View style={{flex : 1,flexDirection : 'row',justifyContent : 'space-between',alignItems: 'center'}}>
+                                <View style={belongstyles.AnyOneCanJoin}>
+                                    <Text style={belongstyles.Subheading}>Anyone can join</Text>
+                                </View>
+
+                                <View >
+                                    <Switch
+                                        trackColor={{ false: "#767577", true: "#81b0ff" }}
+                                        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                                        ios_backgroundColor="#3e3e3e"
+                                        onValueChange={toggleSwitch}
+                                        value={isEnabled}
+                                    />
+                                </View>
                             </View>
-                          
                         </View>
                         <View style={belongstyles.browseAll}>
                             <TouchableOpacity style={belongstyles.SubmitButton} onPress={async () => {
@@ -105,7 +105,7 @@ export const CreateBelong = (props) => {
                                     query: {},
                                     body: {
                                         "category_id": props?.route?.params?.categoryid?.category_id,
-                                        "sub_category_id" : props?.route?.params?.categoryid?.id, 
+                                        "sub_category_id": props?.route?.params?.categoryid?.id,
                                         "group_alias": aliesname,
                                         "group_name": communityname,
                                         "is_active": true,

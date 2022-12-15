@@ -257,6 +257,15 @@ export default StyleSheet.create({
         alignItems: 'center',
         marginRight: 10,
     },
+    AnyOneCanJoin: {
+        marginTop: 5,
+        borderColor: 'black',
+        flexDirection: 'row',
+        height: height / 18,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginRight: 10,
+    },
     buttonText: {
         color: 'white',
         fontWeight: '400',
