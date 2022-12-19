@@ -358,9 +358,11 @@ export const Home = (props) => {
             />
           </View>
           <View style={styles.brandlogo}>
-            {timelinesearch ? <TextInput placeholder='Search here' style={{  width: '60%', padding: 5 }} onChangeText={txt => {
+            {timelinesearch ? <TextInput onSubmitEditing={({ nativeEvent: { text, eventCount, target }})=>{
+              getSearchTimeline(text)
+            }} placeholder='Search here' style={{  width: '60%', padding: 5 }} onChangeText={txt => {
               // setSearch(txt)
-              getSearchTimeline(txt)
+              // getSearchTimeline(txt)
             }}></TextInput> :
               <TouchableOpacity onPress={() => {
                 setTimelinesearch(true)
