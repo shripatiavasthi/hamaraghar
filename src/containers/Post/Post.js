@@ -401,20 +401,20 @@ const Newpage = (props) => {
                     <Entypo name="images" size={35} color="black" />
                   </TouchableOpacity>
                 </View>
-                <Button disabled={oneclick} onPress={() => {
+                {/* <Button disabled={oneclick} onPress={() => {
                   setOneclick(true)
-                  Invitepeople()
-                }} title='Next' />
-                {/* <TouchableOpacity
+                 !oneclick && Invitepeople()
+                }} title='Next' /> */}
+                <TouchableOpacity
                   disabled={oneclick}
                   onPress={() => {
                     setOneclick(true)
-                    Invitepeople()
+                    !oneclick && Invitepeople()
                   }}
                   style={styles.btnContainer}
                 >
                   <Text style={styles.btnTxt}>Next</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
               </View>
             </ScrollView>
           </KeyboardAwareScrollView>
