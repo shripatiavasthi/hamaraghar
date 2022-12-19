@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   PermissionsAndroid,
   Modal,
-  Pressable
+  Pressable,
+  Button
 } from 'react-native'
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -29,7 +30,7 @@ import DocumentPicker from 'react-native-document-picker'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import { get_curated_timeline, get_post_replies, post_comment_reply, get_search_timeline,get_profile_details } from '../../Slices/TimelineSlice';
+import { get_curated_timeline, get_post_replies, post_comment_reply, get_search_timeline, get_profile_details } from '../../Slices/TimelineSlice';
 
 const { height, width } = Dimensions.get('screen')
 
@@ -48,8 +49,9 @@ const Newpage = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState()
   const [oneclick, setOneclick] = useState(false)
+  let [images, setimages] = useState([])
 
-  console.log(GroupId,  "group ids" , groupid )
+  console.log(images, '>>>> sI')
 
   const dispatch = useDispatch()
 
@@ -59,59 +61,59 @@ const Newpage = (props) => {
   }, [])
 
   const Invitepeople = async () => {
-   
+
     // if(content.trim() == ""){
     //   alert("Please input some content to be posted")
     // }else if(images.length == 0){
     //   alert("Select any image to be updated")
     // }else 
-    if(content.trim() !== "" || images.length !== 0){
-        var bodyFormData = new FormData();
-        bodyFormData.append('post_text', content);
-        bodyFormData.append('location', "Delhi");
-        bodyFormData.append('device_id', Deviceid);
-        bodyFormData.append('group_ids', GroupId.join());
-        GroupId.map(items=>{
-          return items.id
+    if (content.trim() !== "" || images.length !== 0) {
+      var bodyFormData = new FormData();
+      bodyFormData.append('post_text', content);
+      bodyFormData.append('location', "Delhi");
+      bodyFormData.append('device_id', Deviceid);
+      bodyFormData.append('group_ids', GroupId.join());
+      GroupId.map(items => {
+        return items.id
+      })
+      GroupId.join()
+      {
+        images?.map((item) => {
+          bodyFormData.append('media', item);
         })
-        GroupId.join()
-        {
-          images.map((item) => {
-            bodyFormData.append('media', item);
-          })
-        }
-        console.log(images, "images")
-        console.log(bodyFormData, "bodyform data")
-        axios({
-          method: "post",
-          url: "http://54.214.196.237:3000/post/create",
-          data: bodyFormData,
-          headers: {
-            Authorization: `${props.token}`,
-            "Content-Type": "multipart/form-data"
-          },
-        })
-          .then(function (response) {
-            //handle success
-            console.log(response?.data?.data?.message
-              , "post direct method work");
-            if (response?.data?.data?.message == 'success') {
-              navigation.push(Screens.Tabs)
-              setOneclick(false)
-            }
-          })
-          .catch(function (response) {
-            //handle error
-            console.log(response?.response?.status 
-
-              , "postdirect method is not working");
-              setOneclick(false)
-              
-          });
-      }else{
-        alert("Please write post or select image")
-        setOneclick(false)
       }
+      console.log(images, "images")
+      console.log(bodyFormData, "bodyform data")
+      axios({
+        method: "post",
+        url: "http://54.214.196.237:3000/post/create",
+        data: bodyFormData,
+        headers: {
+          Authorization: `${props.token}`,
+          "Content-Type": "multipart/form-data"
+        },
+      })
+        .then(function (response) {
+          //handle success
+          console.log(response?.data?.data?.message
+            , "post direct method work");
+          if (response?.data?.data?.message == 'success') {
+            navigation.push(Screens.Tabs)
+            setOneclick(false)
+          }
+        })
+        .catch(function (response) {
+          //handle error
+          console.log(response?.response?.status
+
+            , "postdirect method is not working");
+          setOneclick(false)
+
+        });
+    } else {
+      alert("Please write post or select image")
+      setOneclick(false)
+    }
   }
 
 
@@ -136,7 +138,7 @@ const Newpage = (props) => {
   }
 
   const [filePath, setFilePath] = useState({});
-  const [images, setimages] = useState([])
+
 
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
@@ -243,8 +245,8 @@ const Newpage = (props) => {
         {/* <View style={{}}> */}
         {/* <TouchableOpacity style={{ flexDirection: 'row' }}> */}
         <Text style={styles.lstTxt}>{item.name}</Text>
-        <View style={{ borderColor: 'black', borderWidth: 1, width: '7%', height: '80%' , borderRadius:5 }}>
-        {checked ? <IconAntDesign name="check" size={30} color="#900" /> : null }
+        <View style={{ borderColor: 'black', borderWidth: 1, width: '7%', height: '80%', borderRadius: 5 }}>
+          {checked ? <IconAntDesign name="check" size={30} color="#900" /> : null}
         </View>
         {/* </TouchableOpacity> */}
         {/* </View> */}
@@ -284,55 +286,15 @@ const Newpage = (props) => {
   const [singleFile, setSingleFile] = useState('');
 
   const selectOneFile = async () => {
-    // setimages([])
-    //Opening Document Picker for selection of one file
-    // try {
-    //   const res = await DocumentPicker.pick({
-    //     type: [DocumentPicker.types.allFiles],
-    //     allowMultiSelection: true,
-    //     //There can me more options as well
-    //     // DocumentPicker.types.allFiles
-    //     // DocumentPicker.types.images
-    //     // DocumentPicker.types.plainText
-    //     // DocumentPicker.types.audio
-    //     // DocumentPicker.types.pdf
-    //   });
-    //   //Printing the log realted to the file
-    //   console.log('res : ' + JSON.stringify(res));
-    //   console.log('URI : ' + res.uri);
-    //   console.log('Type : ' + res.type);
-    //   console.log('File Name : ' + res.name);
-    //   console.log('File Size : ' + res.size);
-    //   //Setting the state to show single file attributes
-    //   setSingleFile(res);
-    //   images.push(res)
-    // } catch (err) {
-    //   //Handling any exception (If any)
-    //   if (DocumentPicker.isCancel(err)) {
-    //     //If user canceled the document selection
-    //     alert('Canceled from single doc picker');
-    //   } else {
-    //     //For Unknown Error
-    //     alert('Unknown Error: ' + JSON.stringify(err));
-    //     throw err;
-    //   }
-    // }
     try {
       const results = await DocumentPicker.pickMultiple({
         type: [DocumentPicker.types.images],
         //There can me more options as well find above
       });
-      for (const res of results) {
-        //Printing the log realted to the file
-        console.log('res : ' + JSON.stringify(res));
-        console.log('URI : ' + res.uri);
-        console.log('Type : ' + res.type);
-        console.log('File Name : ' + res.name);
-        console.log('File Size : ' + res.size);
-        images.push(res)
-      }
-      //Setting the state to show multiple file attributes
-      // this.setState({ multipleFile: results });
+      console.log(results, ">>>>>>> r")
+      setimages([])
+      setimages(results)
+
     } catch (err) {
       //Handling any exception (If any)
       if (DocumentPicker.isCancel(err)) {
@@ -365,7 +327,7 @@ const Newpage = (props) => {
   }
 
   useEffect(() => {
-    const data ={
+    const data = {
       token: props?.token,
     }
     getuserDetailprofile(data)
@@ -378,7 +340,7 @@ const Newpage = (props) => {
     const resp = await dispatch(get_profile_details(data))
     const respRaw = await unwrapResult(resp)
     setName(`${respRaw?.data?.result?.first_name} ${respRaw?.data?.result?.last_name}`)
-    console.log(respRaw?.data?.result,"kkkkllll")
+    console.log(respRaw?.data?.result, "kkkkllll")
   }
 
   return (
@@ -430,30 +392,29 @@ const Newpage = (props) => {
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                     <Feather name="camera" size={35} color="black" />
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.imgCon} onPress={() =>
-                  {
-                  // if(images.length > 0){
-                  //   setimages([])
-                    selectOneFile()
-                  // }else {
-                  //   selectOneFile()
-                  // }
-                }
-                    // chooseFile('photo')
+                  <TouchableOpacity style={styles.imgCon} onPress={() => {
+                      selectOneFile()
+                  }
+
                   }>
                     {/* <Image style={styles.serchStyle} resizeMode='contain' source={require('../../Mashu/Images/Icon/search.png')} /> */}
                     <Entypo name="images" size={35} color="black" />
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity 
-                disabled={oneclick}
-                onPress={() => {
+                <Button disabled={oneclick} onPress={() => {
+                  setOneclick(true)
                   Invitepeople()
-                }}
-                style={styles.btnContainer} 
+                }} title='Next' />
+                {/* <TouchableOpacity
+                  disabled={oneclick}
+                  onPress={() => {
+                    setOneclick(true)
+                    Invitepeople()
+                  }}
+                  style={styles.btnContainer}
                 >
                   <Text style={styles.btnTxt}>Next</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </ScrollView>
           </KeyboardAwareScrollView>
