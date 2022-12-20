@@ -9,7 +9,7 @@ import send_otp_phone from '../Slices/SendPhoneOtpSlice'
 import send_otp_email from '../Slices/SendEmailOtpSlice'
 import Belongslice from '../Slices/Belongslice';
 import loginSliceNew from "../containers/LoginScreen/loginSlice"
-
+import spinner from "../containers/spinner/SpinnerReducer"
 
 
 const reducers = combineReducers({
@@ -18,7 +18,8 @@ const reducers = combineReducers({
     send_otp_phone,
     send_otp_email,
     Belongslice,
-    loginSliceNew
+    loginSliceNew,
+    spinner
 });
 
 const persistConfig = {

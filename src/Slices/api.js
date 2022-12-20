@@ -3,6 +3,7 @@ import ObjectHelper from "../helpers/objectHelpers";
 import NetInfo from "@react-native-community/netinfo";
 import { resetScreen, Screens } from "../helpers/Screens";
 import { setToken } from "../containers/LoginScreen/loginSlice"
+import SpinnerActions from "../containers/spinner/SpinnerActions";
 
 const getLocation = (location) => {
   return links?.baseApi + location;
@@ -45,10 +46,12 @@ export const doPost = async (thunk, location, query, body, token) => {
 
   if (!NetInfoData?.isInternetReachable || !NetInfoData?.isConnected) {
     alert("Please Check your internet connection")
-    // thunk.dispatch(SpinnerActions.hideSpinner())
+    thunk.dispatch(SpinnerActions.hideSpinner())
   }
+  thunk.dispatch(SpinnerActions.showSpinner())
   const response = await fetch(url, config);
-  // thunk.dispatch(SpinnerActions.hideSpinner())
+  thunk.dispatch(SpinnerActions.hideSpinner())
+
   status(response)
   console.log(response, url, body,".............")
   return await response.json();
@@ -68,11 +71,11 @@ export const doPut = async (thunk, location, query, body, token) => {
   }
 
   const NetInfoData = await NetInfo.fetch()
-  // thunk.dispatch(SpinnerActions.showSpinner())
+  thunk.dispatch(SpinnerActions.showSpinner())
 
   if (!NetInfoData?.isInternetReachable || !NetInfoData?.isConnected) {
     alert("Please Check your internet connection")
-    // thunk.dispatch(SpinnerActions.hideSpinner())
+    thunk.dispatch(SpinnerActions.hideSpinner())
   }
 
   const response = await fetch(url, config);
@@ -95,9 +98,9 @@ export const doDel = async (thunk, location, query, body, token) => {
   if (token) {
     config.headers["Authorization"] = `Token ${token}`;
   }
-  // thunk.dispatch(SpinnerActions.showSpinner())
+  thunk.dispatch(SpinnerActions.showSpinner())
   const response = await fetch(url, config);
-  // thunk.dispatch(SpinnerActions.hideSpinner())
+  thunk.dispatch(SpinnerActions.hideSpinner())
   console.log(response, url, body,".............")
   status(response)
   return await response.json();
@@ -114,9 +117,9 @@ export const doGet = async (thunk, location, query, token) => {
   if (token) {
     config.headers["Authorization"] = `${token}`;
   }
-  // thunk.dispatch(SpinnerActions.showSpinner())
+  thunk.dispatch(SpinnerActions.showSpinner())
   const response = await fetch(url, config);
-  // thunk.dispatch(SpinnerActions.hideSpinner())
+  thunk.dispatch(SpinnerActions.hideSpinner())
   status(response)
   console.log(response, url,token, ".............")
   return await response.json();
