@@ -143,6 +143,10 @@ const LoginScreen = props => {
             <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
               Sign In
             </Text>
+            <Image
+                source={require('../../staticdata/images/white.png')}
+                style={{ marginLeft:7, height: 22, width: 25}}
+              />
           </TouchableOpacity>
         </View>
         <View
@@ -230,6 +234,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3F8CFF',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection:"row"
   },
   accountButton: {
     height: 40,
