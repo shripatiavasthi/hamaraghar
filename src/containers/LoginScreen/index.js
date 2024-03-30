@@ -27,6 +27,7 @@ import {
 import axios from 'axios';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import CommonTextInput from '../CommonTextInput/CommonTextInput';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -85,40 +86,12 @@ const LoginScreen = props => {
       </View>
       <View style={styles.subcontainer}>
         <Text style={styles.title}>Sign In to Hamaragharr</Text>
-        <View
-          style={{
-            width: '100%',
-            height: 50,
-            borderWidth: 1,
-            borderColor: '#ccc',
-            borderRadius: 5,
-            paddingHorizontal: 10,
-            marginBottom: 10,
-          }}>
-          <Text style={{fontSize: 14, color: '#7D8592', fontWeight: '700'}}>
-            Email Address
-          </Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            //  onChangeText={text => setEmail(text)}
-            //   value={email}
-            keyboardType="email-address"
-            autoCapitalize="none"
+          <CommonTextInput
+            headingtext={"Email Address"}
+            value={email}
+            onChangeText={setemail}
+            placeholder="Enter your email here"
           />
-        </View>
-        <View>
-          <Text style={{fontSize: 14, color: '#7D8592', fontWeight: '700'}}>
-            Email Address
-          </Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            //  onChangeText={text => setPassword(text)}
-            //  value={password}
-            secureTextEntry
-          />
-        </View>
         <Button title="Login" onPress={handleLogin} />
       </View>
     </View>
@@ -145,7 +118,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'yellow',
     flexGrow: 0.6,
     width: '90%',
-    padding : 20,
+    padding: 20,
     //  justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
