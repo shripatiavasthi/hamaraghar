@@ -28,6 +28,7 @@ import axios from 'axios';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CommonTextInput from '../CommonTextInput/CommonTextInput';
+import IMAGES from '../Allassets/Allassets';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -80,19 +81,85 @@ const LoginScreen = props => {
     <View style={styles.container}>
       <View style={styles.logocontainer}>
         <Image
-          source={require('../../staticdata/images/IMG-20231104-WA0002-removebg-preview 1.png')}
-          style={{height: 300, width: 300}}
+          source={require('../../staticdata/images/Brandlogo.png')}
+          style={{height: 70, width: 170}}
         />
       </View>
       <View style={styles.subcontainer}>
         <Text style={styles.title}>Sign In to Hamaragharr</Text>
-          <CommonTextInput
-            headingtext={"Email Address"}
-            value={email}
-            onChangeText={setemail}
-            placeholder="Enter your email here"
-          />
-        <Button title="Login" onPress={handleLogin} />
+        <CommonTextInput
+          headingtext={'Email Address'}
+          value={email}
+          onChangeText={setemail}
+          placeholder="Enter your email here"
+          password={false}
+          rightIconShow={false}
+        />
+        <CommonTextInput
+          headingtext={'Password'}
+          value={Password}
+          onChangeText={setPassword}
+          placeholder="Enter password"
+          password={true}
+          rightIconShow={true}
+        />
+        <View
+          style={{
+            height: 55,
+            paddingHorizontal: 10,
+            marginBottom: 10,
+            width: '100%',
+            justifyContent: 'center',
+            flexDirection: 'row',
+          }}>
+          <View style={styles.Inputtextfeildconatiner}>
+            <View style={{flexDirection:"row" , alignItems:"center"}}>
+              <Image
+                source={require('../../staticdata/images/selected.png')}
+                style={{height: 25, width: 25}}
+              />
+              <Text style={{ marginLeft:5, fontSize: 14, color: '#0A1629', fontWeight: '400'}}>
+                Remember me
+              </Text>
+            </View>
+            <TouchableOpacity>
+              <Text style={{fontSize: 14, color: '#7D8593', fontWeight: '400'}}>
+                Forgot Password?
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View
+          style={{
+            height: 73,
+            paddingHorizontal: 10,
+            marginBottom: 10,
+            width: '100%',
+            justifyContent: 'center',
+            flexDirection: 'row',
+            marginTop: 10,
+          }}>
+          <TouchableOpacity style={styles.SIgnInButton}>
+            <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+              Sign In
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            height: 60,
+            paddingHorizontal: 10,
+            marginBottom: 10,
+            width: '100%',
+            justifyContent: 'center',
+            flexDirection: 'row',
+          }}>
+          <TouchableOpacity style={styles.accountButton}>
+            <Text style={{fontSize: 16, color: '#3F8CFF', fontWeight: '600'}}>
+              Don’t have an account?
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -103,22 +170,21 @@ const styles = StyleSheet.create({
     flex: 1,
     // justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: 'lightblue',
+    paddingHorizontal: 10,
+    backgroundColor: '#F4F9FD',
   },
   logocontainer: {
     marginTop: '16%',
-    backgroundColor: 'pink',
     height: '14%',
     width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   subcontainer: {
-    backgroundColor: 'yellow',
-    flexGrow: 0.6,
+    backgroundColor: '#fff',
+    flexGrow: 0.2 / 7,
     width: '90%',
-    padding: 20,
+    padding: 10,
     //  justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 30,
@@ -132,7 +198,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '700',
-    marginBottom: 20,
+    marginVertical: 20,
     color: '#0A1629',
   },
   input: {
@@ -143,6 +209,35 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
+  },
+  Inputtextfeildconatiner: {
+    height: 40,
+    width: '100%',
+    borderColor: '#D8E0F0',
+    // borderWidth: 1,
+    borderRadius: 15,
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  SIgnInButton: {
+    height: 53,
+    width: '100%',
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    marginTop: 10,
+    backgroundColor: '#3F8CFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  accountButton: {
+    height: 40,
+    width: '100%',
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   // mainContinter: {
   //     flex: 1,
