@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
 import CustomHeader from '../CustomHeader/CustomHeader';
 import Svg, {Circle, Line, Path} from 'react-native-svg';
+import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 export const LeadGeneration = props => {
   const curveHeight = (100 * 50) / 100;
@@ -13,15 +14,16 @@ export const LeadGeneration = props => {
       {/* <View style={styles.subcontainer}>
 
         </View> */}
-      <View style={{alignItems: 'center' , backgroundColor:'yellow'}}>
-        <Svg height="100" width="100" viewBox="0 0 100 100">
-          <Path
-            d={`M 0 100 Q 50 ${100 - curveHeight} 100 100`}
-            fill="transparent"
-            stroke="#007bff"
-            strokeWidth="3"
-          />
-        </Svg>
+      <View style={{alignItems: 'center', backgroundColor: 'yellow'}}>
+        <AnimatedCircularProgress
+          size={200}
+          width={20}
+          fill={50}
+          tintColor="#00e0ff"
+          arcSweepAngle={180}
+          backgroundColor="#3d5875">
+          {fill => <Text>{"500000"}</Text>}
+        </AnimatedCircularProgress>
       </View>
     </SafeAreaView>
   );
