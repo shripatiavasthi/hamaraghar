@@ -139,7 +139,9 @@ const LoginScreen = props => {
             flexDirection: 'row',
             marginTop: 10,
           }}>
-          <TouchableOpacity style={styles.SIgnInButton}>
+          <TouchableOpacity style={styles.SIgnInButton} onPress={()=>{
+              navigation.navigate(Screens.LeadGeneration)    
+          }}>
             <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
               Sign In
             </Text>
