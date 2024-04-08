@@ -148,7 +148,7 @@ export const MainNaviagtor = (props) => {
       <NavigationContainer
         ref={navigationRef}>
         <Stack.Navigator
-          initialRouteName={props?.token ? Screens.Tabs : Screens.Login}
+          initialRouteName={props?.token ? Screens.Tabs : Screens.LeadGeneration}
         >
           <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />

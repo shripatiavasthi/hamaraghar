@@ -16,12 +16,14 @@ export const LeadGeneration = props => {
         </View> */}
       <View style={{alignItems: 'center', backgroundColor: 'yellow'}}>
         <AnimatedCircularProgress
-          size={200}
-          width={20}
-          fill={50}
-          tintColor="#00e0ff"
-          arcSweepAngle={180}
-          backgroundColor="#3d5875">
+           size={200}
+           width={10}
+           fill={50} // Change this value dynamically to update the progress
+           tintColor="#00e0ff"
+           backgroundColor="#3d5875"
+           rotation={-90} // Start from the top (12 o'clock position)
+           lineCap="round"
+           arcSweepAngle={180} >
           {fill => <Text>{"500000"}</Text>}
         </AnimatedCircularProgress>
       </View>
