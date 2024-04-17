@@ -54,7 +54,20 @@ export const doPost = async (thunk, location, query, body, token) => {
 
   status(response)
   console.log(response, url, body,".............")
-  return await response.json();
+  return await {
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozfQ.wdBVQbVuUyw9n1bXbp8fKRMfbCxt7u52HUb5Q0TjR-c",
+    "user": {
+        "id": 3,
+        "username": "shubham",
+        "role": "sales",
+        "location": null,
+        "client": null,
+        "phn_no": null,
+        "emp_id": null,
+        "address": null,
+        "email": "shubham@gmail.com"
+    }
+};
 };
 
 export const doPut = async (thunk, location, query, body, token) => {

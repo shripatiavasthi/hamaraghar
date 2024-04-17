@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {connect, useDispatch} from 'react-redux';
-import {unwrapResult} from '@reduxjs/toolkit';
 import {postLogin} from '../../Slices/LoginSlice';
 import {postUserLogin} from './loginSlice';
 import {alies_exist} from '../../Slices/AliesCheckSlice';
@@ -29,6 +28,7 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CommonTextInput from '../CommonTextInput/CommonTextInput';
 import IMAGES from '../Allassets/Allassets';
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const {height, width} = Dimensions.get('screen');
 
@@ -47,14 +47,14 @@ const LoginScreen = props => {
   const [lat, setlat] = useState('');
   const [lon, setlon] = useState('');
 
-  Geolocation.getCurrentPosition(info => {
-    setlat(info?.coords?.latitude);
-    setlon(info?.coords?.longitude);
-    console.log(info?.coords?.latitude, 'location data ');
-  });
+  // Geolocation.getCurrentPosition(info => {
+  //   setlat(info?.coords?.latitude);
+  //   setlon(info?.coords?.longitude);
+  //   console.log(info?.coords?.latitude, 'location data ');
+  // });
 
   useEffect(() => {
-    getlocation();
+   // getlocation();
   }, [lat && lon]);
 
   const getlocation = () => {
@@ -70,12 +70,20 @@ const LoginScreen = props => {
       });
   };
 
-  // testing start
-  const handleLogin = () => {
-    // Implement your login logic here
-    console.log('Logging in with:', email, password);
+
+  const handleLogin = async () => {
+    const data = {
+      body: {
+      email,
+      Password
+      },
+      query : {}
+    }
+    const res = await props.doLogin(data)
+    const result = await unwrapResult(res)
+    console.log(result,"pppppp")
   };
-  // testing end
+
 
   return (
     <View style={styles.container}>
@@ -139,9 +147,7 @@ const LoginScreen = props => {
             flexDirection: 'row',
             marginTop: 10,
           }}>
-          <TouchableOpacity style={styles.SIgnInButton} onPress={()=>{
-              navigation.navigate(Screens.LeadGeneration)    
-          }}>
+          <TouchableOpacity style={styles.SIgnInButton} onPress={handleLogin}>
             <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
               Sign In
             </Text>
