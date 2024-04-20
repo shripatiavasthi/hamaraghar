@@ -63,14 +63,16 @@ let Api = {
 
   doPost(location, body, successCallback, errorCallback, token) {
     let url = getLocation(location);
-    let headers = {
-      'Content-Type': 'application/json',
-    };
+    let headers = {}
+    if(formData){
+      headers['Content-Type'] = 'application/json'
+    }else{
+      headers['Content-Type'] = 'multipart/form-data'
+    }
     if (token) {
       headers['Authorization'] = `Token ${token}`;
     }
 
-    // console.log(url, body,"post api <<<<<<<<<");
     instance
       .post(url, JSON.stringify(body), {
         headers,

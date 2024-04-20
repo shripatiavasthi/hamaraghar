@@ -16,9 +16,9 @@ async function status(response) {
     // alert('Working fine ')
   }
   if (response.status >= 401 && response.status <= 403) {
-    alert(`Token expired please login again\nError code : ${response?.status}`)
-    setToken(null)
-    resetScreen(Screens?.Login)
+    alert(`Token expired please login again\nError code`)
+    // setToken(null)
+    // resetScreen(Screens?.Login)
   }
   if (response.status == 400 || (response.status >= 404 && response.status < 500)) {
     alert(`Something went wrong, please try again later\nError code : ${response?.status} `)
@@ -28,19 +28,32 @@ async function status(response) {
   }
 }
 
-export const doPost = async (thunk, location, query, body, token) => {
+export const doPost = async (thunk, location, query, body, token = false, formData = false) => {
   let url = getLocation(location) + ObjectHelper.getQueryString(query);
-
-  const config = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  };
-  if (token) {
-    config.headers["Authorization"] = `${token}`;
+  let config = {}
+  if(formData){
+     config = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    };
+  }else{
+     config = {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      body: body,
+    };
   }
+ 
+
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const NetInfoData = await NetInfo.fetch()
   // thunk.dispatch(SpinnerActions.showSpinner())
 
@@ -54,20 +67,7 @@ export const doPost = async (thunk, location, query, body, token) => {
 
   status(response)
   console.log(response, url, body,".............")
-  return await {
-    "token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozfQ.wdBVQbVuUyw9n1bXbp8fKRMfbCxt7u52HUb5Q0TjR-c",
-    "user": {
-        "id": 3,
-        "username": "shubham",
-        "role": "sales",
-        "location": null,
-        "client": null,
-        "phn_no": null,
-        "emp_id": null,
-        "address": null,
-        "email": "shubham@gmail.com"
-    }
-};
+  return await response.json()
 };
 
 export const doPut = async (thunk, location, query, body, token) => {
@@ -80,7 +80,7 @@ export const doPut = async (thunk, location, query, body, token) => {
     body: JSON.stringify(body),
   };
   if (token) {
-    config.headers["Authorization"] = `${token}`;
+    config.headers["Authorization"] = `Bearer ${token}`;
   }
 
   const NetInfoData = await NetInfo.fetch()
@@ -109,7 +109,7 @@ export const doDel = async (thunk, location, query, body, token) => {
     body: JSON.stringify(body),
   };
   if (token) {
-    config.headers["Authorization"] = `Token ${token}`;
+    config.headers["Authorization"] = `Bearer ${token}`;
   }
   thunk.dispatch(SpinnerActions.showSpinner())
   const response = await fetch(url, config);
@@ -119,7 +119,7 @@ export const doDel = async (thunk, location, query, body, token) => {
   return await response.json();
 };
 
-export const doGet = async (thunk, location, query, token) => {
+export const doGet = async (thunk, location, query, token = false) => {
   let url = getLocation(location) + ObjectHelper.getQueryString(query);
   console.log(url, query, token)
   const config = {
@@ -128,7 +128,7 @@ export const doGet = async (thunk, location, query, token) => {
     },
   };
   if (token) {
-    config.headers["Authorization"] = `${token}`;
+    config.headers["Authorization"] = `Bearer ${token}`;
   }
   thunk.dispatch(SpinnerActions.showSpinner())
   const response = await fetch(url, config);

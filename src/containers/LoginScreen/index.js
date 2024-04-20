@@ -72,16 +72,24 @@ const LoginScreen = props => {
 
 
   const handleLogin = async () => {
+
+   let fromBody = new FormData()
+   fromBody.append('email',email)
+   fromBody.append('password',Password)
+
     const data = {
-      body: {
-      email,
-      Password
-      },
-      query : {}
+      body: fromBody,
+      query : {},
+      formData : true
     }
+
     const res = await props.doLogin(data)
     const result = await unwrapResult(res)
-    console.log(result,"pppppp")
+
+    if(result?.token){
+      navigation.navigate("LeadGeneration")
+    }
+    
   };
 
 

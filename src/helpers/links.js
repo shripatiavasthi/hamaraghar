@@ -1,3 +1,3 @@
 module.exports = {
-    baseApi: "http://localhost:3000"
+    baseApi: "http://35.154.222.142"
 }
