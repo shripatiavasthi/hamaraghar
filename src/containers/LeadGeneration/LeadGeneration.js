@@ -18,6 +18,7 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import {getAllLead} from './leadGenerationSlice';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {TextInput} from 'react-native-gesture-handler';
+import {getfilterlist} from './getfilteractionSlice';
 
 const statuses = [
   {id: '1', name: 'Status 1'},
@@ -32,6 +33,7 @@ const statuses = [
 export const LeadGeneration = props => {
   const [data, setdata] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [filterstatedata, setfilterstatedata] = useState([]);
   const [optionshown, setOptionshown] = useState(false);
   const {width, height} = Dimensions.get('window');
 
@@ -46,16 +48,38 @@ export const LeadGeneration = props => {
       const result = await unwrapResult(res);
       setdata(result);
       console.log(result, 'all lead response');
+      const filterres = await props.filterdata(data);
+      const filterresult = await unwrapResult(filterres);
+      setfilterstatedata(filterresult.filter_hash);
+      console.log(filterresult.filter_hash, 'all filter response');
     });
   }, []);
+
+  const newrenderItem = ({item}) => (
+    <TouchableOpacity
+      onPress={() => {
+        setselectedstatus(item.name);
+      }}
+      style={{
+        borderColor: 'lightgray',
+        borderWidth: 0.8,
+        borderRadius: 10,
+        height: 40,
+        width: 85,
+        margin: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <Text>{item.name}</Text>
+    </TouchableOpacity>
+  );
 
   const renderItem = ({item}) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={()=>{
-        props.navigation.navigate("Productdetails")
-      }}
-      >
+      onPress={() => {
+        props.navigation.navigate('Productdetails');
+      }}>
       <View
         style={{
           flexDirection: 'row',
@@ -73,8 +97,7 @@ export const LeadGeneration = props => {
           <Text>Email : {item.client_email}</Text>
         </View>
       </View>
-      <View
-        style={styles.carddetailrow}>
+      <View style={styles.carddetailrow}>
         <View style={styles.gender}>
           <Text>Gender</Text>
           <Text>Male</Text>
@@ -88,8 +111,7 @@ export const LeadGeneration = props => {
           <Text>25</Text>
         </View>
       </View>
-      <View
-        style={styles.carddetailrow}>
+      <View style={styles.carddetailrow}>
         <View style={styles.gender}>
           <Text>Contact no.</Text>
           <Text>{item.contact_number}</Text>
@@ -141,24 +163,11 @@ export const LeadGeneration = props => {
         <View style={styles.modal}>
           <View style={styles.modalContent}>
             <Text>Please select status</Text>
-            <TouchableOpacity
-              style={styles.selectedoption}
-              onPress={() => setOptionshown(true)}>
-              <Text>Status</Text>
-            </TouchableOpacity>
-            {optionshown ? (
-              <View style={styles.optionsbox}>
-                <FlatList
-                  data={statuses}
-                  renderItem={renderStatus}
-                  keyExtractor={item => item.id}
-                />
-              </View>
-            ) : null}
-            <Text>Please select status</Text>
-            <TextInput
-              style={[styles.selectedoption, {height: 40}]}
-              placeholder="Please enter range"
+            <FlatList
+              data={filterstatedata}
+              renderItem={newrenderItem}
+              keyExtractor={item => item}
+              numColumns={3}
             />
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
@@ -169,8 +178,7 @@ export const LeadGeneration = props => {
                   backgroundColor: 'lightblue',
                   height: 40,
                 },
-              ]}
-              >
+              ]}>
               <Text style={{fontSize: 14, fontWeight: '700', color: '#fff'}}>
                 Submit
               </Text>
@@ -234,6 +242,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
+    justifyContent:"center",
+    alignItems:"center",
+    marginVertical:40
   },
   optionsbox: {
     height: 120,
@@ -259,24 +270,24 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     height: 30,
   },
-  carddetailrow:{
+  carddetailrow: {
     flexDirection: 'row',
     height: 60,
     alignItems: 'center',
-    justifyContent:"space-between"
+    justifyContent: 'space-between',
   },
-  gender:{
-    width:"33%",
-    height:"100%",
+  gender: {
+    width: '33%',
+    height: '100%',
   },
-  card:{
+  card: {
     height: 230,
     backgroundColor: '#fff',
     borderRadius: 25,
     marginTop: 12,
     paddingVertical: 10,
     paddingHorizontal: 20,
-  }
+  },
 });
 
 const mapStateToProps = state => ({
@@ -288,6 +299,9 @@ const mapDispatchToProps = dispatch => {
   return {
     allLead: data => {
       return dispatch(getAllLead(data));
+    },
+    filterdata: data => {
+      return dispatch(getfilterlist(data));
     },
   };
 };
