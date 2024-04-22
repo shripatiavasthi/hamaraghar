@@ -34,6 +34,7 @@ export const LeadGeneration = props => {
   const [data, setdata] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [filterstatedata, setfilterstatedata] = useState([]);
+  const [selectedfilterstatuses, setselectedfilterstatuses] = useState("");
   const [optionshown, setOptionshown] = useState(false);
   const {width, height} = Dimensions.get('window');
 
@@ -55,10 +56,22 @@ export const LeadGeneration = props => {
     });
   }, []);
 
+  const filter = async () => {
+    const data = {
+      query: { status : selectedfilterstatuses },
+      token: props?.token,
+    };
+
+    const res = await props.allLead(data);
+    const result = await unwrapResult(res);
+    setdata(result);
+    console.log(result, 'all lead response');
+  }
+
   const newrenderItem = ({item}) => (
     <TouchableOpacity
       onPress={() => {
-        setselectedstatus(item.name);
+        setselectedfilterstatuses(item.name);
       }}
       style={{
         borderColor: 'lightgray',
@@ -170,7 +183,12 @@ export const LeadGeneration = props => {
               numColumns={3}
             />
             <TouchableOpacity
-              onPress={() => setModalVisible(false)}
+              onPress={() => 
+                {
+                  filter()
+                setModalVisible(false)
+                }
+              }
               style={[
                 styles.selectedoption,
                 {

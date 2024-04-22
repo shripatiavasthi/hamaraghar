@@ -42,9 +42,10 @@ export const Productdetails = props => {
   const {width, height} = Dimensions.get('window');
 
   useEffect(() => {
+    console.log(props.route.params.item.id ,"all>>>>>>>>>>>>>>>")
     props.navigation.addListener('focus', async () => {
       const data = {
-        query: {},
+        query: { id : props.route.params.item.id },
         token: props?.token,
       };
 
