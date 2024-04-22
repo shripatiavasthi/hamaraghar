@@ -37,7 +37,7 @@ export const Productdetails = props => {
   const [data, setdata] = useState([]);
   const [filterstatedata, setfilterstatedata] = useState([]);
   const [userlistdata, setuserlistdata] = useState([]);
-  const [selectedstatus , setselectedstatus] = useState("")
+  const [selectedstatus, setselectedstatus] = useState('');
   const [userid, setuserid] = useState(0);
   const {width, height} = Dimensions.get('window');
 
@@ -84,9 +84,9 @@ export const Productdetails = props => {
 
   const newrenderItem = ({item}) => (
     <TouchableOpacity
-    onPress={()=>{
-        setselectedstatus(item.name)
-    }}
+      onPress={() => {
+        setselectedstatus(item.name);
+      }}
       style={{
         borderColor: 'lightgray',
         borderWidth: 0.8,
@@ -173,13 +173,17 @@ export const Productdetails = props => {
             <Text>{data.status}</Text>
           </View>
         </View>
-        <Text>All users</Text>
-        <FlatList
-          data={userlistdata}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          numColumns={3}
-        />
+        {data.admin ? (
+          <>
+            <Text>All users</Text>
+            <FlatList
+              data={userlistdata}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+              numColumns={3}
+            />
+          </>
+        ) : null}
         <Text>All status</Text>
         <FlatList
           data={filterstatedata}

@@ -78,7 +78,7 @@ export const LeadGeneration = props => {
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
-        props.navigation.navigate('Productdetails');
+        props.navigation.navigate('Productdetails',{item : item});
       }}>
       <View
         style={{
