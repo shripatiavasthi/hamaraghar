@@ -26,5 +26,9 @@ module.exports = {
   POST_SEARCH_TIMELINE : '/post/search_timeline',
   POST_CREATE_REPLY : '/post/create_reply',
   GET_CURRENT_USER_NAME : '/user/',
-  GET_LEAD_ALL : '/lead/'
+  GET_LEAD_ALL : '/lead/',
+  GET_PRODUCT_DETAILS : '/lead_info?id=1',
+  GET_FILTER_API : '/lead/filter',
+  GET_USER_LIST_API : "/user_list",
+  USER_UPDATE_API : '/lead/2'
 };

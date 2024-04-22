@@ -39,5 +39,6 @@ export const Screens = {
  Post : 'Post',
  Real : 'Real',
  Profile : 'Profile',
- LeadGeneration :'LeadGeneration'
+ LeadGeneration :'LeadGeneration',
+ Productdetails : 'Productdetails'
 };

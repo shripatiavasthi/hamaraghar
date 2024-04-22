@@ -40,6 +40,7 @@ import { setToken } from '../containers/LoginScreen/loginSlice';
 import { navigationRef } from '../helpers/Screens'
 import Profile from '../containers/Profile/Profile'
 import LeadGeneration from "../containers/LeadGeneration/LeadGeneration"
+import Productdetails from "../containers/Productdetails/Productdetails"
 
 let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
@@ -171,6 +172,7 @@ export const MainNaviagtor = (props) => {
           <Stack.Screen name={Screens.InviteSucess} component={InviteSucess} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.SubCategories} component={SubCategories} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.LeadGeneration} component={LeadGeneration} options={{ headerShown: false }} />
+          <Stack.Screen name={Screens.Productdetails} component={Productdetails} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.AddName} component={AddName} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.VerifyOtp} component={VerifyEmailorPhone} options={{ headerShown: false }} />
           <Stack.Screen name="CreateUser" component={CreateUser} options={{ headerShown: false }} />
