@@ -149,7 +149,7 @@ export const LeadGeneration = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader />
+      <CustomHeader  navigation = {props.navigation} />
       <Text
         style={[
           {fontSize: 36, color: '#0A1629', marginTop: 36, fontWeight: '600'},

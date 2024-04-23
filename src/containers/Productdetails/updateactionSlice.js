@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { doPost, doGet, doDel ,doPut } from "../../Slices/api";
+import { doPost, doGet, doDel ,doPut , doPatch } from "../../Slices/api";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import location from "../../helpers/locations";
 
@@ -11,14 +11,14 @@ const initialState = {
   token : null
 };
 
-export const postUserLogin = createAsyncThunk(
-  "postUserLoginNew",
+export const Userupdate = createAsyncThunk(
+  "updateuser",
   async (data, thunkAPI) => {
-    return await doPost(thunkAPI,location.USER_UPDATE_API, data?.query, data?.body, data?.formData);
+    return await doPatch(thunkAPI,location.USER_UPDATE_API, data?.query, data?.body, data?.token);
   }
 );
 
-const loginSlice = createSlice({
+const userUpdateSlice = createSlice({
   name: "StoreAddress",
   initialState,
   reducers: {
@@ -28,21 +28,21 @@ const loginSlice = createSlice({
     setAddressStateSlider(state, action) {
      
     },
-    setToken(state,action){
-      state.token = action.payload;
-    }
+    // setToken(state,action){
+    //   state.token = action.payload;
+    // }
   },
 
   extraReducers: (builder) => {
     builder
-      .addCase(postUserLogin.pending, (state) => {
+      .addCase(Userupdate.pending, (state) => {
         state.pending = true;
       })
-      .addCase(postUserLogin.fulfilled, (state, action) => {
+      .addCase(Userupdate.fulfilled, (state, action) => {
         state.pending = false;
-        state.token = action.payload.token;
+      //  state.token = action.payload.token;
       })
-      .addCase(postUserLogin.rejected, (state) => {
+      .addCase(Userupdate.rejected, (state) => {
         state.pending = false;
         state.error = true;
       });
@@ -54,5 +54,5 @@ const loginSlice = createSlice({
 export const {
   rehydrate,
   setToken
-} = loginSlice.actions;
-export default loginSlice.reducer;
+} = userUpdateSlice.actions;
+export default userUpdateSlice.reducer;

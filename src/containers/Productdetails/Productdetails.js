@@ -19,7 +19,7 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import {getAllLead} from './leadGenerationSlice';
 import {getuserlist} from './getuserlistactionSlice';
 import {getfilterlist} from './getfilteractionSlice';
-import {postUserLogin} from './updateactionSlice';
+import {Userupdate} from './updateactionSlice';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {TextInput} from 'react-native-gesture-handler';
 
@@ -52,6 +52,7 @@ export const Productdetails = props => {
       const res = await props.allLead(data);
       const result = await unwrapResult(res);
       setdata(result);
+      setuserid(result.user_id)
       console.log(result, 'all product response response');
       const userres = await props.alluser(data);
       const userresult = await unwrapResult(userres);
@@ -103,15 +104,17 @@ export const Productdetails = props => {
   );
 
   const handleLogin = async () => {
-    let fromBody = new FormData();
-    fromBody.append('status', selectedstatus);
-    fromBody.append('user_id', userid);
-
+   
     const data = {
-      body: fromBody,
-      query: {},
-      formData: true,
+      body: {id :  userid},
+      query: {
+        status : selectedstatus,
+        user_id : userid ,
+      },
+      token: props?.token,
     };
+
+    console.log(data , "datainpatch")
 
     const res = await props.doLogin(data);
     const result = await unwrapResult(res);
@@ -121,7 +124,7 @@ export const Productdetails = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader />
+      <CustomHeader navigation = {props.navigation} />
       <Text
         style={[
           {fontSize: 36, color: '#0A1629', marginTop: 36, fontWeight: '600'},
@@ -304,7 +307,7 @@ const mapDispatchToProps = dispatch => {
       return dispatch(getfilterlist(data));
     },
     doLogin: data => {
-      return dispatch(postUserLogin(data));
+      return dispatch(Userupdate(data));
     },
   };
 };

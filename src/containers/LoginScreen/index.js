@@ -28,7 +28,7 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CommonTextInput from '../CommonTextInput/CommonTextInput';
 import IMAGES from '../Allassets/Allassets';
-import { unwrapResult } from '@reduxjs/toolkit'
+import {unwrapResult} from '@reduxjs/toolkit';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -54,7 +54,7 @@ const LoginScreen = props => {
   // });
 
   useEffect(() => {
-   // getlocation();
+    // getlocation();
   }, [lat && lon]);
 
   const getlocation = () => {
@@ -70,28 +70,24 @@ const LoginScreen = props => {
       });
   };
 
-
   const handleLogin = async () => {
-
-   let fromBody = new FormData()
-   fromBody.append('email',email)
-   fromBody.append('password',Password)
+    let fromBody = new FormData();
+    fromBody.append('email', email);
+    fromBody.append('password', Password);
 
     const data = {
       body: fromBody,
-      query : {},
-      formData : true
-    }
+      query: {},
+      formData: true,
+    };
 
-    const res = await props.doLogin(data)
-    const result = await unwrapResult(res)
+    const res = await props.doLogin(data);
+    const result = await unwrapResult(res);
 
-    if(result?.token){
-      navigation.navigate("LeadGeneration")
+    if (result?.token) {
+      navigation.navigate('LeadGeneration');
     }
-    
   };
-
 
   return (
     <View style={styles.container}>
@@ -129,12 +125,18 @@ const LoginScreen = props => {
             flexDirection: 'row',
           }}>
           <View style={styles.Inputtextfeildconatiner}>
-            <View style={{flexDirection:"row" , alignItems:"center"}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
                 source={require('../../staticdata/images/selected.png')}
                 style={{height: 25, width: 25}}
               />
-              <Text style={{ marginLeft:5, fontSize: 14, color: '#0A1629', fontWeight: '400'}}>
+              <Text
+                style={{
+                  marginLeft: 5,
+                  fontSize: 14,
+                  color: '#0A1629',
+                  fontWeight: '400',
+                }}>
                 Remember me
               </Text>
             </View>
@@ -160,9 +162,9 @@ const LoginScreen = props => {
               Sign In
             </Text>
             <Image
-                source={require('../../staticdata/images/white.png')}
-                style={{ marginLeft:7, height: 22, width: 25}}
-              />
+              source={require('../../staticdata/images/white.png')}
+              style={{marginLeft: 7, height: 22, width: 25}}
+            />
           </TouchableOpacity>
         </View>
         <View
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3F8CFF',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection:"row"
+    flexDirection: 'row',
   },
   accountButton: {
     height: 40,

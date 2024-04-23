@@ -43,10 +43,14 @@ export const CustomHeader = props => {
             <Line x1="21" y1="21" x2="16.65" y2="16.65" />
           </Svg>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.profile}>
+        <TouchableOpacity
+          style={styles.profile}
+          onPress={() => {
+            props.navigation.navigate("ChangePassword")
+          }}>
           <Image
             source={require('../../staticdata/images/Avatar5.jpeg')}
-            style={{height: 30, width: 30,borderRadius:50}}
+            style={{height: 30, width: 30, borderRadius: 50}}
           />
         </TouchableOpacity>
       </View>
@@ -55,32 +59,34 @@ export const CustomHeader = props => {
 };
 
 const styles = StyleSheet.create({
-    constainer:{
-        backgroundColor:"#fff",
-        height:"9%",
-        width:"100%",
-        flexDirection:"row",
-        marginTop:10,
-        borderRadius:25
-    },
-    firstconatiner:{
-        width:"50%",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    secondconatiner:{
-        width:"50%",
-        flexDirection:"row",
-        alignItems: "center",
-        justifyContent: "space-evenly",
-    },
-    profile:{
-        backgroundColor:"pink",
-        borderRadius:50
-    }
+  constainer: {
+    backgroundColor: '#fff',
+    height: '9%',
+    width: '100%',
+    flexDirection: 'row',
+    marginTop: 10,
+    borderRadius: 25,
+  },
+  firstconatiner: {
+    width: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  secondconatiner: {
+    width: '50%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  profile: {
+    backgroundColor: 'pink',
+    borderRadius: 50,
+  },
 });
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+
+});
 
 const mapDispatchToProps = {};
 

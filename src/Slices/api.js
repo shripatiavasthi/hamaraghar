@@ -137,3 +137,25 @@ export const doGet = async (thunk, location, query, token = false) => {
   console.log(response, url,token, ".............")
   return await response.json();
 };
+
+export const doPatch = async (thunk,location , query, body, token) => {
+  let url = getLocation(location) + ObjectHelper.getQueryString(query);
+
+  const requestOptions  = {
+    method: "PATCH",
+    body: JSON.stringify(body),
+    redirect: "follow",
+    headers : {
+      "Content-Type" : "application/json"
+    }
+  };
+
+  if(token){
+    if (token) {
+      requestOptions.headers["Authorization"] = `Bearer ${token}`;
+    }
+  }
+
+  const response = await fetch(url, requestOptions)
+  return await response.json();
+}

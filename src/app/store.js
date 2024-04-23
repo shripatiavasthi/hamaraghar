@@ -11,6 +11,8 @@ import Belongslice from '../Slices/Belongslice';
 import loginSliceNew from "../containers/LoginScreen/loginSlice";
 import spinner from "../containers/spinner/SpinnerReducer";
 import leadGenerationSlice from "../containers/LeadGeneration/leadGenerationSlice"
+import Updatestatus from "../containers/Productdetails/updateactionSlice"
+
 
 
 const reducers = combineReducers({
@@ -21,7 +23,8 @@ const reducers = combineReducers({
     Belongslice,
     loginSliceNew,
     spinner,
-    leadGenerationSlice
+    leadGenerationSlice,
+    Updatestatus
 });
 
 const persistConfig = {
