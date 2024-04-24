@@ -16,88 +16,163 @@ import CustomHeader from '../CustomHeader/CustomHeader';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {TextInput} from 'react-native-gesture-handler';
 import CommonTextInput from '../CommonTextInput/CommonTextInput';
+import {changePassword} from "./ChangepasswordSlice"
+import {logout} from "./logoutSlice"
+
 
 export const ChangePassword = props => {
-
-const [oldpassword , setoldpassword] = useState('')
-const [newpassword , setnewpassword] = useState('')
-const [confirmpassword , setconfirmpassword] = useState('')
-
+  const [oldpassword, setoldpassword] = useState('');
+  const [newpassword, setnewpassword] = useState('');
+  const [confirmpassword, setconfirmpassword] = useState('');
+  const [show, setshow] = useState(true);
 
   useEffect(() => {
-    // console.log(props.route.params.item.id, 'all>>>>>>>>>>>>>>>');
-    // props.navigation.addListener('focus', async () => {
-    //   const data = {
-    //     query: {id: props.route.params.item.id},
-    //     token: props?.token,
-    //   };
-
-    //   const res = await props.allLead(data);
-    //   const result = await unwrapResult(res);
-    //   setdata(result);
-    //   console.log(result, 'all product response response');
-    //   const userres = await props.alluser(data);
-    //   const userresult = await unwrapResult(userres);
-    //   setuserlistdata(userresult.list);
-    //   console.log(userresult, 'all user list');
-    //   const filterres = await props.filterdata(data);
-    //   const filterresult = await unwrapResult(filterres);
-    //   setfilterstatedata(filterresult.filter_hash);
-    //   console.log(filterresult.filter_hash, 'all filter response');
-    // });
+   
   }, []);
+
+  const handleLogin = async () => {
+    let fromBody = new FormData();
+    fromBody.append('current_password', oldpassword);
+    fromBody.append('password', newpassword);
+    fromBody.append('password_confirmation', confirmpassword);
+
+    const data = {
+      body: fromBody,
+      query: {},
+      formData: true,
+      token: props?.token,
+    };
+
+    console.log(data , "data in change api")
+
+    const res = await props.dochangepassword(data);
+    const result = await unwrapResult(res);
+
+    console.log(result,"check resuklt")
+  };
+
+  const logout =  () => {
+    
+
+    // const res = await props.dologout(data);
+    // const result = await unwrapResult(res);
+
+    // console.log(result,"check resuklt")
+    props.navigation.navigate('Login');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader />
-      <Text
-        style={[
-          {fontSize: 36, color: '#0A1629', marginTop: 36, fontWeight: '600'},
-        ]}>
-        Change password
-      </Text>
-      <View>
-        <CommonTextInput
-          headingtext={'Old password'}
-          value={oldpassword}
-          onChangeText={setoldpassword}
-          placeholder="Enter your email here"
-          password={false}
-          rightIconShow={false}
-        />
-        <CommonTextInput
-          headingtext={'New password'}
-          value={newpassword}
-          onChangeText={setnewpassword}
-          placeholder="Enter your email here"
-          password={false}
-          rightIconShow={false}
-        />
-        <CommonTextInput
-          headingtext={'Confirm password'}
-          value={confirmpassword}
-          onChangeText={setconfirmpassword}
-          placeholder="Enter your email here"
-          password={false}
-          rightIconShow={false}
-        />
-         <View
-          style={{
-            height: 73,
-            paddingHorizontal: 10,
-            marginBottom: 10,
-            width: '100%',
-            justifyContent: 'center',
-            flexDirection: 'row',
-            marginTop: 10,
-          }}>
-          <TouchableOpacity style={styles.SIgnInButton} >
-            <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
-              Submit
-            </Text>
-          </TouchableOpacity>
+      {show ? (
+        <View>
+          <View
+            style={{
+              height: 73,
+              paddingHorizontal: 10,
+              marginBottom: 10,
+              width: '100%',
+              justifyContent: 'center',
+              flexDirection: 'row',
+              marginTop: 10,
+            }}>
+            <TouchableOpacity
+              style={styles.SIgnInButton}
+              onPress={() => {
+                setshow(false);
+              }}>
+              <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+                Change password
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              height: 73,
+              paddingHorizontal: 10,
+              marginBottom: 10,
+              width: '100%',
+              justifyContent: 'center',
+              flexDirection: 'row',
+              marginTop: 10,
+            }}>
+            <TouchableOpacity style={styles.SIgnInButton} onPress={()=>{logout()}}>
+              <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+                Log out
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      ) : (
+        <>
+          <Text
+            style={[
+              {
+                fontSize: 36,
+                color: '#0A1629',
+                marginTop: 36,
+                fontWeight: '600',
+              },
+            ]}>
+            Change password
+          </Text>
+          <View>
+            <CommonTextInput
+              headingtext={'Old password'}
+              value={oldpassword}
+              onChangeText={setoldpassword}
+              placeholder="Enter your email here"
+              password={false}
+              rightIconShow={false}
+            />
+            <CommonTextInput
+              headingtext={'New password'}
+              value={newpassword}
+              onChangeText={setnewpassword}
+              placeholder="Enter your email here"
+              password={false}
+              rightIconShow={false}
+            />
+            <CommonTextInput
+              headingtext={'Confirm password'}
+              value={confirmpassword}
+              onChangeText={setconfirmpassword}
+              placeholder="Enter your email here"
+              password={false}
+              rightIconShow={false}
+            />
+            <View
+              style={{
+                height: 73,
+                paddingHorizontal: 10,
+                marginBottom: 10,
+                width: '100%',
+                justifyContent: 'center',
+                flexDirection: 'row',
+                marginTop: 10,
+              }}>
+              <TouchableOpacity
+                style={styles.SIgnInButton}
+                onPress={() => {
+                  if(oldpassword == ""){
+                    alert("Please enter your oldpassword")
+                  }else if(newpassword == ""){
+                    alert("Please enter your newpassword")
+                  }
+                  else if(confirmpassword == ""){
+                    alert("Please enter your confirmpassword")
+                  } else if (oldpassword != "" && newpassword != "" && confirmpassword != ""){
+                  handleLogin()
+                  }
+                }}>
+                <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+                  Submit
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </>
+      )}
     </SafeAreaView>
   );
 };
@@ -193,7 +268,14 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    dochangepassword: data => {
+      return dispatch(changePassword(data));
+    },
+    dologout: data => {
+      return dispatch(logout(data));
+    },
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword);

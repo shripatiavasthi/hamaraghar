@@ -82,6 +82,7 @@ export const LeadGeneration = props => {
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor : selectedfilterstatuses == item.name ? "lightblue" : "white"
       }}>
       <Text>{item.name}</Text>
     </TouchableOpacity>
@@ -187,13 +188,14 @@ export const LeadGeneration = props => {
                 {
                   filter()
                 setModalVisible(false)
+                setselectedfilterstatuses("")
                 }
               }
               style={[
                 styles.selectedoption,
                 {
                   alignItems: 'center',
-                  backgroundColor: 'lightblue',
+                  backgroundColor: selectedfilterstatuses != "" ?  'lightblue':"lightgray",
                   height: 40,
                 },
               ]}>

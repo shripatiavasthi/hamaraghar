@@ -12,7 +12,7 @@ import loginSliceNew from "../containers/LoginScreen/loginSlice";
 import spinner from "../containers/spinner/SpinnerReducer";
 import leadGenerationSlice from "../containers/LeadGeneration/leadGenerationSlice"
 import Updatestatus from "../containers/Productdetails/updateactionSlice"
-
+import changepasswordSlice from "../containers/Changepassword/ChangepasswordSlice"
 
 
 const reducers = combineReducers({
@@ -24,7 +24,8 @@ const reducers = combineReducers({
     loginSliceNew,
     spinner,
     leadGenerationSlice,
-    Updatestatus
+    Updatestatus,
+    changepasswordSlice
 });
 
 const persistConfig = {

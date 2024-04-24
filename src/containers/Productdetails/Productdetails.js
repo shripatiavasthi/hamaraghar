@@ -40,6 +40,8 @@ export const Productdetails = props => {
   const [selectedstatus, setselectedstatus] = useState('');
   const [userid, setuserid] = useState(0);
   const {width, height} = Dimensions.get('window');
+  const [selectedoptionone , setoptionone] = useState("")
+  const [selectedoptiontwo , setoptiontwo] = useState("")
 
   useEffect(() => {
     console.log(props.route.params.item.id ,"all>>>>>>>>>>>>>>>")
@@ -79,6 +81,7 @@ export const Productdetails = props => {
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor : userid == item.id ? "lightblue" : 'white'
       }}>
       <Text>{item.name}</Text>
     </TouchableOpacity>
@@ -98,6 +101,8 @@ export const Productdetails = props => {
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor : selectedstatus == item.name ? "lightblue" : 'white'
+        
       }}>
       <Text>{item.name}</Text>
     </TouchableOpacity>
@@ -195,7 +200,7 @@ export const Productdetails = props => {
           keyExtractor={item => item}
           numColumns={3}
         />
-        <TouchableOpacity style={styles.SIgnInButton} onPress={handleLogin}>
+        <TouchableOpacity style={[styles.SIgnInButton,  selectedstatus != "" ? {backgroundColor:"#3F8CFF"} : {backgroundColor:"lightgray"} ]} onPress={handleLogin}>
           <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
             Update
           </Text>
@@ -282,7 +287,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     paddingHorizontal: 10,
     marginTop: 10,
-    backgroundColor: '#3F8CFF',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
