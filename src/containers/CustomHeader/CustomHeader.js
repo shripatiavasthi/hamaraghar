@@ -16,7 +16,7 @@ export const CustomHeader = props => {
         <TouchableOpacity
           style={styles.profile}
           onPress={() => {
-            props.navigation.navigate("ChangePassword")
+            props.navigation.navigate("Profile")
           }}>
           <Image
             source={require('../../staticdata/images/Avatar5.jpeg')}

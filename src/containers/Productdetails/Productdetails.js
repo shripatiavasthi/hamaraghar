@@ -11,6 +11,8 @@ import {
   Image,
   Modal,
   ScrollView,
+  DatePickerAndroid,
+  Button,
 } from 'react-native';
 import CustomHeader from '../CustomHeader/CustomHeader';
 import {navigate, Screens} from '../../helpers/Screens';
@@ -22,6 +24,8 @@ import {getfilterlist} from './getfilteractionSlice';
 import {Userupdate} from './updateactionSlice';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {TextInput} from 'react-native-gesture-handler';
+import DatePicker from 'react-native-date-picker';
+import moment from 'moment';
 
 const statuses = [
   {id: '1', name: 'Status 1'},
@@ -39,22 +43,22 @@ export const Productdetails = props => {
   const [userlistdata, setuserlistdata] = useState([]);
   const [selectedstatus, setselectedstatus] = useState('');
   const [userid, setuserid] = useState(0);
-  const {width, height} = Dimensions.get('window');
-  const [selectedoptionone , setoptionone] = useState("")
-  const [selectedoptiontwo , setoptiontwo] = useState("")
+  const [selecteddate , setselecteddate] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    console.log(props.route.params.item.id ,"all>>>>>>>>>>>>>>>")
+    console.log(props.route.params.item.id, 'all>>>>>>>>>>>>>>>');
     props.navigation.addListener('focus', async () => {
       const data = {
-        query: { id : props.route.params.item.id },
+        query: {id: props.route.params.item.id},
         token: props?.token,
       };
 
       const res = await props.allLead(data);
       const result = await unwrapResult(res);
       setdata(result);
-      setuserid(result.user_id)
+      setuserid(result.user_id);
       console.log(result, 'all product response response');
       const userres = await props.alluser(data);
       const userresult = await unwrapResult(userres);
@@ -81,7 +85,7 @@ export const Productdetails = props => {
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor : userid == item.id ? "lightblue" : 'white'
+        backgroundColor: userid == item.id ? 'lightblue' : 'white',
       }}>
       <Text>{item.name}</Text>
     </TouchableOpacity>
@@ -101,25 +105,23 @@ export const Productdetails = props => {
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor : selectedstatus == item.name ? "lightblue" : 'white'
-        
+        backgroundColor: selectedstatus == item.name ? 'lightblue' : 'white',
       }}>
       <Text>{item.name}</Text>
     </TouchableOpacity>
   );
 
   const handleLogin = async () => {
-   
     const data = {
-      body: {id :  userid},
+      body: {id: userid},
       query: {
-        status : selectedstatus,
-        user_id : userid ,
+        status: selectedstatus,
+        user_id: userid,
       },
       token: props?.token,
     };
 
-    console.log(data , "datainpatch")
+    console.log(data, 'datainpatch');
 
     const res = await props.doLogin(data);
     const result = await unwrapResult(res);
@@ -129,13 +131,21 @@ export const Productdetails = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader navigation = {props.navigation} />
-      <Text
-        style={[
-          {fontSize: 36, color: '#0A1629', marginTop: 36, fontWeight: '600'},
-        ]}>
-        Product Details
-      </Text>
+      <CustomHeader navigation={props.navigation} />
+      <View style={styles.headercontainer}>
+        <TouchableOpacity>
+          <Image
+            source={require('../../staticdata/images/backarrow.png')}
+            style={{height: 30, width: 30, borderRadius: 50}}
+          />
+        </TouchableOpacity>
+        <Text
+          style={[
+            {fontSize: 36, color: '#0A1629', fontWeight: '600', marginLeft: 10},
+          ]}>
+          Product Details
+        </Text>
+      </View>
       <ScrollView style={styles.card}>
         <View
           style={{
@@ -200,11 +210,57 @@ export const Productdetails = props => {
           keyExtractor={item => item}
           numColumns={3}
         />
-        <TouchableOpacity style={[styles.SIgnInButton,  selectedstatus != "" ? {backgroundColor:"#3F8CFF"} : {backgroundColor:"lightgray"} ]} onPress={handleLogin}>
+        <TouchableOpacity
+          style={{backgroundColor:"white", borderColor:"lightgray",borderWidth:0.9,padding:15,borderRadius:20}}
+          onPress={()=>{
+            setOpen(true)
+            console.log(date,"beforeselection")
+          }}>
+          <Text style={{fontSize: 16, color: '#000', fontWeight: '400'}}>
+             {selecteddate ? moment(selecteddate).format('MMMM Do YYYY, h:mm:ss a')  : "Select date and time" }
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.SIgnInButton,
+            selectedstatus != ''
+              ? {backgroundColor: '#3F8CFF'}
+              : {backgroundColor: 'lightgray'},
+          ]}
+          onPress={handleLogin}>
           <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
             Update
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.SIgnInButton,
+            selecteddate != ''
+              ? {backgroundColor: '#3F8CFF'}
+              : {backgroundColor: 'lightgray'},
+          ]}
+          onPress={() => {
+          
+          }}>
+          <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+            Schedule meeting 
+          </Text>
+        </TouchableOpacity>
+
+        <DatePicker
+          modal
+          open={open}
+          date={date}
+          onConfirm={date => {
+            setOpen(false);
+            setDate(date);
+            setselecteddate(date)
+            console.log( typeof(date), 'selected date');
+          }}
+          onCancel={() => {
+            setOpen(false);
+          }}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -219,6 +275,11 @@ const styles = StyleSheet.create({
   subcontainer: {
     flex: 1,
     backgroundColor: 'red',
+  },
+  headercontainer: {
+    height: 60,
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   filterbutton: {
     backgroundColor: 'lightblue',

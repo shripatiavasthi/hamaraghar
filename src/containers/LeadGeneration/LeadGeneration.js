@@ -34,7 +34,7 @@ export const LeadGeneration = props => {
   const [data, setdata] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [filterstatedata, setfilterstatedata] = useState([]);
-  const [selectedfilterstatuses, setselectedfilterstatuses] = useState("");
+  const [selectedfilterstatuses, setselectedfilterstatuses] = useState('');
   const [optionshown, setOptionshown] = useState(false);
   const {width, height} = Dimensions.get('window');
 
@@ -58,7 +58,7 @@ export const LeadGeneration = props => {
 
   const filter = async () => {
     const data = {
-      query: { status : selectedfilterstatuses },
+      query: {status: selectedfilterstatuses},
       token: props?.token,
     };
 
@@ -66,7 +66,7 @@ export const LeadGeneration = props => {
     const result = await unwrapResult(res);
     setdata(result);
     console.log(result, 'all lead response');
-  }
+  };
 
   const newrenderItem = ({item}) => (
     <TouchableOpacity
@@ -82,7 +82,8 @@ export const LeadGeneration = props => {
         margin: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor : selectedfilterstatuses == item.name ? "lightblue" : "white"
+        backgroundColor:
+          selectedfilterstatuses == item.name ? 'lightblue' : 'white',
       }}>
       <Text>{item.name}</Text>
     </TouchableOpacity>
@@ -92,7 +93,7 @@ export const LeadGeneration = props => {
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
-        props.navigation.navigate('Productdetails',{item : item});
+        props.navigation.navigate('Productdetails', {item: item});
       }}>
       <View
         style={{
@@ -142,21 +143,25 @@ export const LeadGeneration = props => {
     </TouchableOpacity>
   );
 
-  const renderStatus = ({item}) => (
-    <TouchableOpacity style={styles.item} onPress={() => setOptionshown(false)}>
-      <Text>{item.name}</Text>
-    </TouchableOpacity>
-  );
+
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader  navigation = {props.navigation} />
-      <Text
-        style={[
-          {fontSize: 36, color: '#0A1629', marginTop: 36, fontWeight: '600'},
-        ]}>
-        Lead Generation
-      </Text>
+      <CustomHeader navigation={props.navigation} />
+      <View style={styles.headercontainer}>
+        <TouchableOpacity>
+          <Image
+            source={require('../../staticdata/images/backarrow.png')}
+            style={{height: 30, width: 30, borderRadius: 50}}
+          />
+        </TouchableOpacity>
+        <Text
+          style={[
+            {fontSize: 36, color: '#0A1629', fontWeight: '600', marginLeft: 10},
+          ]}>
+          Lead Generation
+        </Text>
+      </View>
       <TouchableOpacity
         style={styles.filterbutton}
         onPress={() => setModalVisible(true)}>
@@ -184,18 +189,17 @@ export const LeadGeneration = props => {
               numColumns={3}
             />
             <TouchableOpacity
-              onPress={() => 
-                {
-                  filter()
-                setModalVisible(false)
-                setselectedfilterstatuses("")
-                }
-              }
+              onPress={() => {
+                filter();
+                setModalVisible(false);
+                setselectedfilterstatuses('');
+              }}
               style={[
                 styles.selectedoption,
                 {
                   alignItems: 'center',
-                  backgroundColor: selectedfilterstatuses != "" ?  'lightblue':"lightgray",
+                  backgroundColor:
+                    selectedfilterstatuses != '' ? 'lightblue' : 'lightgray',
                   height: 40,
                 },
               ]}>
@@ -244,6 +248,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'red',
   },
+  headercontainer: {
+    height: 60,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   filterbutton: {
     backgroundColor: 'lightblue',
     height: 30,
@@ -262,9 +271,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    justifyContent:"center",
-    alignItems:"center",
-    marginVertical:40
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 40,
   },
   optionsbox: {
     height: 120,

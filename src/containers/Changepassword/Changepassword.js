@@ -63,59 +63,23 @@ export const ChangePassword = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CustomHeader />
-      {show ? (
-        <View>
-          <View
-            style={{
-              height: 73,
-              paddingHorizontal: 10,
-              marginBottom: 10,
-              width: '100%',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              marginTop: 10,
-            }}>
-            <TouchableOpacity
-              style={styles.SIgnInButton}
-              onPress={() => {
-                setshow(false);
-              }}>
-              <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
-                Change password
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              height: 73,
-              paddingHorizontal: 10,
-              marginBottom: 10,
-              width: '100%',
-              justifyContent: 'center',
-              flexDirection: 'row',
-              marginTop: 10,
-            }}>
-            <TouchableOpacity style={styles.SIgnInButton} onPress={()=>{logout()}}>
-              <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
-                Log out
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ) : (
         <>
-          <Text
-            style={[
-              {
-                fontSize: 36,
-                color: '#0A1629',
-                marginTop: 36,
-                fontWeight: '600',
-              },
-            ]}>
-            Change password
-          </Text>
+
+        <View style={styles.headercontainer}>
+        <TouchableOpacity>
+          <Image
+            source={require('../../staticdata/images/backarrow.png')}
+            style={{height: 30, width: 30, borderRadius: 50}}
+          />
+        </TouchableOpacity>
+        <Text
+          style={[
+            {fontSize: 36, color: '#0A1629', fontWeight: '600', marginLeft: 10},
+          ]}>
+          Profile
+        </Text>
+      </View>
+
           <View>
             <CommonTextInput
               headingtext={'Old password'}
@@ -172,7 +136,6 @@ export const ChangePassword = props => {
             </View>
           </View>
         </>
-      )}
     </SafeAreaView>
   );
 };
@@ -182,6 +145,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     backgroundColor: '#F4F9FD',
+  },
+  headercontainer: {
+    height: 60,
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   subcontainer: {
     flex: 1,

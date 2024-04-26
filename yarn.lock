@@ -6141,12 +6141,10 @@ react-native-contacts@^7.0.5:
   resolved "https://registry.npmjs.org/react-native-contacts/-/react-native-contacts-7.0.5.tgz"
   integrity sha512-RsWf5udhL/wpnBVu/oKVoIzogKcd7IwnxvNK48M4abICGtHxxv+te7hi4q04QjClytIsa5SylpJC2VsnpFDS2A==
 
-react-native-date-picker@^4.2.5:
-  version "4.2.5"
-  resolved "https://registry.npmjs.org/react-native-date-picker/-/react-native-date-picker-4.2.5.tgz"
-  integrity sha512-YjwiMpZEnVVS+ymLvmJDicVZ3pSR+nJHgtAhctMl6fO8f7iRNcYhY427gemlTBf2Ji+XIAK0Agyl255DhaemFw==
-  dependencies:
-    prop-types "^15.8.1"
+react-native-date-picker@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.npmjs.org/react-native-date-picker/-/react-native-date-picker-4.4.2.tgz"
+  integrity sha512-wYKN8nYWhETVHJV/+Im30JOdzkFRwYRrDlEOyyYesOjt+1JTFJh9M7K5CqePLOIB4Nxlf2f2lRSI0VoUyFIovA==
 
 react-native-device-info@^10.2.0:
   version "10.2.0"
