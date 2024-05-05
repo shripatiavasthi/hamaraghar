@@ -20,23 +20,12 @@ import {unwrapResult} from '@reduxjs/toolkit';
 import {TextInput} from 'react-native-gesture-handler';
 import {getfilterlist} from './getfilteractionSlice';
 
-const statuses = [
-  {id: '1', name: 'Status 1'},
-  {id: '2', name: 'Status 2'},
-  {id: '3', name: 'Status 3'},
-  {id: '4', name: 'Status 4'},
-  {id: '5', name: 'Status 5'},
-  {id: '6', name: 'Status 6'},
-  {id: '7', name: 'Status 7'},
-];
 
 export const LeadGeneration = props => {
   const [data, setdata] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [filterstatedata, setfilterstatedata] = useState([]);
   const [selectedfilterstatuses, setselectedfilterstatuses] = useState('');
-  const [optionshown, setOptionshown] = useState(false);
-  const {width, height} = Dimensions.get('window');
 
   useEffect(() => {
     props.navigation.addListener('focus', async () => {
@@ -109,10 +98,10 @@ export const LeadGeneration = props => {
         />
         <View style={{marginLeft: 20}}>
           <Text>Name : {item.client_name}</Text>
-          <Text>Email : {item.client_email}</Text>
+          {/* <Text>Email : {item.client_email}</Text> */}
         </View>
       </View>
-      <View style={styles.carddetailrow}>
+      {/* <View style={styles.carddetailrow}>
         <View style={styles.gender}>
           <Text>Gender</Text>
           <Text>Male</Text>
@@ -125,36 +114,28 @@ export const LeadGeneration = props => {
           <Text>Full age</Text>
           <Text>25</Text>
         </View>
-      </View>
+      </View> */}
       <View style={styles.carddetailrow}>
         <View style={styles.gender}>
           <Text>Contact no.</Text>
           <Text>{item.contact_number}</Text>
         </View>
-        <View style={styles.gender}>
+        {/* <View style={styles.gender}>
           <Text>Mail</Text>
           <Text>{item.client_email}</Text>
         </View>
         <View style={styles.gender}>
           <Text>Status</Text>
           <Text>{item.status}</Text>
-        </View>
+        </View> */}
       </View>
     </TouchableOpacity>
   );
-
-
 
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader navigation={props.navigation} />
       <View style={styles.headercontainer}>
-        <TouchableOpacity>
-          <Image
-            source={require('../../staticdata/images/backarrow.png')}
-            style={{height: 30, width: 30, borderRadius: 50}}
-          />
-        </TouchableOpacity>
         <Text
           style={[
             {fontSize: 36, color: '#0A1629', fontWeight: '600', marginLeft: 10},
@@ -162,11 +143,19 @@ export const LeadGeneration = props => {
           Lead Generation
         </Text>
       </View>
+      <View style={styles.row}>
       <TouchableOpacity
         style={styles.filterbutton}
         onPress={() => setModalVisible(true)}>
         <Text>filter</Text>
       </TouchableOpacity>
+    
+      <TouchableOpacity
+        style={[styles.filterbutton,{backgroundColor:"red",width:90, marginLeft:30}]}
+        onPress={() => filter()}>
+        <Text style={{color:"#fff"}}>Clear filter</Text>
+      </TouchableOpacity>
+      </View>
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -210,30 +199,6 @@ export const LeadGeneration = props => {
           </View>
         </View>
       </Modal>
-      {/* <View
-        style={[
-          {
-            height: 200,
-            backgroundColor: '#fff',
-            alignItems: 'center',
-            borderRadius: 25,
-            marginTop: 12,
-          },
-        ]}>
-        <View style={{marginTop: 25}}>
-          <AnimatedCircularProgress
-            size={280}
-            width={20}
-            fill={50}
-            tintColor="#006AFF"
-            backgroundColor="#F1F1F4"
-            rotation={-90}
-            lineCap="round"
-            arcSweepAngle={180} >
-            {fill => <Text style={[{fontSize : 24,fontWeight : '400',marginBottom : 100, color : 'black'}]}>{"500000"}</Text>}
-          </AnimatedCircularProgress> 
-        </View>
-      </View> */}
     </SafeAreaView>
   );
 };
@@ -243,6 +208,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     backgroundColor: '#F4F9FD',
+  },
+  row:{
+    flexDirection: 'row',
   },
   subcontainer: {
     flex: 1,
@@ -310,7 +278,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   card: {
-    height: 230,
+    height: 160,
     backgroundColor: '#fff',
     borderRadius: 25,
     marginTop: 12,

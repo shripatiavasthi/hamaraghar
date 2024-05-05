@@ -25,6 +25,7 @@ import {Userupdate} from './updateactionSlice';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {TextInput} from 'react-native-gesture-handler';
 import DatePicker from 'react-native-date-picker';
+import Feather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 
 const statuses = [
@@ -43,9 +44,14 @@ export const Productdetails = props => {
   const [userlistdata, setuserlistdata] = useState([]);
   const [selectedstatus, setselectedstatus] = useState('');
   const [userid, setuserid] = useState(0);
-  const [selecteddate , setselecteddate] = useState('');
+  const [selecteddate, setselecteddate] = useState('');
   const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [showallusers, setShowallusers] = useState(false);
+  const [showallstatus, setShowallstatus] = useState(false);
+  const [selectedusernames, setSelectedusernames] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const screenHeight = Dimensions.get('window').height;
 
   useEffect(() => {
     console.log(props.route.params.item.id, 'all>>>>>>>>>>>>>>>');
@@ -75,16 +81,17 @@ export const Productdetails = props => {
     <TouchableOpacity
       onPress={() => {
         setuserid(item.id);
+        setShowallusers(false);
+        setSelectedusernames(item.name);
       }}
       style={{
-        borderColor: 'lightgray',
-        borderWidth: 0.8,
-        borderRadius: 10,
+        borderBottomColor: 'lightgray',
+        borderBottomWidth: 0.8,
         height: 40,
-        width: 85,
+        width: '93%',
         margin: 10,
         justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'red',
         backgroundColor: userid == item.id ? 'lightblue' : 'white',
       }}>
       <Text>{item.name}</Text>
@@ -95,16 +102,16 @@ export const Productdetails = props => {
     <TouchableOpacity
       onPress={() => {
         setselectedstatus(item.name);
+        setShowallstatus(false);
       }}
       style={{
-        borderColor: 'lightgray',
-        borderWidth: 0.8,
-        borderRadius: 10,
+        borderBottomColor: 'lightgray',
+        borderBottomWidth: 0.8,
         height: 40,
-        width: 85,
+        width: '93%',
         margin: 10,
         justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: 'red',
         backgroundColor: selectedstatus == item.name ? 'lightblue' : 'white',
       }}>
       <Text>{item.name}</Text>
@@ -133,7 +140,10 @@ export const Productdetails = props => {
     <SafeAreaView style={styles.container}>
       <CustomHeader navigation={props.navigation} />
       <View style={styles.headercontainer}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.goBack();
+          }}>
           <Image
             source={require('../../staticdata/images/backarrow.png')}
             style={{height: 30, width: 30, borderRadius: 50}}
@@ -161,10 +171,10 @@ export const Productdetails = props => {
           />
           <View style={{marginLeft: 20}}>
             <Text>Name : {data.client_name}</Text>
-            <Text>Email : {data.client_email}</Text>
+            {/* <Text>Email : {data.client_email}</Text> */}
           </View>
         </View>
-        <View style={styles.carddetailrow}>
+        {/* <View style={styles.carddetailrow}>
           <View style={styles.gender}>
             <Text>Gender</Text>
             <Text>Male</Text>
@@ -177,8 +187,8 @@ export const Productdetails = props => {
             <Text>Full age</Text>
             <Text>25</Text>
           </View>
-        </View>
-        <View style={styles.carddetailrow}>
+        </View> */}
+        {/* <View style={styles.carddetailrow}>
           <View style={styles.gender}>
             <Text>Contact no.</Text>
             <Text>{data.contact_number}</Text>
@@ -191,26 +201,95 @@ export const Productdetails = props => {
             <Text>Status</Text>
             <Text>{data.status}</Text>
           </View>
-        </View>
+        </View> */}
         {data.admin ? (
           <>
             <Text>All users</Text>
-            <FlatList
-              data={userlistdata}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-              numColumns={3}
-            />
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                backgroundColor: 'white',
+                borderColor: 'lightgray',
+                borderWidth: 0.9,
+                padding: 15,
+                borderRadius: 10,
+                marginTop: 10,
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+              onPress={() => {
+                // setOpen(true)
+                // console.log(date,"beforeselection")
+                setShowallusers(true);
+              }}>
+              <Text style={{fontSize: 16, color: '#000', fontWeight: '400'}}>
+                {selectedusernames ? selectedusernames : 'Please select users'}
+              </Text>
+              <Feather name="chevron-down" size={25} color="black" />
+            </TouchableOpacity>
+            {showallusers ? (
+              <View
+                style={{
+                  height: 200,
+                  width: '100%',
+                  marginVertical: 10,
+                  borderColor: 'lightgray',
+                  borderWidth: 0.9,
+                  borderRadius: 10,
+                }}>
+                <FlatList
+                  nestedScrollEnabled
+                  data={userlistdata}
+                  renderItem={renderItem}
+                  keyExtractor={item => item.id}
+                />
+              </View>
+            ) : null}
           </>
         ) : null}
         <Text>All status</Text>
-        <FlatList
-          data={filterstatedata}
-          renderItem={newrenderItem}
-          keyExtractor={item => item}
-          numColumns={3}
-        />
         <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+            backgroundColor: 'white',
+            borderColor: 'lightgray',
+            borderWidth: 0.9,
+            padding: 15,
+            borderRadius: 10,
+            marginTop: 10,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+          onPress={() => {
+            // setOpen(true)
+            // console.log(date,"beforeselection")
+            setShowallstatus(true);
+          }}>
+          <Text style={{fontSize: 16, color: '#000', fontWeight: '400'}}>
+            {selectedstatus ? selectedstatus : 'Please select status'}
+          </Text>
+          <Feather name="chevron-down" size={25} color="black" />
+        </TouchableOpacity>
+        {showallstatus ? (
+          <View
+            style={{
+              height: 200,
+              width: '100%',
+              marginVertical: 10,
+              borderColor: 'lightgray',
+              borderWidth: 0.9,
+              borderRadius: 10,
+            }}>
+            <FlatList
+              nestedScrollEnabled
+              data={filterstatedata}
+              renderItem={newrenderItem}
+              keyExtractor={item => item}
+            />
+          </View>
+        ) : null}
+
+        {/* <TouchableOpacity
           style={{backgroundColor:"white", borderColor:"lightgray",borderWidth:0.9,padding:15,borderRadius:20}}
           onPress={()=>{
             setOpen(true)
@@ -219,48 +298,54 @@ export const Productdetails = props => {
           <Text style={{fontSize: 16, color: '#000', fontWeight: '400'}}>
              {selecteddate ? moment(selecteddate).format('MMMM Do YYYY, h:mm:ss a')  : "Select date and time" }
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.SIgnInButton,
-            selectedstatus != ''
-              ? {backgroundColor: '#3F8CFF'}
-              : {backgroundColor: 'lightgray'},
-          ]}
-          onPress={handleLogin}>
-          <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
-            Update
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.SIgnInButton,
-            selecteddate != ''
-              ? {backgroundColor: '#3F8CFF'}
-              : {backgroundColor: 'lightgray'},
-          ]}
-          onPress={() => {
-          
+        </TouchableOpacity> */}
+        <View
+          style={{
+            marginVertical: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}>
-          <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
-            Schedule meeting 
-          </Text>
-        </TouchableOpacity>
-
-        <DatePicker
-          modal
-          open={open}
-          date={date}
-          onConfirm={date => {
-            setOpen(false);
-            setDate(date);
-            setselecteddate(date)
-            console.log( typeof(date), 'selected date');
-          }}
-          onCancel={() => {
-            setOpen(false);
-          }}
-        />
+          <TouchableOpacity
+            style={[
+              styles.SIgnInButton,
+              selectedstatus != ''
+                ? {backgroundColor: '#3F8CFF'}
+                : {backgroundColor: 'lightgray'},
+            ]}
+            onPress={handleLogin}>
+            <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+              Update
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.SIgnInButton, {backgroundColor: 'lightblue'}]}
+            onPress={() => {
+              setModalVisible(true);
+            }}>
+            <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+              Schedule meeting
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(false);
+          }}>
+          <View style={[styles.modal, {height: screenHeight / 2}]}>
+            <View style={styles.modalContent}>
+              <DatePicker date={date} onDateChange={setDate} />
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.closeButtonText}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );
@@ -344,7 +429,7 @@ const styles = StyleSheet.create({
   },
   SIgnInButton: {
     height: 53,
-    width: '100%',
+    width: '45%',
     borderRadius: 15,
     paddingHorizontal: 10,
     marginTop: 10,
@@ -352,6 +437,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     marginBottom: 30,
+  },
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  closeButton: {
+    marginVertical: 20,
+    backgroundColor: 'lightblue',
+    borderRadius:10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width:190,
+    height:50
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontWeight :"700",
+    fontSize: 16,
   },
 });
 

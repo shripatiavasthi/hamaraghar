@@ -6,7 +6,9 @@ export const Profile = props => {
   return (
     <View style={styles.container}>
       <View style={styles.headercontainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>{
+         props.navigation.goBack()
+        }}>
           <Image
             source={require('../../staticdata/images/backarrow.png')}
             style={{height: 30, width: 30, borderRadius: 50}}
@@ -20,7 +22,7 @@ export const Profile = props => {
         </Text>
       </View>
       <View style={styles.maincontainer}>
-        <View style={styles.profileview}>
+        {/* <View style={styles.profileview}>
           <Image
             source={require('../../staticdata/images/Avatar5.jpeg')}
             style={{height: 30, width: 30, borderRadius: 50}}
@@ -29,7 +31,7 @@ export const Profile = props => {
             <Text>Name</Text>
             <Text>Email</Text>
           </View>
-        </View>
+        </View> */}
         <TouchableOpacity
           style={[
             styles.SIgnInButton,

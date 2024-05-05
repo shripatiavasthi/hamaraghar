@@ -66,7 +66,9 @@ export const ChangePassword = props => {
         <>
 
         <View style={styles.headercontainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>{
+           props.navigation.goBack()
+        }}>
           <Image
             source={require('../../staticdata/images/backarrow.png')}
             style={{height: 30, width: 30, borderRadius: 50}}
