@@ -42,6 +42,7 @@ import Profile from '../containers/Profile/Profile'
 import LeadGeneration from "../containers/LeadGeneration/LeadGeneration"
 import Productdetails from "../containers/Productdetails/Productdetails"
 import ChangePassword from "../containers/Changepassword/Changepassword"
+import Review from "../containers/Review/Review"
 
 let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
@@ -157,6 +158,11 @@ export const MainNaviagtor = (props) => {
           
           <Stack.Screen name={Screens.ChangePassword} component={ChangePassword} options={{ headerShown: false }} />
          
+          
+
+          <Stack.Screen name={Screens.Review} component={Review} options={{ headerShown: false }} />
+
+
           <Stack.Screen name={Screens.Post} component={Post} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.InvitePeople} component={InvitePeople} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Login} component={Login} options={{ headerShown: false }} />

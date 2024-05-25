@@ -41,5 +41,6 @@ export const Screens = {
  Profile : 'Profile',
  LeadGeneration :'LeadGeneration',
  Productdetails : 'Productdetails',
- ChangePassword : "ChangePassword"
+ ChangePassword : "ChangePassword",
+ Review : "Review"
 };
