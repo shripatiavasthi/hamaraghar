@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
+  ActivityIndicator,
   FlatList,
   TouchableOpacity,
   Dimensions,
@@ -26,6 +27,8 @@ export const LeadGeneration = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [filterstatedata, setfilterstatedata] = useState([]);
   const [selectedfilterstatuses, setselectedfilterstatuses] = useState('');
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     props.navigation.addListener('focus', async () => {
@@ -56,6 +59,22 @@ export const LeadGeneration = props => {
     setdata(result);
     console.log(result, 'all lead response');
   };
+
+  const infinitescroll = async () => {
+    if (loading) return;
+
+    setLoading(true);
+    try {
+      // Replace with your API call
+      const response = await fetch(`https://api.example.com/data?page=${page}`);
+      const result = await response.json();
+      setData(prevData => [...prevData, ...result]);
+      setPage(prevPage => prevPage + 1);
+    } catch (error) {
+      console.error(error);
+    }
+    setLoading(false);
+  }
 
   const newrenderItem = ({item}) => (
     <TouchableOpacity
@@ -132,6 +151,11 @@ export const LeadGeneration = props => {
     </TouchableOpacity>
   );
 
+  const renderFooter = () => {
+    if (!loading) return null;
+    return <ActivityIndicator style={styles.loader} />;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader navigation={props.navigation} />
@@ -160,6 +184,9 @@ export const LeadGeneration = props => {
         data={data}
         renderItem={renderItem}
         keyExtractor={item => item.id}
+        onEndReached={infinitescroll}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
       />
       <Modal
         animationType="slide"
@@ -284,6 +311,10 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingVertical: 10,
     paddingHorizontal: 20,
+  },
+  loader: {
+    marginTop: 10,
+    alignItems: 'center',
   },
 });
 
