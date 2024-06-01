@@ -10,6 +10,8 @@ import {
   ImageBackground,
   Button,
   Image,
+  BackHandler,
+  Alert
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {connect, useDispatch} from 'react-redux';
@@ -29,9 +31,10 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CommonTextInput from '../CommonTextInput/CommonTextInput';
 import IMAGES from '../Allassets/Allassets';
 import {unwrapResult} from '@reduxjs/toolkit';
+import messaging from '@react-native-firebase/messaging';
 
 const {height, width} = Dimensions.get('screen');
-
+const TOPIC = 'MyNews';
 const image = {image: require('../../staticdata/images/BackgroundImage.png')};
 
 const LoginScreen = props => {
@@ -47,39 +50,165 @@ const LoginScreen = props => {
   const [lat, setlat] = useState('');
   const [lon, setlon] = useState('');
 
-  // Geolocation.getCurrentPosition(info => {
-  //   setlat(info?.coords?.latitude);
-  //   setlon(info?.coords?.longitude);
-  //   console.log(info?.coords?.latitude, 'location data ');
-  // });
+  const [fcmToken, setfcmToken] = useState('');
+
+
+  const requestUserPermission = async () => {
+    /**
+     * On iOS, messaging permission must be requested by
+     * the current application before messages can be
+     * received or sent
+     */
+    const authStatus = await messaging().requestPermission();
+    console.log('Authorization status(authStatus):', authStatus);
+    return (
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL
+    );
+  };
 
   useEffect(() => {
-    // getlocation();
-  }, [lat && lon]);
+    if (requestUserPermission()) {
+      /**
+       * Returns an FCM token for this device
+       */
+      messaging()
+        .getToken()
+        .then(fcmToken => {
+          console.log('FCM Token -> ', fcmToken);
+          setfcmToken(fcmToken)
+        });
+    } else console.log('Not Authorization status:', authStatus);
 
-  const getlocation = () => {
-    axios({
-      method: 'post',
-      url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyBFB_A5HYqjbBxCd5eLF7oUD7_movLicUk`,
-    })
-      .then(response => {
-        console.log(response, 'direct method');
-      })
-      .catch(e => {
-        console.log(e.response, 'direct method');
+    /**
+     * When a notification from FCM has triggered the application
+     * to open from a quit state, this method will return a
+     * `RemoteMessage` containing the notification data, or
+     * `null` if the app was opened via another method.
+     */
+    messaging()
+      .getInitialNotification()
+      .then(async remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'getInitialNotification:' +
+              'Notification caused app to open from quit state',
+          );
+          console.log(remoteMessage);
+     
+          
+            if (remoteMessage.data.type === 'lead') {
+              navigation.navigate('Productdetails', {item: "33"})
+            //  props.navigation.navigate(Screens.Productdetails)
+              }else if(remoteMessage.data.type === 'review'){
+                navigation.navigate('Review');
+              }
+          
+          // alert(
+          //   'getInitialNotification: Notification caused app to' +
+          //     ' open from quit state',
+          // );
+        }
       });
-  };
+
+    /**
+     * When the user presses a notification displayed via FCM,
+     * this listener will be called if the app has opened from
+     * a background state. See `getInitialNotification` to see
+     * how to watch for when a notification opens the app from
+     * a quit state.
+     */
+    messaging().onNotificationOpenedApp(async remoteMessage => {
+      if (remoteMessage) {
+        console.log(
+          'onNotificationOpenedApp: ' +
+            'Notification caused app to open from background state',
+        );
+        console.log(">>>>>>>>>>>>>>>",remoteMessage);
+        if (remoteMessage.data.type === 'lead') {
+          navigation.navigate('Productdetails', {item: "33"})
+        //  props.navigation.navigate(Screens.Productdetails)
+          }else if(remoteMessage.data.type === 'review'){
+            navigation.navigate('Review');
+          }
+        //}
+        // alert(
+        //   'onNotificationOpenedApp: Notification caused app to' +
+        //     ' open from background state',
+        // );
+      }
+    });
+
+    /**
+     * Set a message handler function which is called when
+     * the app is in the background or terminated. In Android,
+     * a headless task is created, allowing you to access the
+     * React Native environment to perform tasks such as updating
+     * local storage, or sending a network request.
+     */
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      console.log('Message handled in the background!', remoteMessage);
+      if (remoteMessage.data.type === 'lead') {
+        navigation.navigate('Productdetails', {item: "33"})
+      //  props.navigation.navigate(Screens.Productdetails)
+        }else if(remoteMessage.data.type === 'review'){
+          navigation.navigate('Review');
+        }
+    });
+
+    /**
+     * When any FCM payload is received, the listener callback
+     * is called with a `RemoteMessage`. Returns an unsubscribe
+     * function to stop listening for new messages.
+     */
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      //alert('A new FCM message arrived!');
+      console.log('A new FCM message arrived!', remoteMessage.data);
+    //  if (remoteMessage.data.type === 'lead') {
+       
+    if (remoteMessage.data.type === 'lead') {
+      navigation.navigate('Productdetails', {item: "33"})
+    //  props.navigation.navigate(Screens.Productdetails)
+      }else if(remoteMessage.data.type === 'review'){
+        navigation.navigate('Review');
+      }
+     // }
+    });
+
+    /**
+     * Apps can subscribe to a topic, which allows the FCM
+     * server to send targeted messages to only those devices
+     * subscribed to that topic.
+     */
+    messaging()
+      .subscribeToTopic(TOPIC)
+      .then(() => {
+        console.log(`Topic: ${TOPIC} Suscribed`);
+      });
+
+    return () => {
+      unsubscribe;
+      /**
+       * Unsubscribe the device from a topic.
+       */
+      // messaging().unsubscribeFromTopic(TOPIC);
+    };
+  }, []);
 
   const handleLogin = async () => {
     let fromBody = new FormData();
     fromBody.append('email', email);
     fromBody.append('password', Password);
+    fromBody.append('device_token', fcmToken);
 
     const data = {
       body: fromBody,
       query: {},
       formData: true,
     };
+
+    console.log(data, fromBody ,'direct method');
+
 
     const res = await props.doLogin(data);
     const result = await unwrapResult(res);
@@ -124,7 +253,7 @@ const LoginScreen = props => {
             justifyContent: 'center',
             flexDirection: 'row',
           }}>
-          <View style={styles.Inputtextfeildconatiner}>
+          {/* <View style={styles.Inputtextfeildconatiner}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Image
                 source={require('../../staticdata/images/selected.png')}
@@ -140,12 +269,7 @@ const LoginScreen = props => {
                 Remember me
               </Text>
             </View>
-            <TouchableOpacity>
-              <Text style={{fontSize: 14, color: '#7D8593', fontWeight: '400'}}>
-                Forgot Password?
-              </Text>
-            </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
         <View
           style={{
@@ -176,15 +300,13 @@ const LoginScreen = props => {
             justifyContent: 'center',
             flexDirection: 'row',
           }}>
-          <TouchableOpacity style={styles.accountButton} 
-          onPress={()=>{
-            navigation.navigate('Review');
-          }}
+          {/* <TouchableOpacity style={styles.accountButton} 
+      
           >
             <Text style={{fontSize: 16, color: '#3F8CFF', fontWeight: '600'}}>
               Don’t have an account?
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>

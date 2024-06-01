@@ -44,9 +44,10 @@ const styles = StyleSheet.create({
   },
   secondconatiner: {
     width: '50%',
+    padding:10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: "flex-end",
   },
   profile: {
     backgroundColor: 'pink',

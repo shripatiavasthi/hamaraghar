@@ -11,6 +11,7 @@ import {
   Dimensions,
   Image,
   Modal,
+  BackHandler, Alert
 } from 'react-native';
 import CustomHeader from '../CustomHeader/CustomHeader';
 import {navigate, Screens} from '../../helpers/Screens';
@@ -46,6 +47,24 @@ export const LeadGeneration = props => {
       setfilterstatedata(filterresult.filter_hash);
       console.log(filterresult.filter_hash, 'all filter response');
     });
+    const backAction = () => {
+      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        { text: 'YES', onPress: () => BackHandler.exitApp() },
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
+    return () => backHandler.remove();
   }, []);
 
   const filter = async () => {
@@ -111,14 +130,15 @@ export const LeadGeneration = props => {
           borderBottomColor: 'lightgray',
           borderBottomWidth: 1,
         }}>
-        <Image
+        {/* <Image
           source={require('../../staticdata/images/Avatar5.jpeg')}
           style={{height: 40, width: 40, borderRadius: 50}}
-        />
-        <View style={{marginLeft: 20}}>
-          <Text>Name : {item.client_name}</Text>
+        /> */}
+          <View style={{}}>
+          <Text>{item.client_name} Status : {item.status}</Text>
           {/* <Text>Email : {item.client_email}</Text> */}
         </View>
+     
       </View>
       {/* <View style={styles.carddetailrow}>
         <View style={styles.gender}>
@@ -136,14 +156,14 @@ export const LeadGeneration = props => {
       </View> */}
       <View style={styles.carddetailrow}>
         <View style={styles.gender}>
-          <Text>Contact no.</Text>
-          <Text>{item.contact_number}</Text>
-        </View>
-        {/* <View style={styles.gender}>
-          <Text>Mail</Text>
-          <Text>{item.client_email}</Text>
+          <Text>Contact no. : {item.contact_number}</Text>
+          {/* <Text></Text> */}
         </View>
         <View style={styles.gender}>
+          <Text>Quotation : {item.quotation}</Text>
+          {/* <Text></Text> */}
+        </View>
+       {/*  <View style={styles.gender}>
           <Text>Status</Text>
           <Text>{item.status}</Text>
         </View> */}
@@ -162,16 +182,16 @@ export const LeadGeneration = props => {
       <View style={styles.headercontainer}>
         <Text
           style={[
-            {fontSize: 36, color: '#0A1629', fontWeight: '600', marginLeft: 10},
+            {fontSize: 26, color: '#0A1629', fontWeight: '600', marginLeft: 10},
           ]}>
           Lead Generation
         </Text>
       </View>
       <View style={styles.row}>
       <TouchableOpacity
-        style={styles.filterbutton}
+        style={[styles.filterbutton,{width:90}]}
         onPress={() => setModalVisible(true)}>
-        <Text>filter</Text>
+        <Text>Filter</Text>
       </TouchableOpacity>
     
       <TouchableOpacity
@@ -180,6 +200,10 @@ export const LeadGeneration = props => {
         <Text style={{color:"#fff"}}>Clear filter</Text>
       </TouchableOpacity>
       </View>
+      {data.length <= 0 ? 
+    <View style={{flex:1,justifyContent:"center",alignItems:"center",margin:10}}>
+      <Text>No lead present</Text>
+    </View>   :
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -187,7 +211,8 @@ export const LeadGeneration = props => {
         onEndReached={infinitescroll}
         onEndReachedThreshold={0.5}
         ListFooterComponent={renderFooter}
-      />
+      /> 
+}
       <Modal
         animationType="slide"
         transparent={true}
@@ -301,8 +326,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   gender: {
-    width: '33%',
-    height: '100%',
+    width: '50%',
+    height: '70%',
+    justifyContent: 'center',
   },
   card: {
     height: 160,

@@ -54,10 +54,10 @@ export const Productdetails = props => {
   const screenHeight = Dimensions.get('window').height;
 
   useEffect(() => {
-    console.log(props.route.params.item.id, 'all>>>>>>>>>>>>>>>');
+    console.log(props?.route?.params?.item?.id, 'all>>>>>>>>>>>>>>>');
     props.navigation.addListener('focus', async () => {
       const data = {
-        query: {id: props.route.params.item.id},
+        query: {id: props?.route?.params?.item?.id},
         token: props?.token,
       };
 
@@ -101,7 +101,7 @@ export const Productdetails = props => {
   const newrenderItem = ({item}) => (
     <TouchableOpacity
       onPress={() => {
-        setselectedstatus(item.name);
+        setselectedstatus(item?.name);
         setShowallstatus(false);
       }}
       style={{
@@ -132,8 +132,30 @@ export const Productdetails = props => {
 
     const res = await props.doLogin(data);
     const result = await unwrapResult(res);
-
+    setdata(result);
     console.log(result, 'update api response');
+  };
+
+
+
+  const appointmentdateiusupdated = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", `Bearer ${props.token}`);
+    
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    
+    fetch(`http://35.154.222.142/appointment_call?lead_id=${userid}&time=${date}`, requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        setModalVisible(false)
+        handleLogin()
+        console.log(result)
+      })
+      .catch(error => console.log('error', error));
   };
 
   return (
@@ -151,7 +173,7 @@ export const Productdetails = props => {
         </TouchableOpacity>
         <Text
           style={[
-            {fontSize: 36, color: '#0A1629', fontWeight: '600', marginLeft: 10},
+            {fontSize: 26, color: '#0A1629', fontWeight: '600', marginLeft: 10},
           ]}>
           Product Details
         </Text>
@@ -165,46 +187,71 @@ export const Productdetails = props => {
             borderBottomColor: 'lightgray',
             borderBottomWidth: 1,
           }}>
-          <Image
+          {/* <Image
             source={require('../../staticdata/images/Avatar5.jpeg')}
             style={{height: 40, width: 40, borderRadius: 50}}
-          />
+          /> */}
           <View style={{marginLeft: 20}}>
-            <Text>Name : {data.client_name}</Text>
+            <Text>{data.client_name}</Text>
             {/* <Text>Email : {data.client_email}</Text> */}
           </View>
         </View>
-        {/* <View style={styles.carddetailrow}>
-          <View style={styles.gender}>
-            <Text>Gender</Text>
-            <Text>Male</Text>
-          </View>
-          <View style={styles.gender}>
-            <Text>Birthday</Text>
-            <Text>April 12</Text>
-          </View>
-          <View style={styles.gender}>
-            <Text>Full age</Text>
-            <Text>25</Text>
-          </View>
-        </View> */}
-        {/* <View style={styles.carddetailrow}>
-          <View style={styles.gender}>
-            <Text>Contact no.</Text>
-            <Text>{data.contact_number}</Text>
-          </View>
-          <View style={styles.gender}>
-            <Text>Mail</Text>
-            <Text>{data.client_email}</Text>
-          </View>
+        <View style={styles.carddetailrow}>
           <View style={styles.gender}>
             <Text>Status</Text>
             <Text>{data.status}</Text>
           </View>
-        </View> */}
+          <View style={styles.gender}>
+            <Text>Quotation</Text>
+            <Text>{data.quotation}</Text>
+          </View>
+          <View style={styles.gender}>
+            <Text>Plot size</Text>
+            <Text>{data.plot_size}</Text>
+          </View>
+        </View>
+        <View style={styles.carddetailrow}>
+          <View style={styles.gender}>
+            <Text>Plot type</Text>
+            <Text>{data.plot_type}</Text>
+          </View>
+          <View style={styles.gender}>
+            <Text>Client location</Text>
+            <Text>{data.client_location}</Text>
+          </View>
+          <View style={styles.gender}>
+            <Text>Client email</Text>
+            <Text>{data.client_email}</Text>
+          </View>
+        </View>
+        <Text style={{marginVertical: 10}}>Appointment</Text>
+        <View style={styles.carddetailrow}>
+          <View style={styles.gender}>
+            <Text>Call time</Text>
+            <Text>{data?.appointment?.call_time}</Text>
+          </View>
+          <View style={styles.gender}>
+            <Text>Rating</Text>
+            <Text>{data?.appointment?.rating}</Text>
+          </View>
+          <View style={styles.gender}>
+            <Text>Updated at</Text>
+            <Text>{data?.appointment?.updated_at}</Text>
+          </View>
+        </View>
+        <View style={styles.carddetailrow}>
+          <View style={{width: '100%'}}>
+            <Text>Desc</Text>
+            {data?.appointment?.desc === null ? (
+              <Text>will update soon</Text>
+            ) : (
+              <Text>{data?.appointment?.desc}</Text>
+            )}
+          </View>
+        </View>
         {data.admin ? (
           <>
-            <Text>All users</Text>
+            <Text>All user </Text>
             <TouchableOpacity
               style={{
                 flexDirection: 'row',
@@ -337,10 +384,17 @@ export const Productdetails = props => {
           }}>
           <View style={[styles.modal, {height: screenHeight / 2}]}>
             <View style={styles.modalContent}>
-              <DatePicker date={date} onDateChange={setDate} />
+              <DatePicker date={date} onDateChange={setDate} 
+               minimumDate={new Date()}
+                
+              />
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={() => setModalVisible(false)}>
+                onPress={() => {
+                  appointmentdateiusupdated() 
+                
+                }
+                }>
                 <Text style={styles.closeButtonText}>Submit</Text>
               </TouchableOpacity>
             </View>
@@ -453,15 +507,15 @@ const styles = StyleSheet.create({
   closeButton: {
     marginVertical: 20,
     backgroundColor: 'lightblue',
-    borderRadius:10,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    width:190,
-    height:50
+    width: 190,
+    height: 50,
   },
   closeButtonText: {
     color: '#fff',
-    fontWeight :"700",
+    fontWeight: '700',
     fontSize: 16,
   },
 });

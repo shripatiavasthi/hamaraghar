@@ -1,7 +1,8 @@
 // CommonTextInput.js
-import React from 'react';
-import {View, Text, TextInput, StyleSheet, Image} from 'react-native';
+import React , {useState} from 'react';
+import {View, Text, TextInput, StyleSheet, Image , TouchableOpacity} from 'react-native';
 import {IMAGES} from '../Allassets/Allassets';
+
 
 const CommonTextInput = ({
   password,
@@ -11,6 +12,7 @@ const CommonTextInput = ({
   placeholder,
   rightIconShow
 }) => {
+  const [test , settest] = useState(true)
   return (
     <View style={styles.customfeildview}>
       <Text style={styles.textinputheader}>{headingtext}</Text>
@@ -20,13 +22,18 @@ const CommonTextInput = ({
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          secureTextEntry={password}
+          secureTextEntry={test === false ? false : password}
         />
         {rightIconShow ? 
+        <TouchableOpacity onPress={()=>{
+          settest(!test)
+        }}>
         <Image
           source={require('../../staticdata/images/viewpassword.png')}
           style={{height: 24, width: 24}}
-        /> : null }
+        />
+        </TouchableOpacity>
+         : null }
       </View>
     </View>
   );
@@ -57,7 +64,9 @@ const styles = StyleSheet.create({
     alignItems:"center",
     justifyContent:"space-between"
   },
-  input: {},
+  input: {
+    width:"90%"
+  },
 });
 
 export default CommonTextInput;

@@ -16,9 +16,8 @@ import CustomHeader from '../CustomHeader/CustomHeader';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {TextInput} from 'react-native-gesture-handler';
 import CommonTextInput from '../CommonTextInput/CommonTextInput';
-import {changePassword} from "./ChangepasswordSlice"
-import {logout} from "./logoutSlice"
-
+import {changePassword} from './ChangepasswordSlice';
+import {logout} from './logoutSlice';
 
 export const ChangePassword = props => {
   const [oldpassword, setoldpassword] = useState('');
@@ -26,118 +25,145 @@ export const ChangePassword = props => {
   const [confirmpassword, setconfirmpassword] = useState('');
   const [show, setshow] = useState(true);
 
-  useEffect(() => {
-   
-  }, []);
-
   const handleLogin = async () => {
-    let fromBody = new FormData();
-    fromBody.append('current_password', oldpassword);
-    fromBody.append('password', newpassword);
-    fromBody.append('password_confirmation', confirmpassword);
+    // let fromBody = new FormData();
+    // fromBody.append('current_password', oldpassword);
+    // fromBody.append('password', newpassword);
+    // fromBody.append('password_confirmation', confirmpassword);
 
-    const data = {
-      body: fromBody,
-      query: {},
-      formData: true,
-      token: props?.token,
+    // const data = {
+    //   body: {},
+    //   query: {
+    //     'current_password': oldpassword,
+    //     'password': newpassword,
+    //     'password_confirmation': confirmpassword
+    //   },
+    //   token: props?.token,
+    // };
+
+    // console.log(data ,fromBody, "data in change api")
+
+    // const res = await props.dochangepassword(data);
+    // const result = await unwrapResult(res);
+
+    // console.log(result,"check resuklt")
+    var myHeaders = new Headers();
+    myHeaders.append(
+      'Authorization',
+      `Bearer ${props.token}`,
+    );
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      redirect: 'follow',
     };
 
-    console.log(data , "data in change api")
-
-    const res = await props.dochangepassword(data);
-    const result = await unwrapResult(res);
-
-    console.log(result,"check resuklt")
+    fetch(
+      `http://35.154.222.142/passwords?current_password=${oldpassword}&password=${newpassword}&password_confirmation=${confirmpassword}`,
+      requestOptions,
+    )
+      .then(response => response.text())
+      .then(result => {
+        console.log(result)
+        props.navigation.replace('Login');
+      })
+      .catch(error => console.log('error', error));
   };
 
-  const logout =  () => {
-    
-
+  const logout = () => {
     // const res = await props.dologout(data);
     // const result = await unwrapResult(res);
 
     // console.log(result,"check resuklt")
-    props.navigation.navigate('Login');
+    
   };
 
   return (
     <SafeAreaView style={styles.container}>
-        <>
-
+      <>
         <View style={styles.headercontainer}>
-        <TouchableOpacity onPress={()=>{
-           props.navigation.goBack()
-        }}>
-          <Image
-            source={require('../../staticdata/images/backarrow.png')}
-            style={{height: 30, width: 30, borderRadius: 50}}
-          />
-        </TouchableOpacity>
-        <Text
-          style={[
-            {fontSize: 36, color: '#0A1629', fontWeight: '600', marginLeft: 10},
-          ]}>
-          Profile
-        </Text>
-      </View>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.goBack();
+            }}>
+            <Image
+              source={require('../../staticdata/images/backarrow.png')}
+              style={{height: 30, width: 30, borderRadius: 50}}
+            />
+          </TouchableOpacity>
+          <Text
+            style={[
+              {
+                fontSize: 26,
+                color: '#0A1629',
+                fontWeight: '600',
+                marginLeft: 10,
+              },
+            ]}>
+            Profile
+          </Text>
+        </View>
 
-          <View>
-            <CommonTextInput
-              headingtext={'Old password'}
-              value={oldpassword}
-              onChangeText={setoldpassword}
-              placeholder="Enter your email here"
-              password={false}
-              rightIconShow={false}
-            />
-            <CommonTextInput
-              headingtext={'New password'}
-              value={newpassword}
-              onChangeText={setnewpassword}
-              placeholder="Enter your email here"
-              password={false}
-              rightIconShow={false}
-            />
-            <CommonTextInput
-              headingtext={'Confirm password'}
-              value={confirmpassword}
-              onChangeText={setconfirmpassword}
-              placeholder="Enter your email here"
-              password={false}
-              rightIconShow={false}
-            />
-            <View
-              style={{
-                height: 73,
-                paddingHorizontal: 10,
-                marginBottom: 10,
-                width: '100%',
-                justifyContent: 'center',
-                flexDirection: 'row',
-                marginTop: 10,
+        <View>
+          <CommonTextInput
+            headingtext={'Old password'}
+            value={oldpassword}
+            onChangeText={setoldpassword}
+            placeholder="Enter your email here"
+            password={false}
+            rightIconShow={false}
+          />
+          <CommonTextInput
+            headingtext={'New password'}
+            value={newpassword}
+            onChangeText={setnewpassword}
+            placeholder="Enter your email here"
+            password={false}
+            rightIconShow={false}
+          />
+          <CommonTextInput
+            headingtext={'Confirm password'}
+            value={confirmpassword}
+            onChangeText={setconfirmpassword}
+            placeholder="Enter your email here"
+            password={false}
+            rightIconShow={false}
+          />
+          <View
+            style={{
+              height: 73,
+              paddingHorizontal: 10,
+              marginBottom: 10,
+              width: '100%',
+              justifyContent: 'center',
+              flexDirection: 'row',
+              marginTop: 10,
+            }}>
+            <TouchableOpacity
+              style={styles.SIgnInButton}
+              onPress={() => {
+                if (oldpassword == '') {
+                  alert('Please enter your oldpassword');
+                } else if (newpassword == '') {
+                  alert('Please enter your newpassword');
+                } else if (confirmpassword == '') {
+                  alert('Please enter your confirmpassword');
+                } else if (
+                  oldpassword != '' &&
+                  newpassword != '' &&
+                  confirmpassword != ''
+                ) {
+                  handleLogin();
+                }
               }}>
-              <TouchableOpacity
-                style={styles.SIgnInButton}
-                onPress={() => {
-                  if(oldpassword == ""){
-                    alert("Please enter your oldpassword")
-                  }else if(newpassword == ""){
-                    alert("Please enter your newpassword")
-                  }
-                  else if(confirmpassword == ""){
-                    alert("Please enter your confirmpassword")
-                  } else if (oldpassword != "" && newpassword != "" && confirmpassword != ""){
-                  handleLogin()
-                  }
-                }}>
-                <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
-                  Submit
-                </Text>
-              </TouchableOpacity>
-            </View>
+              <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
+                Submit
+              </Text>
+            </TouchableOpacity>
           </View>
-        </>
+        </View>
+      </>
     </SafeAreaView>
   );
 };

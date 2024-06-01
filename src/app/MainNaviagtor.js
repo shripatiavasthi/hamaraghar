@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, Image, StyleSheet  } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { View, Text, Image, StyleSheet ,Alert } from 'react-native';
+import { NavigationContainer ,useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -43,6 +43,7 @@ import LeadGeneration from "../containers/LeadGeneration/LeadGeneration"
 import Productdetails from "../containers/Productdetails/Productdetails"
 import ChangePassword from "../containers/Changepassword/Changepassword"
 import Review from "../containers/Review/Review"
+import messaging from '@react-native-firebase/messaging';
 
 let persistor = persistStore(store);
 const Stack = createNativeStackNavigator();
@@ -142,16 +143,20 @@ const Tabs = props => {
 };
 
 
+
 export const MainNaviagtor = (props) => {
 
-  console.log(props?.token , 'token in navigator')
+
+  console.log(props , 'token in navigator')
+
+
 
   return (
     <PersistGate loading={<View><Text>Loading....</Text></View>} persistor={persistor}>
       <NavigationContainer
         ref={navigationRef}>
         <Stack.Navigator
-          initialRouteName={props?.token ? Screens.LeadGeneration : Screens.Login}
+         initialRouteName={props?.token ? Screens.LeadGeneration : Screens.Login}
         >
           <Stack.Screen name={Screens.Gender} component={Gender} options={{ headerShown: false }} />
           <Stack.Screen name={Screens.Avatar} component={Avatar} options={{ headerShown: false }} />

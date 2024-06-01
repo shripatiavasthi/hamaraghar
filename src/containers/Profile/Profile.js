@@ -16,7 +16,7 @@ export const Profile = props => {
         </TouchableOpacity>
         <Text
           style={[
-            {fontSize: 36, color: '#0A1629', fontWeight: '600', marginLeft: 10},
+            {fontSize: 26, color: '#0A1629', fontWeight: '600', marginLeft: 10},
           ]}>
           Profile
         </Text>
@@ -48,6 +48,9 @@ export const Profile = props => {
           style={[
             styles.SIgnInButton,
           ]}
+          onPress={()=>{
+            props.navigation.replace("Login")
+          }}
          >
           <Text style={{fontSize: 16, color: 'green', fontWeight: '600'}}>
          logout

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "398289016973",
-    "project_id": "hamara-50395",
-    "storage_bucket": "hamara-50395.appspot.com"
+    "project_number": "663489881287",
+    "project_id": "testing-ef282",
+    "storage_bucket": "testing-ef282.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:398289016973:android:4f0f74a49bea007575eac4",
+        "mobilesdk_app_id": "1:663489881287:android:4662cfd9fb9e19f5450ae2",
         "android_client_info": {
           "package_name": "com.myproject"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAlfQbKHkq4nG8u3hfKxwrqQ_VCfi0agCM"
+          "current_key": "AIzaSyAl1dwnNE12MXu3FvPKN-oTBL4shoFvQiY"
         }
       ],
       "services": {

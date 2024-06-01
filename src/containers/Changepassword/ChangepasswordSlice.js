@@ -29,7 +29,7 @@ const changepasswordSlice = createSlice({
      
     },
     setToken(state,action){
-      state.token = action.payload;
+     // state.token = action.payload;
     }
   },
 
@@ -40,7 +40,7 @@ const changepasswordSlice = createSlice({
       })
       .addCase(changePassword.fulfilled, (state, action) => {
         state.pending = false;
-        state.token = action.payload.token;
+      //  state.token = action.payload.token;
       })
       .addCase(changePassword.rejected, (state) => {
         state.pending = false;
