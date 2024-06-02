@@ -21,7 +21,8 @@ import {getAllLead} from './leadGenerationSlice';
 import {unwrapResult} from '@reduxjs/toolkit';
 import {TextInput} from 'react-native-gesture-handler';
 import {getfilterlist} from './getfilteractionSlice';
-
+import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const LeadGeneration = props => {
   const [data, setdata] = useState([]);
@@ -31,41 +32,112 @@ export const LeadGeneration = props => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  // useEffect(() => {
+  //   props.navigation.addListener('focus', async () => {
+  //     const data = {
+  //       query: {},
+  //       token: props?.token,
+  //     };
+
+  //     const res = await props.allLead(data);
+  //     const result = await unwrapResult(res);
+  //     setdata(result);
+  //     console.log(result, 'all lead response');
+  //     const filterres = await props.filterdata(data);
+  //     const filterresult = await unwrapResult(filterres);
+  //     setfilterstatedata(filterresult.filter_hash);
+  //     console.log(filterresult.filter_hash, 'all filter response');
+  //   });
+  //   const backAction = () => {
+  //     Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+  //       {
+  //         text: 'Cancel',
+  //         onPress: () => null,
+  //         style: 'cancel',
+  //       },
+  //       { text: 'YES', onPress: () => BackHandler.exitApp() },
+  //     ]);
+  //     return true;
+  //   };
+
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     backAction
+  //   );
+
+  //   return () => backHandler.remove();
+  // }, []);
+
   useEffect(() => {
-    props.navigation.addListener('focus', async () => {
-      const data = {
-        query: {},
-        token: props?.token,
-      };
+    filter()
+    NotificationService.requestUserPermission();
+    NotificationService.listenForNotifications();
+  },[])
 
-      const res = await props.allLead(data);
-      const result = await unwrapResult(res);
-      setdata(result);
-      console.log(result, 'all lead response');
-      const filterres = await props.filterdata(data);
-      const filterresult = await unwrapResult(filterres);
-      setfilterstatedata(filterresult.filter_hash);
-      console.log(filterresult.filter_hash, 'all filter response');
-    });
-    const backAction = () => {
-      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
-        {
-          text: 'Cancel',
-          onPress: () => null,
-          style: 'cancel',
-        },
-        { text: 'YES', onPress: () => BackHandler.exitApp() },
-      ]);
-      return true;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, []);
+  const NotificationService = {
+    // navigationRef: null,
+  
+    // setNavigation(navigationRef) {
+    //   this.navigationRef = navigationRef;
+    // },
+  
+    async requestUserPermission() {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+        this.getFcmToken();
+      }
+    },
+  
+    async getFcmToken() {
+      let fcmToken = await AsyncStorage.getItem('fcmToken');
+      console.log('FcmToken old token:', fcmToken);
+      if (!fcmToken) {
+        fcmToken = await messaging().getToken();
+        if (fcmToken) {
+          await AsyncStorage.setItem('fcmToken', fcmToken);
+          console.log('New FCM Token:', fcmToken);
+          setfcmToken(fcmToken)
+        }
+      } else {
+        console.log('Existing FCM Token:', fcmToken);
+      }
+    },
+  
+    listenForNotifications() {
+      messaging().onNotificationOpenedApp(remoteMessage => {
+        console.log('Notification caused app to open from background state:', remoteMessage);  
+        if ( remoteMessage.data.type === 'lead') {
+          props.navigation.navigate('Productdetails', {item: remoteMessage.data.id})
+        }else if(remoteMessage.data.type === 'review'){
+          props.navigation.navigate('Review', {item: remoteMessage.data.id})
+        }
+      });
+  
+      messaging().onMessage(async remoteMessage => {
+        console.log('A new FCM message arrived!', remoteMessage);
+       // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        if ( remoteMessage.data.type === 'lead') {
+          props.navigation.navigate('Productdetails', {item: remoteMessage.data.id})
+        }
+      });
+  
+      messaging()
+        .getInitialNotification()
+        .then(remoteMessage => {
+          if (remoteMessage) {
+            console.log('Notification caused app to open from quit state:', remoteMessage.notification);
+            if ( remoteMessage.data.type === 'lead') {
+              props.navigation.navigate('Productdetails', {item: remoteMessage.data.id})
+            }
+          }
+        });
+    }
+  };
 
   const filter = async () => {
     const data = {
@@ -120,7 +192,7 @@ export const LeadGeneration = props => {
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
-        props.navigation.navigate('Productdetails', {item: item});
+        props.navigation.navigate('Productdetails', {item: item.id});
       }}>
       <View
         style={{

@@ -30,6 +30,7 @@ import CommonTextInput from '../CommonTextInput/CommonTextInput';
 import IMAGES from '../Allassets/Allassets';
 import {unwrapResult} from '@reduxjs/toolkit';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import StarReview from './StarReview';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -44,31 +45,61 @@ const Review = props => {
   const [errorName, setErrorName] = useState(null);
   const [email, setemail] = useState('');
   const [errorEmail, setErrorEmail] = useState(null);
+  const [rating , setrationg] = useState(0)
+  const [leadid , setleadid] = useState(0)
 
-  const handleLogin = async () => {
-    let fromBody = new FormData();
-    fromBody.append('email', email);
-    fromBody.append('password', Password);
+  
 
-    const data = {
-      body: fromBody,
-      query: {},
-      formData: true,
+  useEffect(() => {
+    console.log(props?.route?.params?.item , "all props in review")
+    setleadid(props?.route?.params?.item)
+  },[])
+
+  const reviewsubmit = () => {
+    console.log(props?.token , "token in review")
+    var myHeaders = new Headers();
+    myHeaders.append(
+      'Authorization',
+      `Bearer ${props?.token}`,
+    );
+
+    var requestOptions = {
+      method: 'PATCH',
+      headers: myHeaders,
+      redirect: 'follow',
     };
 
-    const res = await props.doLogin(data);
-    const result = await unwrapResult(res);
+    fetch(
+      `http://35.154.222.142/feedback?lead_id=${leadid}&rating=${rating}&desc=${email}`,
+      requestOptions,
+    )
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+  };
 
-    // if (result?.token) {
-    //   navigation.navigate('LeadGeneration');
-    // }
+  const handleRatingChange = (newRating) => {
+    console.log('New Rating:', newRating);
+    setrationg(newRating)
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.subcontainer}>
+        <View style={{flexDirection:"row" , justifyContent:"space-between",alignItems:"center"}}>
+      <TouchableOpacity
+      style={{marginRight:30}}
+          onPress={() => {
+            props.navigation.goBack();
+          }}>
+          <Image
+            source={require('../../staticdata/images/backarrow.png')}
+            style={{height: 30, width: 30, borderRadius: 50}}
+          />
+        </TouchableOpacity>
         <Text style={styles.title}>Please give feeback</Text>
-        <View
+        </View>
+        {/* <View
           style={{
             height: 50,
             width: '90%',
@@ -90,7 +121,8 @@ const Review = props => {
           <TouchableOpacity style={{marginRight: 10}}>
             <AntDesign name="staro" size={28} color="black" />
           </TouchableOpacity>
-        </View>
+        </View> */}
+        <StarReview onRatingChange={handleRatingChange} />
         <CommonTextInput
           headingtext={'Write your review'}
           value={email}
@@ -110,7 +142,7 @@ const Review = props => {
             flexDirection: 'row',
             marginTop: 10,
           }}>
-          <TouchableOpacity style={styles.SIgnInButton} onPress={handleLogin}>
+          <TouchableOpacity style={styles.SIgnInButton} onPress={reviewsubmit}>
             <Text style={{fontSize: 16, color: '#fff', fontWeight: '600'}}>
               Review Submit
             </Text>
@@ -293,6 +325,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  token: state.loginSliceNew.token,
   login: state.LoginSlice,
 });
 

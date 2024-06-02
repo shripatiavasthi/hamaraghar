@@ -54,10 +54,10 @@ export const Productdetails = props => {
   const screenHeight = Dimensions.get('window').height;
 
   useEffect(() => {
-    console.log(props?.route?.params?.item?.id, 'all>>>>>>>>>>>>>>>');
+    console.log(props?.route?.params?.item, 'productdetails all>>>>>>>>>>>>>>>');
     props.navigation.addListener('focus', async () => {
       const data = {
-        query: {id: props?.route?.params?.item?.id},
+        query: {id: props?.route?.params?.item ? props?.route?.params?.item : props?.route?.params?.item?.id},
         token: props?.token,
       };
 
@@ -139,6 +139,7 @@ export const Productdetails = props => {
 
 
   const appointmentdateiusupdated = () => {
+    console.log(userid , "lead id in productdetails")
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${props.token}`);
     
@@ -392,7 +393,6 @@ export const Productdetails = props => {
                 style={styles.closeButton}
                 onPress={() => {
                   appointmentdateiusupdated() 
-                
                 }
                 }>
                 <Text style={styles.closeButtonText}>Submit</Text>

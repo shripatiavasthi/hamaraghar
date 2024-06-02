@@ -32,6 +32,7 @@ import CommonTextInput from '../CommonTextInput/CommonTextInput';
 import IMAGES from '../Allassets/Allassets';
 import {unwrapResult} from '@reduxjs/toolkit';
 import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const {height, width} = Dimensions.get('screen');
 const TOPIC = 'MyNews';
@@ -53,147 +54,216 @@ const LoginScreen = props => {
   const [fcmToken, setfcmToken] = useState('');
 
 
-  const requestUserPermission = async () => {
-    /**
-     * On iOS, messaging permission must be requested by
-     * the current application before messages can be
-     * received or sent
-     */
-    const authStatus = await messaging().requestPermission();
-    console.log('Authorization status(authStatus):', authStatus);
-    return (
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL
-    );
-  };
+  // const requestUserPermission = async () => {
+  //   /**
+  //    * On iOS, messaging permission must be requested by
+  //    * the current application before messages can be
+  //    * received or sent
+  //    */
+  //   const authStatus = await messaging().requestPermission();
+  //   console.log('Authorization status(authStatus):', authStatus);
+  //   return (
+  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL
+  //   );
+  // };
 
-  useEffect(() => {
-    if (requestUserPermission()) {
-      /**
-       * Returns an FCM token for this device
-       */
-      messaging()
-        .getToken()
-        .then(fcmToken => {
-          console.log('FCM Token -> ', fcmToken);
-          setfcmToken(fcmToken)
-        });
-    } else console.log('Not Authorization status:', authStatus);
+  // useEffect(() => {
+  //   if (requestUserPermission()) {
+  //     /**
+  //      * Returns an FCM token for this device
+  //      */
+  //     messaging()
+  //       .getToken()
+  //       .then(fcmToken => {
+  //         console.log('FCM Token -> ', fcmToken);
+  //         setfcmToken(fcmToken)
+  //       });
+  //   } else console.log('Not Authorization status:', authStatus);
 
-    /**
-     * When a notification from FCM has triggered the application
-     * to open from a quit state, this method will return a
-     * `RemoteMessage` containing the notification data, or
-     * `null` if the app was opened via another method.
-     */
-    messaging()
-      .getInitialNotification()
-      .then(async remoteMessage => {
-        if (remoteMessage) {
-          console.log(
-            'getInitialNotification:' +
-              'Notification caused app to open from quit state',
-          );
-          console.log(remoteMessage);
+  //   /**
+  //    * When a notification from FCM has triggered the application
+  //    * to open from a quit state, this method will return a
+  //    * `RemoteMessage` containing the notification data, or
+  //    * `null` if the app was opened via another method.
+  //    */
+  //   messaging()
+  //     .getInitialNotification()
+  //     .then(async remoteMessage => {
+  //       if (remoteMessage) {
+  //         console.log(
+  //           'getInitialNotification:' +
+  //             'Notification caused app to open from quit state',
+  //         );
+  //         console.log(remoteMessage);
      
           
-            if (remoteMessage.data.type === 'lead') {
-              navigation.navigate('Productdetails', {item: "33"})
-            //  props.navigation.navigate(Screens.Productdetails)
-              }else if(remoteMessage.data.type === 'review'){
-                navigation.navigate('Review');
-              }
+  //           if (remoteMessage.data.type === 'lead') {
+  //             navigation.navigate('Productdetails', {item: "33"})
+  //           //  props.navigation.navigate(Screens.Productdetails)
+  //             }else if(remoteMessage.data.type === 'review'){
+  //               navigation.navigate('Review');
+  //             }
           
-          // alert(
-          //   'getInitialNotification: Notification caused app to' +
-          //     ' open from quit state',
-          // );
-        }
-      });
+  //         // alert(
+  //         //   'getInitialNotification: Notification caused app to' +
+  //         //     ' open from quit state',
+  //         // );
+  //       }
+  //     });
 
-    /**
-     * When the user presses a notification displayed via FCM,
-     * this listener will be called if the app has opened from
-     * a background state. See `getInitialNotification` to see
-     * how to watch for when a notification opens the app from
-     * a quit state.
-     */
-    messaging().onNotificationOpenedApp(async remoteMessage => {
-      if (remoteMessage) {
-        console.log(
-          'onNotificationOpenedApp: ' +
-            'Notification caused app to open from background state',
-        );
-        console.log(">>>>>>>>>>>>>>>",remoteMessage);
-        if (remoteMessage.data.type === 'lead') {
-          navigation.navigate('Productdetails', {item: "33"})
-        //  props.navigation.navigate(Screens.Productdetails)
-          }else if(remoteMessage.data.type === 'review'){
-            navigation.navigate('Review');
-          }
-        //}
-        // alert(
-        //   'onNotificationOpenedApp: Notification caused app to' +
-        //     ' open from background state',
-        // );
-      }
-    });
+  //   /**
+  //    * When the user presses a notification displayed via FCM,
+  //    * this listener will be called if the app has opened from
+  //    * a background state. See `getInitialNotification` to see
+  //    * how to watch for when a notification opens the app from
+  //    * a quit state.
+  //    */
+  //   messaging().onNotificationOpenedApp(async remoteMessage => {
+  //     if (remoteMessage) {
+  //       console.log(
+  //         'onNotificationOpenedApp: ' +
+  //           'Notification caused app to open from background state',
+  //       );
+  //       console.log(">>>>>>>>>>>>>>>",remoteMessage);
+  //       if (remoteMessage.data.type === 'lead') {
+  //         navigation.navigate('Productdetails', {item: "33"})
+  //       //  props.navigation.navigate(Screens.Productdetails)
+  //         }else if(remoteMessage.data.type === 'review'){
+  //           navigation.navigate('Review');
+  //         }
+  //       //}
+  //       // alert(
+  //       //   'onNotificationOpenedApp: Notification caused app to' +
+  //       //     ' open from background state',
+  //       // );
+  //     }
+  //   });
 
-    /**
-     * Set a message handler function which is called when
-     * the app is in the background or terminated. In Android,
-     * a headless task is created, allowing you to access the
-     * React Native environment to perform tasks such as updating
-     * local storage, or sending a network request.
-     */
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-      if (remoteMessage.data.type === 'lead') {
-        navigation.navigate('Productdetails', {item: "33"})
-      //  props.navigation.navigate(Screens.Productdetails)
-        }else if(remoteMessage.data.type === 'review'){
-          navigation.navigate('Review');
-        }
-    });
+  //   /**
+  //    * Set a message handler function which is called when
+  //    * the app is in the background or terminated. In Android,
+  //    * a headless task is created, allowing you to access the
+  //    * React Native environment to perform tasks such as updating
+  //    * local storage, or sending a network request.
+  //    */
+  //   messaging().setBackgroundMessageHandler(async remoteMessage => {
+  //     console.log('Message handled in the background!', remoteMessage);
+  //     if (remoteMessage.data.type === 'lead') {
+  //       navigation.navigate('Productdetails', {item: "33"})
+  //     //  props.navigation.navigate(Screens.Productdetails)
+  //       }else if(remoteMessage.data.type === 'review'){
+  //         navigation.navigate('Review');
+  //       }
+  //   });
 
-    /**
-     * When any FCM payload is received, the listener callback
-     * is called with a `RemoteMessage`. Returns an unsubscribe
-     * function to stop listening for new messages.
-     */
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      //alert('A new FCM message arrived!');
-      console.log('A new FCM message arrived!', remoteMessage.data);
-    //  if (remoteMessage.data.type === 'lead') {
+  //   /**
+  //    * When any FCM payload is received, the listener callback
+  //    * is called with a `RemoteMessage`. Returns an unsubscribe
+  //    * function to stop listening for new messages.
+  //    */
+  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
+  //     //alert('A new FCM message arrived!');
+  //     console.log('A new FCM message arrived!', remoteMessage.data);
+  //   //  if (remoteMessage.data.type === 'lead') {
        
-    if (remoteMessage.data.type === 'lead') {
-      navigation.navigate('Productdetails', {item: "33"})
-    //  props.navigation.navigate(Screens.Productdetails)
-      }else if(remoteMessage.data.type === 'review'){
-        navigation.navigate('Review');
-      }
-     // }
-    });
+  //   if (remoteMessage.data.type === 'lead') {
+  //     navigation.navigate('Productdetails', {item: "33"})
+  //   //  props.navigation.navigate(Screens.Productdetails)
+  //     }else if(remoteMessage.data.type === 'review'){
+  //       navigation.navigate('Review');
+  //     }
+  //    // }
+  //   });
 
-    /**
-     * Apps can subscribe to a topic, which allows the FCM
-     * server to send targeted messages to only those devices
-     * subscribed to that topic.
-     */
-    messaging()
-      .subscribeToTopic(TOPIC)
-      .then(() => {
-        console.log(`Topic: ${TOPIC} Suscribed`);
-      });
+  //   /**
+  //    * Apps can subscribe to a topic, which allows the FCM
+  //    * server to send targeted messages to only those devices
+  //    * subscribed to that topic.
+  //    */
+  //   messaging()
+  //     .subscribeToTopic(TOPIC)
+  //     .then(() => {
+  //       console.log(`Topic: ${TOPIC} Suscribed`);
+  //     });
 
-    return () => {
-      unsubscribe;
-      /**
-       * Unsubscribe the device from a topic.
-       */
-      // messaging().unsubscribeFromTopic(TOPIC);
-    };
+  //   return () => {
+  //     unsubscribe;
+  //     /**
+  //      * Unsubscribe the device from a topic.
+  //      */
+  //     // messaging().unsubscribeFromTopic(TOPIC);
+  //   };
+  // }, []);
+
+  useEffect(() => {
+   // NotificationService.setNavigation(navigationRef.current);
+    NotificationService.requestUserPermission();
+    NotificationService.listenForNotifications();
   }, []);
+
+  const NotificationService = {
+    navigationRef: null,
+  
+    setNavigation(navigationRef) {
+      this.navigationRef = navigationRef;
+    },
+  
+    async requestUserPermission() {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+        this.getFcmToken();
+      }
+    },
+  
+    async getFcmToken() {
+      let fcmToken = await AsyncStorage.getItem('fcmToken');
+      console.log('FcmToken old token:', fcmToken);
+      if (!fcmToken) {
+        fcmToken = await messaging().getToken();
+        if (fcmToken) {
+          await AsyncStorage.setItem('fcmToken', fcmToken);
+          console.log('New FCM Token:', fcmToken);
+          setfcmToken(fcmToken)
+        }
+      } else {
+        console.log('Existing FCM Token:', fcmToken);
+      }
+    },
+  
+    listenForNotifications() {
+      messaging().onNotificationOpenedApp(remoteMessage => {
+        console.log('Notification caused app to open from background state:', remoteMessage);  
+        if ( remoteMessage.data.type === 'lead') {
+          navigation.navigate('Productdetails', {item: remoteMessage.data.id})
+        }
+      });
+  
+      messaging().onMessage(async remoteMessage => {
+        console.log('A new FCM message arrived!', remoteMessage);
+       // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        if ( remoteMessage.data.type === 'lead') {
+          navigation.navigate('Productdetails', {item: remoteMessage.data.id})
+        }
+      });
+  
+      messaging()
+        .getInitialNotification()
+        .then(remoteMessage => {
+          if (remoteMessage) {
+            console.log('Notification caused app to open from quit state:', remoteMessage.notification);
+            if ( remoteMessage.data.type === 'lead') {
+              navigation.navigate('Productdetails', {item: "33"})
+            }
+          }
+        });
+    }
+  };
 
   const handleLogin = async () => {
     let fromBody = new FormData();
