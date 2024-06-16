@@ -73,7 +73,7 @@ export const Productdetails = props => {
       const filterres = await props.filterdata(data);
       const filterresult = await unwrapResult(filterres);
       setfilterstatedata(filterresult.filter_hash);
-      console.log(filterresult.filter_hash, 'all filter response');
+      console.log(filterresult.filter_hash, 'all filter response in product details screen');
     });
   }, []);
 
@@ -140,6 +140,7 @@ export const Productdetails = props => {
 
   const appointmentdateiusupdated = () => {
     console.log(userid , "lead id in productdetails")
+    const ID = props?.route?.params?.item ? props?.route?.params?.item : props?.route?.params?.item?.id
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${props.token}`);
     
@@ -149,7 +150,7 @@ export const Productdetails = props => {
       redirect: 'follow'
     };
     
-    fetch(`http://35.154.222.142/appointment_call?lead_id=${userid}&time=${date}`, requestOptions)
+    fetch(`http://35.154.222.142/appointment_call?lead_id=${ID}&time=${date}`, requestOptions)
       .then(response => response.text())
       .then(result => {
         setModalVisible(false)

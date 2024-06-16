@@ -43,9 +43,9 @@ export const LeadGeneration = props => {
   //     const result = await unwrapResult(res);
   //     setdata(result);
   //     console.log(result, 'all lead response');
-  //     const filterres = await props.filterdata(data);
-  //     const filterresult = await unwrapResult(filterres);
-  //     setfilterstatedata(filterresult.filter_hash);
+      // const filterres = await props.filterdata(data);
+      // const filterresult = await unwrapResult(filterres);
+      // setfilterstatedata(filterresult.filter_hash);
   //     console.log(filterresult.filter_hash, 'all filter response');
   //   });
   //   const backAction = () => {
@@ -141,13 +141,20 @@ export const LeadGeneration = props => {
 
   const filter = async () => {
     const data = {
-      query: {status: selectedfilterstatuses},
+      query: {
+        status: selectedfilterstatuses,
+        page: 1,
+        query : ""
+      },
       token: props?.token,
     };
 
     const res = await props.allLead(data);
     const result = await unwrapResult(res);
-    setdata(result);
+    setdata(result.leads);
+    const filterres = await props.filterdata(data);
+    const filterresult = await unwrapResult(filterres);
+    setfilterstatedata(filterresult.filter_hash);
     console.log(result, 'all lead response');
   };
 
@@ -157,10 +164,23 @@ export const LeadGeneration = props => {
     setLoading(true);
     try {
       // Replace with your API call
-      const response = await fetch(`https://api.example.com/data?page=${page}`);
-      const result = await response.json();
-      setData(prevData => [...prevData, ...result]);
-      setPage(prevPage => prevPage + 1);
+      // const response = await fetch(`https://api.example.com/data?page=${page}`);
+      // const result = await response.json();
+      // setData(prevData => [...prevData, ...result]);
+      // setPage(prevPage => prevPage + 1);
+      const data = {
+      query: {
+        status: selectedfilterstatuses,
+        page: page,
+        query : ""
+      },
+      token: props?.token,
+    };
+
+    const res = await props.allLead(data);
+    const result = await unwrapResult(res);
+    setdata(prevData => [...prevData, ...result.leads]);
+    setPage(prevPage => prevPage + 1);
     } catch (error) {
       console.error(error);
     }
@@ -189,6 +209,8 @@ export const LeadGeneration = props => {
   );
 
   const renderItem = ({item}) => (
+<>
+{selectedfilterstatuses == "" || selectedfilterstatuses == item.status ?
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
@@ -240,7 +262,8 @@ export const LeadGeneration = props => {
           <Text>{item.status}</Text>
         </View> */}
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity> : null }
+</>
   );
 
   const renderFooter = () => {
