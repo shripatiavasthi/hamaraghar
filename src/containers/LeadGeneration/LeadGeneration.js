@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState , useCallback} from 'react';
 import {connect} from 'react-redux';
 import {
   View,
@@ -11,7 +11,8 @@ import {
   Dimensions,
   Image,
   Modal,
-  BackHandler, Alert
+  BackHandler,
+  Alert,
 } from 'react-native';
 import CustomHeader from '../CustomHeader/CustomHeader';
 import {navigate, Screens} from '../../helpers/Screens';
@@ -23,6 +24,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import {getfilterlist} from './getfilteractionSlice';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export const LeadGeneration = props => {
   const [data, setdata] = useState([]);
@@ -31,6 +33,9 @@ export const LeadGeneration = props => {
   const [selectedfilterstatuses, setselectedfilterstatuses] = useState('');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [totalpages , settotalpages] = useState(0)
 
   // useEffect(() => {
   //   props.navigation.addListener('focus', async () => {
@@ -43,9 +48,9 @@ export const LeadGeneration = props => {
   //     const result = await unwrapResult(res);
   //     setdata(result);
   //     console.log(result, 'all lead response');
-      // const filterres = await props.filterdata(data);
-      // const filterresult = await unwrapResult(filterres);
-      // setfilterstatedata(filterresult.filter_hash);
+  // const filterres = await props.filterdata(data);
+  // const filterresult = await unwrapResult(filterres);
+  // setfilterstatedata(filterresult.filter_hash);
   //     console.log(filterresult.filter_hash, 'all filter response');
   //   });
   //   const backAction = () => {
@@ -69,30 +74,29 @@ export const LeadGeneration = props => {
   // }, []);
 
   useEffect(() => {
-    filter()
+    filter();
     NotificationService.requestUserPermission();
     NotificationService.listenForNotifications();
-  },[])
+  }, []);
 
   const NotificationService = {
     // navigationRef: null,
-  
     // setNavigation(navigationRef) {
     //   this.navigationRef = navigationRef;
     // },
-  
+
     async requestUserPermission() {
       const authStatus = await messaging().requestPermission();
       const enabled =
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-  
+
       if (enabled) {
         console.log('Authorization status:', authStatus);
         this.getFcmToken();
       }
     },
-  
+
     async getFcmToken() {
       let fcmToken = await AsyncStorage.getItem('fcmToken');
       console.log('FcmToken old token:', fcmToken);
@@ -101,50 +105,63 @@ export const LeadGeneration = props => {
         if (fcmToken) {
           await AsyncStorage.setItem('fcmToken', fcmToken);
           console.log('New FCM Token:', fcmToken);
-          setfcmToken(fcmToken)
+          setfcmToken(fcmToken);
         }
       } else {
         console.log('Existing FCM Token:', fcmToken);
       }
     },
-  
+
     listenForNotifications() {
       messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log('Notification caused app to open from background state:', remoteMessage);  
-        if ( remoteMessage.data.type === 'lead') {
-          props.navigation.navigate('Productdetails', {item: remoteMessage.data.id})
-        }else if(remoteMessage.data.type === 'review'){
-          props.navigation.navigate('Review', {item: remoteMessage.data.id})
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage,
+        );
+        if (remoteMessage.data.type === 'lead') {
+          props.navigation.navigate('Productdetails', {
+            item: remoteMessage.data.id,
+          });
+        } else if (remoteMessage.data.type === 'review') {
+          props.navigation.navigate('Review', {item: remoteMessage.data.id});
         }
       });
-  
+
       messaging().onMessage(async remoteMessage => {
         console.log('A new FCM message arrived!', remoteMessage);
-       // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-        if ( remoteMessage.data.type === 'lead') {
-          props.navigation.navigate('Productdetails', {item: remoteMessage.data.id})
+        // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        if (remoteMessage.data.type === 'lead') {
+          props.navigation.navigate('Productdetails', {
+            item: remoteMessage.data.id,
+          });
         }
       });
-  
+
       messaging()
         .getInitialNotification()
         .then(remoteMessage => {
           if (remoteMessage) {
-            console.log('Notification caused app to open from quit state:', remoteMessage.notification);
-            if ( remoteMessage.data.type === 'lead') {
-              props.navigation.navigate('Productdetails', {item: remoteMessage.data.id})
+            console.log(
+              'Notification caused app to open from quit state:',
+              remoteMessage.notification,
+            );
+            if (remoteMessage.data.type === 'lead') {
+              props.navigation.navigate('Productdetails', {
+                item: remoteMessage.data.id,
+              });
             }
           }
         });
-    }
+    },
   };
 
   const filter = async () => {
+    setdata([])
     const data = {
       query: {
         status: selectedfilterstatuses,
         page: 1,
-        query : ""
+        query: '',
       },
       token: props?.token,
     };
@@ -152,40 +169,77 @@ export const LeadGeneration = props => {
     const res = await props.allLead(data);
     const result = await unwrapResult(res);
     setdata(result.leads);
+    settotalpages(result.total_pages)
     const filterres = await props.filterdata(data);
     const filterresult = await unwrapResult(filterres);
     setfilterstatedata(filterresult.filter_hash);
-    console.log(result, 'all lead response');
+    console.log(result.total_pages, 'all lead response');
   };
 
   const infinitescroll = async () => {
+   
     if (loading) return;
-
-    setLoading(true);
+    
     try {
-      // Replace with your API call
-      // const response = await fetch(`https://api.example.com/data?page=${page}`);
-      // const result = await response.json();
-      // setData(prevData => [...prevData, ...result]);
-      // setPage(prevPage => prevPage + 1);
       const data = {
-      query: {
-        status: selectedfilterstatuses,
-        page: page,
-        query : ""
-      },
-      token: props?.token,
-    };
-
-    const res = await props.allLead(data);
-    const result = await unwrapResult(res);
-    setdata(prevData => [...prevData, ...result.leads]);
-    setPage(prevPage => prevPage + 1);
+        query: {
+          status: selectedfilterstatuses,
+          page: page,
+          query: searchQuery,
+        },
+        token: props?.token,
+      };
+      const res = await props.allLead(data);
+      const result = await unwrapResult(res);
+      console.log("newresponse",result)
+      if( page <= result.total_pages ){
+      setLoading(true);
+      setdata(prevData => [...prevData, ...result.leads]);
+      setPage(prevPage => prevPage + 1);
+      }else {
+        setLoading(false);
+        return
+      }
     } catch (error) {
       console.error(error);
-    }
+      setLoading(false);
+      return 
+    } finally {
     setLoading(false);
-  }
+    }
+  
+  };
+
+  const handleEndReached = () => {
+    if (!loading ) {
+      infinitescroll();
+    }
+}
+
+const handleSearch = async () => {
+  // Implement your search logic here
+  setdata([]);
+  console.log('Search Query:', searchQuery);
+  const data = {
+    query: {
+      status: selectedfilterstatuses,
+      page: 1,
+      query: searchQuery,
+    },
+    token: props?.token,
+  };
+
+  const res = await props.allLead(data);
+  const result = await unwrapResult(res);
+  setdata(result.leads);
+};
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    setPage(1);
+    setIsRefreshing(false);
+    filter();
+  };
 
   const newrenderItem = ({item}) => (
     <TouchableOpacity
@@ -209,32 +263,33 @@ export const LeadGeneration = props => {
   );
 
   const renderItem = ({item}) => (
-<>
-{selectedfilterstatuses == "" || selectedfilterstatuses == item.status ?
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => {
-        props.navigation.navigate('Productdetails', {item: item.id});
-      }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          height: 80,
-          alignItems: 'center',
-          borderBottomColor: 'lightgray',
-          borderBottomWidth: 1,
-        }}>
-        {/* <Image
+    <>
+      {selectedfilterstatuses == '' || selectedfilterstatuses == item.status ? (
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => {
+            props.navigation.navigate('Productdetails', {item: item.id});
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              height: 80,
+              alignItems: 'center',
+              borderBottomColor: 'lightgray',
+              borderBottomWidth: 1,
+            }}>
+            {/* <Image
           source={require('../../staticdata/images/Avatar5.jpeg')}
           style={{height: 40, width: 40, borderRadius: 50}}
         /> */}
-          <View style={{}}>
-          <Text>{item.client_name} Status : {item.status}</Text>
-          {/* <Text>Email : {item.client_email}</Text> */}
-        </View>
-     
-      </View>
-      {/* <View style={styles.carddetailrow}>
+            <View style={{}}>
+              <Text>
+                {item.client_name} Status : {item.status}
+              </Text>
+              {/* <Text>Email : {item.client_email}</Text> */}
+            </View>
+          </View>
+          {/* <View style={styles.carddetailrow}>
         <View style={styles.gender}>
           <Text>Gender</Text>
           <Text>Male</Text>
@@ -248,27 +303,33 @@ export const LeadGeneration = props => {
           <Text>25</Text>
         </View>
       </View> */}
-      <View style={styles.carddetailrow}>
-        <View style={styles.gender}>
-          <Text>Contact no. : {item.contact_number}</Text>
-          {/* <Text></Text> */}
-        </View>
-        <View style={styles.gender}>
-          <Text>Quotation : {item.quotation}</Text>
-          {/* <Text></Text> */}
-        </View>
-       {/*  <View style={styles.gender}>
+          <View style={styles.carddetailrow}>
+            <View style={styles.gender}>
+              <Text>Contact no. : {item.contact_number}</Text>
+              {/* <Text></Text> */}
+            </View>
+            <View style={styles.gender}>
+              <Text>Quotation : {item.quotation}</Text>
+              {/* <Text></Text> */}
+            </View>
+            {/*  <View style={styles.gender}>
           <Text>Status</Text>
           <Text>{item.status}</Text>
         </View> */}
-      </View>
-    </TouchableOpacity> : null }
-</>
+          </View>
+        </TouchableOpacity>
+      ) : null}
+    </>
   );
 
   const renderFooter = () => {
-    if (!loading) return null;
-    return <ActivityIndicator style={styles.loader} />;
+    // if (!loading) return null;
+    // return <ActivityIndicator style={styles.loader} />;
+    return loading ? (
+      <View style={{ padding: 10 }}>
+          <ActivityIndicator size="large" />
+      </View>
+  ) : null;
   };
 
   return (
@@ -282,32 +343,61 @@ export const LeadGeneration = props => {
           Lead Generation
         </Text>
       </View>
-      <View style={styles.row}>
-      <TouchableOpacity
-        style={[styles.filterbutton,{width:90}]}
-        onPress={() => setModalVisible(true)}>
-        <Text>Filter</Text>
-      </TouchableOpacity>
-    
-      <TouchableOpacity
-        style={[styles.filterbutton,{backgroundColor:"red",width:90, marginLeft:30}]}
-        onPress={() => filter()}>
-        <Text style={{color:"#fff"}}>Clear filter</Text>
-      </TouchableOpacity>
+      <View style={[styles.headercontainer,{marginVertical:5}]}>
+        <View style={{flexDirection:"row",backgroundColor:"#fff" }}>
+      <TextInput
+                style={styles.input}
+                placeholder="Search..."
+                value={searchQuery}
+                onChangeText={text => setSearchQuery(text)}
+            />
+            <TouchableOpacity style={styles.searchIcon} 
+            onPress={()=>{
+              handleSearch()
+            }}
+            >
+                <Icon name="search" size={24} color="#000" />
+            </TouchableOpacity>
+            </View>
       </View>
-      {data.length <= 0 ? 
-    <View style={{flex:1,justifyContent:"center",alignItems:"center",margin:10}}>
-      <Text>No lead present</Text>
-    </View>   :
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        onEndReached={infinitescroll}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={renderFooter}
-      /> 
-}
+      <View style={styles.row}>
+        <TouchableOpacity
+          style={[styles.filterbutton, {width: 90}]}
+          onPress={() => setModalVisible(true)}>
+          <Text>Filter</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.filterbutton,
+            {backgroundColor: 'red', width: 90, marginLeft: 30},
+          ]}
+          onPress={() => filter()}>
+          <Text style={{color: '#fff'}}>Clear filter</Text>
+        </TouchableOpacity>
+      </View>
+      {data.length <= 0 ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: 10,
+          }}>
+          <Text>No lead present</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={renderFooter}
+          refreshing={isRefreshing}
+          onRefresh={handleRefresh}
+        />
+      )}
       <Modal
         animationType="slide"
         transparent={true}
@@ -328,7 +418,6 @@ export const LeadGeneration = props => {
               onPress={() => {
                 filter();
                 setModalVisible(false);
-                setselectedfilterstatuses('');
               }}
               style={[
                 styles.selectedoption,
@@ -356,7 +445,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: '#F4F9FD',
   },
-  row:{
+  row: {
     flexDirection: 'row',
   },
   subcontainer: {
@@ -437,6 +526,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'center',
   },
+  input: {
+    flex: 1,
+    padding: 10,
+    fontSize: 16,
+},
+searchIcon: {
+    padding: 10,
+},
 });
 
 const mapStateToProps = state => ({
